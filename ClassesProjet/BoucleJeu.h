@@ -35,7 +35,6 @@ class BoucleJeu : public GameController<float>
 
     private :
 
-    sf::RenderWindow* m_window;             //use-a
     MetaInterface<float> m_interface;
 
     TextureList m_textureList;

@@ -50,7 +50,7 @@ void Loader::setBaseTextureList(TextureList& t)
     textures[PLAYER_BULLET_SPRITE_NAME] = "Ressources\\Images\\Tir.bmp";
     textures[DEFAULT_ENEMY_SHOT_NAME] = "Ressources\\Images\\Tir_Ennemi.bmp";
 
-    t.loadBaseTextures(textures);
+    t.loadTextures(textures);
 }
 
 
@@ -130,7 +130,7 @@ void Loader::setLevel(RandomSpaceLevel* level, TextureList& t)
 void Loader::setHUD(TextureList& t, SpaceHUD* hud, sf::Font* f)
 {
     hud->setAllFonts(f, sf::Color::White);
-    hud->setLifeSprite(sf::Sprite( *t.texture(LIFE_TEXTURE_NAME) ));
+    hud->setLifeSprite(sf::Sprite( t.texture(LIFE_TEXTURE_NAME) ));
 }
 
 

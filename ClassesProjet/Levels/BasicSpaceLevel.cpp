@@ -110,7 +110,7 @@ TextureList* BasicSpaceLevel::textureList()
 
 const sf::Texture* BasicSpaceLevel::texture(const std::string& name) const
 {
-    return m_textureList->texture(name);
+    return &m_textureList->texture(name);
 }
 
 

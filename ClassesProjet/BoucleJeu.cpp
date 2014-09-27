@@ -5,19 +5,14 @@
 
 BoucleJeu::BoucleJeu(AbstractInputs* in, sf::RenderWindow* cible) : m_level(new RandomSpaceLevel)
 {
-    m_window = cible;
     set(in, cible);
     m_level->setUserInputs(windowInputs());
 
     m_font.loadFromFile(DEFAULT_FONT_NAME);
     FirstScreen* screen = new FirstScreen(&m_font, sf::Color::White, windowInputs());
 
-    screen->drawIn(*renderingWindow());
-    cible->display();
-
     SpaceHUD* hud = new SpaceHUD(m_level);
     m_interface.addInterface(hud);
-
     m_interface.addInterface(screen);
 
     drawEverything(0);
