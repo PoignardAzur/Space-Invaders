@@ -8,18 +8,18 @@
 
 
 /*
-Affiche basiquement l'apparence des objets.
+N'affiche rien du tout. Peut remplacer n'importe quel abstractdrawer.
 */
 
 class VoidDrawer : public AbstractDrawer
 {
     private :
-//    sf::RenderTarget m_null;
-    virtual sf::RenderTarget& target();
-//    { return m_null; }
+    sf::RenderWindow m_null;
+    sf::RenderTarget& target()
+    { return m_null; }
 
     public :
-    virtual void draw(const AbstractDrawable& objet) {}
+    void draw(const AbstractDrawable& objet) {}
 };
 
 

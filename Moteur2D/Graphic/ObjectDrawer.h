@@ -14,15 +14,15 @@ class ObjectDrawer : public AbstractDrawer
 {
     public :
 
-    ObjectDrawer(sf::RenderWindow* cible);
+    ObjectDrawer(sf::RenderTarget* cible);
 
     sf::RenderTarget& target();
-    void display();
+//    void display();
 
     protected :
 
     private :
-    sf::RenderWindow* m_fenetreCible; /// use-a
+    sf::RenderTarget* m_fenetreCible; /// use-a
 };
 
 

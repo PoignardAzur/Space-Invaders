@@ -16,8 +16,8 @@ base sur un sprite sfml et deplaçable.
 class DrawableObject : public AbstractDrawable
 {
     protected :
-    virtual const sf::Drawable& sprite() const = 0;
-    virtual sf::Drawable& sprite() = 0;
+    virtual const sf::Drawable& sprite() const = 0;         // The two functions to define
+    virtual sf::Drawable& sprite() = 0;                     // for child classes to work
 
     public :
     void drawIn(sf::RenderTarget& cible) const

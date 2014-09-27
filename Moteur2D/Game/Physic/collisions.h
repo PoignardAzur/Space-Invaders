@@ -5,8 +5,8 @@
 
 #include <SFML/Graphics.hpp>
 
-// fonctions inline, car tres simples
-// testent la "collision" entre rectangles et points.
+// The functions are inline because they're quite simple
+// They test wether two objects intersect
 
 inline bool testCollision(const sf::IntRect& rectangle1, const sf::IntRect& rectangle2)
 {

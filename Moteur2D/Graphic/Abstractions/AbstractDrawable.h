@@ -11,6 +11,7 @@
 /*
 Interface d'objet pouvant etre affiche.
 */
+class AbstractInterface;
 
 class AbstractDrawable
 {
@@ -21,12 +22,13 @@ class AbstractDrawable
         cible.draw(*this);
     }
 
-    virtual void update(float tickSize) {}
+    virtual void update(float tickSize) {}                              // for animations
 
 
-    public : // ne pas utiliser, laisser à la classe AbstractDrawer, et implementer dans les classes filles
-    virtual void drawIn(sf::RenderTarget&) const = 0;
-
+    protected :
+    virtual void drawIn(sf::RenderTarget&) const = 0;                   // the function to define for child classes to work
+    friend void AbstractDrawer::draw(const AbstractDrawable&);
+    friend class AbstractInterface;
 };
 
 

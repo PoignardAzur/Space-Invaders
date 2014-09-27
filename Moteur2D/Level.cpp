@@ -3,27 +3,22 @@
 #include "Level.h"
 // Fuuuuuuuuuuuuuuuuu
 
-
+/*
 Level::Level() : m_tableau15(new VartArray<AbsVart>())
 {
 
-}
+}*/
 
- void Level::attribuer(Inputs* entrees)
-{
-    m_entrees = entrees;
-}
-
+/*
 void Level::update(float tickSize)
 {
-    m_tableau15->update(tickSize);
+    m_tableau15->updateAll(tickSize);
 }
 
 void Level::drawIn(AbstractDrawer& fenetre)
 {
-    m_tableau15->drawIn(fenetre);
+    m_tableau15->drawAllIn(fenetre);
 }
-
 void Level::clear()
 {
     m_tableau15->clear();
@@ -49,4 +44,5 @@ void Level::finirJeu()
 {
     m_fin = true;
 }
+*/
 

@@ -1,5 +1,4 @@
 
-
 #ifndef HEADER_VARTS
 #define HEADER_VARTS
 
@@ -11,7 +10,7 @@
 /*
 Objet representant un objet de jeu avec un sprite, un comportement et une hitbox.
 */
-class Vart : public AbsVart, public PhysicObject //protected PhysicObject
+class Vart : public AbsVart, public PhysicObject
 {
     public :
 
@@ -21,11 +20,10 @@ class Vart : public AbsVart, public PhysicObject //protected PhysicObject
     virtual bool doDelete() const;
     virtual void drawIn(AbstractDrawer&); // Classique
 
-    /// Comportement : TODO ?
-
     protected :
 
     void setSprite(Sprite* para); // Setters
+    void setSprite(boost::shared_ptr<Sprite> para);
     void setHitbox(const PhysicObject&);
 
     virtual void removeThis();
@@ -35,25 +33,7 @@ class Vart : public AbsVart, public PhysicObject //protected PhysicObject
 
     boost::shared_ptr<Sprite> m_sprite; // has a
     bool m_detruit;
-
-/*
-    friend class boost::serialization::access;
-
-    template <typename Flux>
-    void serialize(Flux& f, const unsigned long int version);
 };
-
-
-template <typename Flux>
-void Vart::serialize(Flux& f, const unsigned long int version)
-{
-    f & boost::serialization::base_object<ObjetPhysique>(*this);
-}
-
-
-
-BOOST_CLASS_EXPORT_GUID(Vart, "Vart")
-//*/};
 
 
 

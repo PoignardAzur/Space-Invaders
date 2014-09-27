@@ -11,7 +11,7 @@
 
 
 template <typename T = AbsVart>
-class VartArray : public AbsVart
+class VartArray
 {
     public :
 
@@ -47,7 +47,7 @@ class VartArray : public AbsVart
 
     public :
 
-    virtual void update(float tickSize) // Quand le tableau est mis à jour, tous ses éléments le sont.
+    virtual void updateAll(float tickSize) // Quand le tableau est mis à jour, tous ses éléments le sont.
     {
         for (unsigned short i = 0; i < t_varts.size(); i++)
         {
@@ -57,12 +57,7 @@ class VartArray : public AbsVart
         deleteVarts();
     }
 
-    virtual bool doDelete() const // Dans un tableau basique, pas de raison de le delete.
-    {
-        return false;
-    }
-
-    virtual void drawIn(AbstractDrawer& cible) // Quand le tableau est affiche, tous ses éléments le sont.
+    virtual void drawAllIn(AbstractDrawer& cible) // Quand le tableau est affiche, tous ses éléments le sont.
     {
         for (unsigned short i = 0; i < t_varts.size(); i++)
         {

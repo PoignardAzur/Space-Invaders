@@ -14,14 +14,14 @@ class AbstractDrawable;
 class AbstractDrawer
 {
     public :
-    virtual void clear();
+
+    virtual void clear();                           // reset the screen
+    virtual void draw(const AbstractDrawable& objet);
+
 
     protected :
-    virtual sf::RenderTarget& target() = 0;
+    virtual sf::RenderTarget& target() = 0;         // the one function to set in child classes
 
-    public :
-
-    virtual void draw(const AbstractDrawable& objet);
 };
 
 

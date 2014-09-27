@@ -20,6 +20,4 @@ class AbsVart : public Updatable, public Deletable
 };
 
 
-#include <boost/serialization/base_object.hpp>
-
 #endif

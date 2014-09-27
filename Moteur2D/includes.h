@@ -14,9 +14,10 @@ Inclus tous les fichiers du moteur
     #include "Entries/Alea.h"
     #include "Timer.h"
     #include "Game/Vart.h"
-    #include "Game/Emitter.h"
-
+    #include "StartEndBool.h"
 //}
+
+    #include "ushort.h"
 
 
 #endif

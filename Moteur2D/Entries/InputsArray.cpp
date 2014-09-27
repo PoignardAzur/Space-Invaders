@@ -4,29 +4,6 @@
 #include "InputsArray.h"
 
 
-void UpdateKey::operator()(std::pair<const sf::Mouse::Button, KeyState>& x)
-{
-    if (x.second == Pressee) // si la touche a déjà été pressée à la frame précédente, elle est maintenant considérée comme en cours d'appui
-    x.second = Activee;
-
-    if (x.second == Lachee) // et inversement
-    x.second = Desactivee;
-}
-
-void UpdateKey::operator()(std::pair<const sf::Keyboard::Key, KeyState>& x)
-{
-    if (x.second == Pressee) // pareil
-    x.second = Activee;
-
-    if (x.second == Lachee)
-    x.second = Desactivee;
-}
-
-
-
-
-
-
 Inputs::Inputs(sf::Window* fenetre) : m_fenetre(fenetre), m_fin(false)
 {
 
@@ -48,8 +25,6 @@ void Inputs::update()
     return;
 
     m_molette = 0;
-    for_each(t_boutonsSouris.begin(), t_boutonsSouris.end(), majClavier);
-    for_each(t_boutonsClavier.begin(), t_boutonsClavier.end(), majClavier);
 
     while (m_fenetre->pollEvent(m_event))
     {
@@ -60,21 +35,21 @@ void Inputs::update()
             break;
 
             case sf::Event::MouseButtonPressed : // Enregistre l'appui d'une touche (de souris)
-            t_boutonsSouris[m_event.mouseButton.button] = Pressee;
+            t_boutonsSouris[m_event.mouseButton.button] = true;
             break;
 
             case sf::Event::MouseButtonReleased : // Met fin à l'appui d'une touche (de souris)
-            t_boutonsSouris[m_event.mouseButton.button] = Lachee;
+            t_boutonsSouris[m_event.mouseButton.button] = false;
             break;
 
             case sf::Event::KeyPressed : // Pareil, mais sans les (de souris)
-            t_boutonsClavier[m_event.key.code] = Pressee;
+            t_boutonsClavier[m_event.key.code] = true;
             if (m_event.key.code == sf::Keyboard::Escape) // L'appui sur echap met fin au jeu.
             m_fin = true;
             break;
 
             case sf::Event::KeyReleased : // Encore pareil
-            t_boutonsClavier[m_event.key.code] = Lachee;
+            t_boutonsClavier[m_event.key.code] = false;
             break;
 
 
@@ -94,12 +69,12 @@ void Inputs::update()
     }
 }
 
-std::map<sf::Mouse::Button, KeyState>& Inputs::mouseButtons()
+std::map<sf::Mouse::Button, bool>& Inputs::mouseButtons()
 {
     return t_boutonsSouris;
 }
 
-std::map<sf::Keyboard::Key, KeyState>& Inputs::keyboardButtons()
+std::map<sf::Keyboard::Key, bool>& Inputs::keyboardButtons()
 {
     return t_boutonsClavier;
 }

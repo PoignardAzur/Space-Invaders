@@ -4,10 +4,20 @@
 
 
 Timer::Timer(float tempsDepart, float tempsMax, bool razAuto) :
-m_temps(tempsDepart), m_tempsMax(tempsMax), m_autoRaz(razAuto)
+m_temps(tempsDepart), m_autoRaz(razAuto)
+{
+    if (tempsMax)
+    m_tempsMax = tempsMax;
+
+    else
+    m_tempsMax = tempsDepart;
+}
+
+Timer::Timer(const Timer& t) : m_temps(t.m_temps), m_tempsMax(t.m_tempsMax), m_autoRaz(t.m_autoRaz)
 {
 
 }
+
 
 void Timer::setMaxTime(float nTemps)
 {
@@ -23,7 +33,7 @@ void Timer::setTime(float nTemps, bool limiter)
     nTemps = m_tempsMax;
 }
 
-void Timer::setTimeToMax()
+void Timer::resetTimeToMax()
 {
     m_temps = m_tempsMax;
 }
@@ -32,28 +42,31 @@ bool Timer::decrement(float ticks)
 {
     if (m_temps)
     {
-        if (ticks >= m_temps)
+        if (ticks <= m_temps)
         m_temps -= ticks;
+
+        else if (m_autoRaz)
+        {
+            resetTimeToMax();
+            return true;
+        }
 
         else
         m_temps = 0;
 
-        return !m_temps;
+        return m_temps == 0;
     }
 
 /// else
-    if (m_autoRaz)
-    setTimeToMax();
-
-    return false;
+    return true;
 }
 
-inline float Timer::maxTime() const
+/*inline*/ float Timer::maxTime() const
 {
     return m_tempsMax;
 }
 
-inline float Timer::time() const
+/*inline*/ float Timer::time() const
 {
     return m_temps;
 }

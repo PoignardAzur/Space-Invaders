@@ -13,16 +13,17 @@ class Timer
 {
     public :
 
-    Timer(float tempsDepart = 0, float tempsMax = 0, bool razAuto = true);
+    Timer(float startTime = 0, float maxTime = 0, bool autoReset = false);
+    Timer(const Timer& t);
 
-    void setMaxTime(float nTemps);
-    void setTime(float nTemps, bool limiter = false);
-    virtual void setTimeToMax();
+    void setMaxTime(float nTime);
+    void setTime(float nTime, bool limiter = false);
+    virtual void resetTimeToMax();
 
     bool decrement(float ticks);
 
-    inline float maxTime() const;
-    inline float time() const;
+/*    inline */float maxTime() const;
+/*    inline */float time() const;
 
     protected :
 

@@ -5,55 +5,52 @@
 #define HEADER_BOUCLE
 
 #include "Moteur2D.h"
-#include "Entities/Player.hpp"
-#include "SpriteCreator.h"
+#include "LoadingSpaceLevel.h"
+#include <fstream>
+#include "MainDimensions.h"
+#include "GameInterface.h"
 
+#define TITRE_FENETRE "Space !"
+#define FRAMERATE 60
+#define FRAME_SIZE (1.0f / FRAMERATE) * 2
 
-#define HAUTEUR_FENETRE 400
-#define LARGEUR_FENETRE 600
-
-#define ADRESSE_IMAGE_VAISSEAU "Ressources/Vaisseau.bmp"
-#define ADRESSE_IMAGE_TIR "Ressources/Tir.bmp"
-#define HITBOX_VAISSEAU sf::IntRect(-32,-16,32,16)
-#define HITBOX_TIR sf::IntRect(-4,-16,4,16)
-#define VITESSE_TIR 1.0f
-
-#define VIE_JOUEUR 100
-
-#define POSITION_JOUEUR sf::Vector2f(LARGEUR_FENETRE / 2, HAUTEUR_FENETRE - 50)
-#define CARACS_1_VAISSEAU_JOUEUR Ship::Para(VIE_JOUEUR, POSITION_JOUEUR, 0, 0)
-
-#define MUNITIONS_MAX_JOUEURS 100.0f
-
-#define VITESSE_BASE_JOUEUR 100.0
-#define VITESSE_BOOST_JOUEUR 1.5
-#define CARACS_2_VAISSEAU_JOUEUR Straffer::Para(VITESSE_BASE_JOUEUR, VITESSE_BOOST_JOUEUR, 0, LARGEUR_FENETRE)
+#define MAIN_DATABASE "Ressources\\DatabaseFile.txt"
+#define COMMAND_FILE  "Ressources\\CommandFile.txt"
 
 
 
-
-class BoucleJeu : public BlossClass
+class BoucleJeu : public BlossClass<float, SpaceStats>
 {
     public :
 
-    BoucleJeu(Level* niveauJoue = 0, Inputs* tableauEntrees = 0, sf::RenderWindow* cible = 0);
+    BoucleJeu(Inputs* tableauEntrees = 0, sf::RenderWindow* cible = 0);
 
-    virtual void updateGame(float tickSize);
- // void finirJeu();
-    void update(float tickSize)
-    {
-        BlossClass::update(tickSize);
-        updateGame(tickSize);
-    }
+    virtual void update(float tickSize);
+    virtual Level<float, SpaceStats>* playedLevel();
+    bool doContinue();
+    int finalScore();
+
 
     private :
 
-    Alea m_hasard;
-    Level* m_niveauJoue;
+    GameInterface m_interface;
+    ObjectDrawer m_textureDrawer;
+    sf::RenderTexture m_mainTexture;
+    sf::RenderWindow* m_window;
 
-    PlayerShip* m_ship;
-    sf::Texture m_texture_1;
-    sf::Texture m_texture_2;
+    boost::shared_ptr<PlayerShip> m_player; // has-a
+    boost::shared_ptr<LoadingSpaceLevel> m_level; // has-a
+    void setPlayer();
+
+    sf::Texture tex_player_life;
+    sf::Texture tex_player_idle;
+    sf::Texture tex_player_shoot;
+    sf::Texture tex_player_bullet;
+
+    int m_score;
+    int m_lifes;
+
+    Timer m_deathTimer;
 };
 
 
