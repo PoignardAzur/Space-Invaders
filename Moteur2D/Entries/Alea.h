@@ -16,7 +16,7 @@ class Alea
 
     Alea()
     {
-        srand(time(0)); // initialise la graine
+        srand(time(nullptr)); // initialise la graine
     }
 /*
     Alea(int graine)

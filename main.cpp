@@ -2,7 +2,7 @@
 
 #include "ClassesProjet/BoucleJeu.h"
 //#include "Moteur2D/includes.h"
-
+#include <iostream>
 
 inline int catchError(const char* e)
 {
@@ -14,8 +14,8 @@ int main(int argc, char** argv)
 {
     try
     {
-
         sf::RenderWindow* fenetre = new sf::RenderWindow(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE);
+
         fenetre->setFramerateLimit(FRAMERATE);
         BoucleJeu bigBrother(new Inputs(fenetre), fenetre);
         sf::Clock chronos;

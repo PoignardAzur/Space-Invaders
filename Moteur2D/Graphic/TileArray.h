@@ -8,7 +8,7 @@
 #include "Abstractions/AbsTileArray.h"
 
 
-typedef std::vector< boost::shared_ptr<sf::Sprite> > Correspondances;
+typedef std::vector< std::shared_ptr<sf::Sprite> > Correspondances;
 
 
 class TileArrayDrawer : public AbsTileArrayDrawable

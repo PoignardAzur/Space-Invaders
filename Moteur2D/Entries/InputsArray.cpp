@@ -4,22 +4,29 @@
 #include "InputsArray.h"
 
 
-Inputs::Inputs(sf::Window* fenetre) : m_fenetre(fenetre), m_fin(false)
+
+Inputs::Inputs(sf::Window* fenetre, bool escapeMeansClose) : m_fenetre(fenetre), m_closeWindow(false), m_escapeMeansClose(escapeMeansClose)
 {
 
 }
 
-bool Inputs::endGame()
+void Inputs::set(sf::Window* fenetre, bool escapeMeansClose)
 {
-    return m_fin;
+    m_fenetre = fenetre;
+    m_escapeMeansClose = escapeMeansClose;
 }
 
-sf::Vector2f Inputs::cursor()
+bool Inputs::closeWindow() const
 {
-    return m_curseur;
+    return m_closeWindow;
 }
 
-void Inputs::update()
+sf::Vector2f Inputs::cursor() const
+{
+    return m_cursor;
+}
+
+void Inputs::update(float ticks)
 {
     if (!m_fenetre)
     return;
@@ -44,8 +51,10 @@ void Inputs::update()
 
             case sf::Event::KeyPressed : // Pareil, mais sans les (de souris)
             t_boutonsClavier[m_event.key.code] = true;
-            if (m_event.key.code == sf::Keyboard::Escape) // L'appui sur echap met fin au jeu.
-            m_fin = true;
+
+            if (m_event.key.code == sf::Keyboard::Escape && m_escapeMeansClose) // L'appui sur echap peut mettre fin au jeu.
+            m_closeWindow = true;
+
             break;
 
             case sf::Event::KeyReleased : // Encore pareil
@@ -54,12 +63,12 @@ void Inputs::update()
 
 
             case sf::Event::MouseMoved : // Enregistre la nouvelle position de la souris (pas de mouvement relatif)
-            m_curseur.x = m_event.mouseMove.x;
-            m_curseur.y = m_event.mouseMove.y;
+            m_cursor.x = m_event.mouseMove.x;
+            m_cursor.y = m_event.mouseMove.y;
             break;
 
             case sf::Event::Closed : // Détecte les tentatives de fermeture de fenetre
-            m_fin = true;
+            m_closeWindow = true;
             break;
 
             default :
@@ -78,3 +87,18 @@ std::map<sf::Keyboard::Key, bool>& Inputs::keyboardButtons()
 {
     return t_boutonsClavier;
 }
+
+
+
+const std::map<sf::Mouse::Button, bool>& Inputs::mouseButtons() const
+{
+    return const_cast<Inputs*>(this)->mouseButtons();
+}
+
+const std::map<sf::Keyboard::Key , bool>& Inputs::keyboardButtons() const
+{
+    return const_cast<Inputs*>(this)->keyboardButtons();
+}
+
+
+

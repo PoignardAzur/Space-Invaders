@@ -4,7 +4,7 @@
 #ifndef BULLET_HEADER
 #define BULLET_HEADER
 
-#define BULLET_HITBOX sf::IntRect(0,0, 8, 32)
+#define BULLET_HITBOX sf::IntRect(-4, -16, 4, 16)
 #define DEFAULT_BULLET_POWER 10
 #define MAX_BULLET_SPEED -900.0f
 //#define BULLET_ACCELERATION 100.0f
@@ -17,18 +17,18 @@ class Enemy;
 class PlayerShip;
 
 
-class Bullet : public Vart
+class Bullet : public BaseVart
 {
     public :
 
     Bullet();
-    Bullet(sf::Vector2f pos, float maxSpeed, Sprite* bulletSprite);
-    void set(sf::Vector2f pos, float maxSpeed, Sprite* bulletSprite);
+    Bullet(sf::Vector2f pos, float maxSpeed, const sf::Sprite& bulletSprite);
+    void set(sf::Vector2f pos, float maxSpeed, const sf::Sprite& bulletSprite);
 
     void update(float tickSize);
-    void recycle(sf::IntRect visibleZone);
+    void recycle(sf::IntRect visibleZone);          // deletes the bullet one it exits that zone
 
-    void testHarming(Enemy& e);
+    void testHarming(Enemy& e);                     // if the bullet his touching 'e', then 'e' takes up to m_power damage and the bullet loses power
     void testHarming(PlayerShip& e);
 
 

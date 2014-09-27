@@ -4,10 +4,12 @@
 #ifndef ENEMIES_STATS
 #define ENEMIES_STATS
 
+#define DEFAULT_ENEMY_SHOT_NAME "blueShot"
+
 
 struct EnemiesStats
 {
-    int spriteNumber;
+    std::string spriteName;
     sf::IntRect hitbox;
     float speed;
     int scoreValue;
@@ -15,8 +17,9 @@ struct EnemiesStats
 
     bool shoots;
 
-    EnemiesStats(int sprNumber, sf::IntRect nHitbox, float nSpeed, int nScoreValue, int nHP, bool nShoots = false) :
-    spriteNumber(sprNumber), hitbox(nHitbox), speed(nSpeed), scoreValue(nScoreValue), hp(nHP), shoots(nShoots) {}
+    EnemiesStats() {}
+    EnemiesStats(const std::string& sprName, sf::IntRect nHitbox, float nSpeed, int nScoreValue, int nHP, bool nShoots = false) :
+    spriteName(sprName), hitbox(nHitbox), speed(nSpeed), scoreValue(nScoreValue), hp(nHP), shoots(nShoots) {}
 };
 
 

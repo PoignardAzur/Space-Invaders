@@ -4,25 +4,28 @@
 #ifndef HEADER_AFFICHEUR_OBJETS
 #define HEADER_AFFICHEUR_OBJETS
 
-#include "Abstractions/AbstractDrawer.h"
+#include "AbstractDrawer.h"
 
-/*
-Affiche basiquement l'apparence des objets.
-*/
+
 
 class ObjectDrawer : public AbstractDrawer
 {
     public :
 
     ObjectDrawer(sf::RenderTarget* cible);
+    virtual ~ObjectDrawer() {}
 
-    sf::RenderTarget& target();
+    virtual void clear();                               // reset the screen
+    virtual void draw(const sf::Drawable& o);
 //    void display();
 
+
     protected :
+    sf::RenderTarget& target();
+
 
     private :
-    sf::RenderTarget* m_fenetreCible; /// use-a
+    sf::RenderTarget* m_target;       // use-a
 };
 
 

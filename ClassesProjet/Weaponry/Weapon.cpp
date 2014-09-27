@@ -6,37 +6,39 @@
 
 Weapon::Weapon(float shootCoolDown, float timeToNextShoot)
 {
-    set(shootCoolDown, timeToNextShoot);
+    setStats(shootCoolDown, timeToNextShoot);
+    m_ammo = -1;
 }
 
-Weapon::Weapon(const Weapon& otherWeapon) : m_bulletSprite(otherWeapon.m_bulletSprite), p_bulletArray(otherWeapon.p_bulletArray), m_timer(otherWeapon.m_timer)
+Weapon::Weapon(const Weapon& otherWeapon) : m_timer(otherWeapon.m_timer), m_bulletSprite(otherWeapon.m_bulletSprite), p_bulletArray(otherWeapon.p_bulletArray)
 {
-
+    m_ammo = -1;
 }
 
 Weapon::Weapon(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
 {
-    set(bulletSpr, bulletArray);
+    setBullets(bulletSpr, bulletArray);
+    m_ammo = -1;
 }
 
-void Weapon::set(float shootCoolDown, float timeToNextShoot)
+void Weapon::setStats(float shootCoolDown, float timeToNextShoot)
 {
     m_timer.setMaxTime(shootCoolDown);
     m_timer.setTime(timeToNextShoot);
 }
 
 
-void Weapon::set(const sf::Sprite& bulletSpr)
+void Weapon::setBulletSprite(const sf::Sprite& bulletSpr)
 {
     m_bulletSprite = bulletSpr;
 }
 
-void Weapon::set(VartArray<Bullet>* bulletArray)
+void Weapon::setBulletArray(VartArray<Bullet>* bulletArray)
 {
     p_bulletArray = bulletArray;
 }
 
-void Weapon::set(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
+void Weapon::setBullets(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
 {
     m_bulletSprite = bulletSpr;
     p_bulletArray = bulletArray;
@@ -48,9 +50,9 @@ bool Weapon::update(float tickSize)
     return readyToShoot();
 }
 
-bool Weapon::readyToShoot()
+bool Weapon::readyToShoot() const
 {
-    return !(m_timer.time() > 0);
+    return ammo() != 0 && !(m_timer.time() > 0);
 }
 
 bool Weapon::tryToShoot(const sf::Vector2f& pos, float speed)
@@ -62,13 +64,32 @@ bool Weapon::tryToShoot(const sf::Vector2f& pos, float speed)
     shoot(pos, speed);
     m_timer.resetTimeToMax();
     assert(!readyToShoot());
+
+    if (ammo() > 0)
+    setAmmoCount(-1, true);
+
     return true;
 }
 
-void Weapon::shoot(const sf::Vector2f& pos, float speed)
+void Weapon::shoot(const sf::Vector2f& bulletPos, float bulletSpeed)
 {
     m_bulletCenter = sf::Vector2f(4, 16);
-    p_bulletArray->add( new Bullet(pos - m_bulletCenter, speed, new Sprite(m_bulletSprite)) );
+    p_bulletArray->add( new Bullet(bulletPos - m_bulletCenter, bulletSpeed, m_bulletSprite) );
+}
+
+int Weapon::ammo() const
+{
+    return m_ammo;
+}
+
+
+void Weapon::setAmmoCount(int a, bool relative)
+{
+    if (relative)
+    m_ammo += a;
+
+    else
+    m_ammo = a;
 }
 
 

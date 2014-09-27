@@ -9,28 +9,32 @@
 #define SHOOT_BUTTON sf::Keyboard::Space
 #define COOLDOWN_TIME 0.3f
 #define HITBOX_PLAYER_SHIP sf::IntRect(0,20, 60,40)
-#define POSITION_PLAYER_SHIP sf::Vector2f( (LARGEUR_FENETRE / 2) - 10, HAUTEUR_FENETRE - (HAUTEUR_HUD + 50) )
+#define POSITION_PLAYER_SHIP sf::Vector2f( (LARGEUR_FENETRE / 2) - 10, HAUTEUR_FENETRE - 50 )
 
 
 //#include "Moteur2D.h"
 #include "Weaponry/Weapon.h"
 
 
-class PlayerShip : public Vart, public HurtableEntity
+class PlayerShip : public BaseVart, public HurtableEntity
 {
     public :
 
-    PlayerShip(Inputs* in = 0, Sprite* spriteIdle = 0, Sprite* spriteShoot = 0);
-    PlayerShip(Sprite* spriteIdle, Sprite* spriteShoot = 0);
-    void set(Inputs* in, Sprite* spriteIdle = 0, Sprite* spriteShoot = 0);
-    void set(Sprite* spriteIdle, Sprite* spriteShoot = 0);
-    void setBulletArray(VartArray<Bullet>* bulletArray);
-    void setBullets(sf::Sprite bulletSprite);
+    PlayerShip();
+    PlayerShip(const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, AbstractInputs* in = nullptr);
+    virtual ~PlayerShip();
+
+    void set(AbstractInputs* in, const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, float leftLimit, float rightLimit);
+    void setSprites(const sf::Sprite& spriteIdle, const sf::Sprite spriteShoot);
+    void setLimits(float left, float right);
+    void setInputs(AbstractInputs* in);
+
+    void addWeapon(Weapon* w);
+    int takeDamage(int dm);                 /// TO CHANGE
+    int kill();
 
     void update(float tick_size);
 
-    int takeDamage(int dm); /// TO CHANGE
-    int kill();
 
     protected :
 
@@ -40,16 +44,24 @@ class PlayerShip : public Vart, public HurtableEntity
     void gotoLeft(float x);
     void gotoRight(float x);
 
+    Weapon* selectedWeapon();
+    const Weapon* selectedWeapon() const;
+
 
     private :
 
-    Inputs* m_inputs;
+    AbstractInputs* m_inputs;
 
-    boost::shared_ptr<Sprite> m_spriteIdle;     // has-a (shared by itself)
-    boost::shared_ptr<Sprite> m_spriteShoot;    // has-a (shared by itself)
+    sf::Sprite m_spriteIdle;                // The ship keeps this sprite until it shoots
+    sf::Sprite m_spriteShoot;               // The ship gets this sprite after shooting and keeps it a few ticks
 
-    Weapon m_weapon;
+    std::vector<Weapon*> m_weapons;
+    unsigned short m_selectedWeaponSlot;
+
     sf::Vector2f m_center;
+
+    float m_leftLimit;                      // The ship cannot go further left than m_leftLimit or further right than m_rightLimit
+    float m_rightLimit;
 };
 
 

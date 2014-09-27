@@ -7,24 +7,26 @@
 
 Bullet::Bullet()
 {
-    Vart::set(BULLET_HITBOX);
+    BaseVart::PhysicObject::setHitbox(BULLET_HITBOX);
 //    m_maxSpeedReached = false;
 }
 
 
-Bullet::Bullet(sf::Vector2f pos, float maxSpeed, Sprite* bulletSprite)
+Bullet::Bullet(sf::Vector2f pos, float maxSpeed, const sf::Sprite& bulletSprite)
 {
-    Vart::set(BULLET_HITBOX);
+    BaseVart::PhysicObject::setHitbox(BULLET_HITBOX);
     set(pos, maxSpeed, bulletSprite);
 //  m_maxSpeedReached = false;
 }
 
 
-void Bullet::set(sf::Vector2f pos, float maxSpeed, Sprite* bulletSprite)
+void Bullet::set(sf::Vector2f pos, float maxSpeed, const sf::Sprite& bulletSprite)
 {
-    Vart::set(pos);
-    Vart::setSprite(bulletSprite);
-    Vart::PhysicObject::changeSpeed(sf::Vector2f(0, maxSpeed), false);
+    BaseVart::PhysicObject::move(pos, false);
+    BaseVart::setSprite(bulletSprite);
+    Vart::setSpriteRelativePosition(bulletSprite.getGlobalBounds())
+
+    BaseVart::PhysicObject::changeSpeed(sf::Vector2f(0, maxSpeed), false);
     m_power = DEFAULT_BULLET_POWER;
 //  m_maxSpeed = maxSpeed;
 }

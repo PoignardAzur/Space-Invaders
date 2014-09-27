@@ -7,7 +7,7 @@
 #include <vector>
 
 /*
-Un bete timer. Les prototypes parlent d'eux mêmes.
+A class for an in-game timer
 */
 class Timer
 {
@@ -21,6 +21,7 @@ class Timer
     virtual void resetTimeToMax();
 
     bool decrement(float ticks);
+    // returns true if the timer reached zero ; if m_autoReset is true and the time reached zero, it returns true then resets back to its max delay
 
 /*    inline */float maxTime() const;
 /*    inline */float time() const;
@@ -32,7 +33,7 @@ class Timer
     float m_temps;
     float m_tempsMax;
 
-    bool m_autoRaz;
+    bool m_autoReset;
 
 };
 

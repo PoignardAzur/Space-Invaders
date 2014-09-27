@@ -10,14 +10,19 @@ Inclus tous les fichiers du moteur
 //namespace CtB
 //{
 
-    #include "BossClass.h"
-    #include "Entries/Alea.h"
-    #include "Timer.h"
+    #include "GameController.h"
+    #include "Interfaces/MetaInterface.h"
+    #include "Interfaces/PressAnyKeyMenu.h"
+    #include "Interfaces/AbstractHUD.h"
+
     #include "Game/Vart.h"
+    #include "Game/VartArray.h"
+
+    #include "Entries/Alea.h"
     #include "StartEndBool.h"
+    #include "Timer.h"
 //}
 
-    #include "ushort.h"
 
 
 #endif

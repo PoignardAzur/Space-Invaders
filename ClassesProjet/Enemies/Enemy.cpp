@@ -10,23 +10,19 @@ Enemy::Enemy()
 }
 
 
-Enemy::Enemy(sf::IntRect spawnZone, Alea& dice, Sprite* spr, sf::IntRect hitbox, float nSpeed, int hp, int nScore)
+Enemy::Enemy(const sf::Sprite& sprite, sf::IntRect hitbox, float nSpeed, int hp, int nScore)
 {
-    set(spawnZone, dice, spr, hitbox, nSpeed, hp, nScore);
+    set(sprite, hitbox, nSpeed, hp, nScore);
 }
 
 
-void Enemy::set(sf::IntRect spawnZone, Alea& dice, Sprite* spr, sf::IntRect hitbox, float nSpeed, int hp, int nScore)
+void Enemy::set(const sf::Sprite& sprite, sf::IntRect hitbox, float nSpeed, int hp, int nScore)
 {
     m_has_entered = false;
 
-    setHitbox(hitbox);
-    Vart::setSprite(spr);
-//  Vart::PhysicObject::move(sf::Vector2f(50, -20));/*
-    Vart::PhysicObject::move(sf::Vector2f(dice(spawnZone.left + hitbox.left, spawnZone.left - hitbox.left + spawnZone.width - hitbox.width),
-                                          dice(spawnZone.top + hitbox.top, spawnZone.top - hitbox.top + spawnZone.height - hitbox.height) ), false);//*/
-
-    Vart::PhysicObject::changeSpeed(sf::Vector2f(0, nSpeed));
+    setHitbox(PhysicObject(hitbox));
+    BaseVart::setSprite(sprite);
+    BaseVart::PhysicObject::changeSpeed(sf::Vector2f(0, nSpeed));
 
     m_hp = hp;
     m_score = nScore;
@@ -34,19 +30,19 @@ void Enemy::set(sf::IntRect spawnZone, Alea& dice, Sprite* spr, sf::IntRect hitb
 
 void Enemy::setHitbox(const PhysicObject& hitbox)
 {
-    Vart::setHitbox(hitbox);
+    BaseVart::PhysicObject::set(hitbox);
 }
 
 bool Enemy::recycle(const sf::IntRect& visibleZone)
 {
-    if (testCollision(Vart::PhysicObject::placedBox(), visibleZone))
+    if (testCollision(BaseVart::PhysicObject::placedBox(), visibleZone))
     {
         m_has_entered = true;
     }
 
     else if (m_has_entered)
     {
-        Vart::removeThis();
+        BaseVart::removeThis();
         return true;
     }
 
@@ -73,9 +69,21 @@ int Enemy::takeDamage(int dm)
     return dm;
 }
 
+void Enemy::kill(bool doExplode, bool givePoints)
+{
+    if (!givePoints)
+    m_score = 0;
+
+    if (doExplode)
+    explode();
+
+    BaseVart::removeThis();
+}
+
+
 bool Enemy::isDead() const
 {
-    return Vart::doDelete();
+    return BaseVart::doDelete();
 }
 
 int Enemy::score() const
@@ -86,6 +94,6 @@ int Enemy::score() const
 
 void Enemy::explode()
 {
-    Vart::removeThis();
+    /// TODO
 }
 

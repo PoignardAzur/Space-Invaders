@@ -12,28 +12,33 @@ class Weapon
 {
     public :
 
-    Weapon(float shootCoolDown = ENEMY_COOLDOWN, float timeToNextShoot = TIME_TO_FIRST_SHOOT);
-    Weapon(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray = 0);
+    explicit Weapon(float shootCoolDown = ENEMY_COOLDOWN, float timeToNextShoot = TIME_TO_FIRST_SHOOT);
+    explicit Weapon(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray = nullptr);
     Weapon(const Weapon& otherWeapon);
+    virtual ~Weapon() {}
 
-    void set(float shootCoolDown, float timeToNextShoot = TIME_TO_FIRST_SHOOT);
-    void set(const sf::Sprite& bulletSpr);
-    void set(VartArray<Bullet>* bulletArray);
-    void set(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray);
+    void setStats(float shootCoolDown, float timeToNextShoot = TIME_TO_FIRST_SHOOT);
+    void setBulletSprite(const sf::Sprite& bulletSpr);
+    void setBulletArray(VartArray<Bullet>* bulletArray);
+    void setBullets(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray);
 
     bool update(float tickSize);
-    bool readyToShoot();
-    virtual bool tryToShoot(const sf::Vector2f& pos, float speed = MAX_BULLET_SPEED);
+    bool readyToShoot() const;
+    virtual bool tryToShoot(const sf::Vector2f& bulletPos, float bulletSpeed = MAX_BULLET_SPEED);
+    int ammo() const;
+
 
     protected :
 
-    virtual void shoot(const sf::Vector2f& pos, float speed);
+    virtual void shoot(const sf::Vector2f& bulletPos, float bulletSpeed);
+    void setAmmoCount(int a, bool relative = false);
 
 
     private :
 
     Timer m_timer;
     sf::Vector2f m_bulletCenter;
+    int m_ammo;                                 // negative numbers mean infinite ammo
 
     sf::Sprite m_bulletSprite;
     VartArray<Bullet>* p_bulletArray;           // use-a

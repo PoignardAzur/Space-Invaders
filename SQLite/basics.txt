@@ -3,35 +3,35 @@
 #include "statement.hpp"
 
 
-class sqlite3::Database
+class sql3::Database
 {
 	public :
 	
 	Database();
-	void open(const char* filename, int flags = SQLITE_OPEN_READWRITE, const char *zVFS = 0);
+	void open(const char* filename, int flags = SQLITE_OPEN_READWRITE, const char *zVFS = 0); // may throw a char* if the file can't open
 	void close();
 	
 	void prepare(const char *query, int maxSize, Statement& modifiedStmt);
 	void prepareSelectAll(const char *table, int maxSize, Statement& modifiedStmt);
 };
 
-sqlite3::Statement
+class sql3::Statement
 {
 	public :
 
 	void prepareIn(Database& target, const char *query, int maxSize = -1);
-	bool step();
+	bool step();						// may throw a const char* if the prepared request was invalid
 	void reset(bool doResetBindings = false);
 	void erase();
 
-	void bindInt(int i, int value);
+	void bindInt(int i, int value);				// each may throw a const char*
 	void bindDouble(int i, double value);
 	void bindText(int i, const char* value, int size);
 	void bindNull(int i);
 };
 
 
-const sqlite3::Statement
+const sql3::Statement
 {
 	int 		columnInt(int i);
 	double 		columnDouble(int i);

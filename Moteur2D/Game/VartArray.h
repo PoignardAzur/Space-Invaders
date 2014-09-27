@@ -8,129 +8,82 @@
 
 
 #include "AbsVart.h"
+#include <deque>
+#include <memory>
 
 
 template <typename T = AbsVart>
-class VartArray
+class VartArray : public std::deque<std::shared_ptr<T>>
 {
     public :
 
-    VartArray();
+    ~VartArray();
 
-    void add(T* nvart);
-    inline const std::vector< boost::shared_ptr<T> >& array() const;
-    inline std::vector< boost::shared_ptr<T> >& array();
+    virtual void updateAll(float tickSize, bool delDeadVarts = true); // Quand le tableau est mis à jour, tous ses éléments le sont.
+    virtual void drawAllIn(AbstractDrawer& cible); // Quand le tableau est affiche, tous ses éléments le sont.
+    virtual void add(T* vart);
 
-    inline boost::shared_ptr<T> objectN(unsigned short lequel);
-    inline const boost::shared_ptr<T> objectN(unsigned short lequel) const;
-    inline unsigned short size() const;
-    inline void clear();
+    virtual void deleteDeadVarts();
 
-
-    protected :
-
-    void remove(int lequel);
-
-    virtual void deleteVarts()
-    {
-        for (unsigned short i = 0; i < t_varts.size(); i++)
-        {
-            if ( t_varts[i]->doDelete() )
-            remove(i);
-        }
-    }
 
     private :
 
-    std::vector< boost::shared_ptr<T> > t_varts; //has a
-
-
-    public :
-
-    virtual void updateAll(float tickSize) // Quand le tableau est mis à jour, tous ses éléments le sont.
-    {
-        for (unsigned short i = 0; i < t_varts.size(); i++)
-        {
-            t_varts[i]->update(tickSize);
-        }
-
-        deleteVarts();
-    }
-
-    virtual void drawAllIn(AbstractDrawer& cible) // Quand le tableau est affiche, tous ses éléments le sont.
-    {
-        for (unsigned short i = 0; i < t_varts.size(); i++)
-        {
-            t_varts[i]->drawIn(cible);
-        }
-    }
+    typedef std::deque<std::shared_ptr<T>> dpT;
+//  using std::deque<std::shared_ptr<T>>::deque();
 };
 
 
-
-
 template <typename T>
-VartArray<T>::VartArray()
+VartArray<T>::~VartArray()
 {
 
 }
 
 
-
-
 template <typename T>
-void VartArray<T>::add(T* nvart)
+void VartArray<T>::updateAll(float tickSize, bool delDeadVarts)
 {
-    boost::shared_ptr<T> pointeurVart(nvart);
-    t_varts.push_back(pointeurVart);
+    for (auto p = dpT::begin(); p != dpT::end(); ++p)
+    {
+        (*p)->update(tickSize);
+    }
+
+    if (delDeadVarts)
+    deleteDeadVarts();
+    /* we could just call erase(p) in the loop, but it could lead to
+    problems should a Vart need variables from a deleted one */
 }
 
 
 template <typename T>
-inline const std::vector< boost::shared_ptr<T> >& VartArray<T>::array() const
+void VartArray<T>::drawAllIn(AbstractDrawer& cible)
 {
-    return /*const_cast<const std::vector< boost::shared_ptr<T> >&>*/ t_varts;
+    for (auto p = dpT::begin(); p != dpT::end(); ++p)
+    {
+        (*p)->drawIn(cible);
+    }
 }
 
 
 template <typename T>
-inline std::vector< boost::shared_ptr<T> >& VartArray<T>::array() // getter basique
+void VartArray<T>::add(T* vart)
 {
-    return t_varts;
-}
-
-
-template <typename T>
-inline void VartArray<T>::clear()
-{
-    t_varts.clear();
-}
-
-template <typename T>
-inline boost::shared_ptr<T> VartArray<T>::objectN(unsigned short lequel)
-{
-    return t_varts[lequel];
-}
-
-
-template <typename T>
-inline const boost::shared_ptr<T> VartArray<T>::objectN(unsigned short lequel) const
-{
-    return t_varts[lequel];
-}
-
-template <typename T>
-inline unsigned short VartArray<T>::size() const
-{
-    return t_varts.size();
+    dpT::push_back(std::shared_ptr<T>(vart));
 }
 
 
 
 template <typename T>
-void VartArray<T>::remove(int lequel)
+void VartArray<T>::deleteDeadVarts()
 {
-    t_varts.erase(t_varts.begin() + lequel);
+    for (auto p = dpT::begin(); p != dpT::end(); )
+    {
+        if ((*p)->doDelete())
+        p = dpT::erase(p);
+
+        else
+        p++;
+    }
 }
 
 

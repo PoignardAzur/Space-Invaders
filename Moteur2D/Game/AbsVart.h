@@ -5,8 +5,6 @@
 #include "Updatable.h"
 #include "Deletable.h"
 #include "../Graphic/ObjectDrawer.h"
-#include "../Graphic/Sprite.h"
-#include "../Graphic/Shape.h"
 
 
 /*

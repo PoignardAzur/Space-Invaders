@@ -3,39 +3,46 @@
 #ifndef DRAWABLE_TEXT_HEADER
 #define DRAWABLE_TEXT_HEADER
 
-#include "Drawable.h"
+#include "AbstractDrawable.h"
 #include <sstream>
 
 
+enum Alignement
+{
+    TopLeftCorner, MiddleTopSide, TopRightCorner, MiddleLeftSide, Center, MiddleRightSide, DownLeftCorner, MiddleDownSide, DownRightCorner
+};
 
-class DrawableText : public DrawableObject
+
+
+class DrawableText : public AbstractDrawable
 {
     public :
 
-    DrawableText(const sf::Text& t, bool rightAligned = false);
-    DrawableText(const char* text = 0, sf::Vector2f pos = sf::Vector2f(0,0), const sf::Font& f = sf::Font::getDefaultFont(), const sf::Color& c = sf::Color::White, bool rightAligned = false);
+    DrawableText(const sf::Text& t, Alignement anchorPosition = TopLeftCorner);
+    DrawableText(const char* text = nullptr, sf::Vector2f pos = sf::Vector2f(0,0), const sf::Font& f = sf::Font(), const sf::Color& c = sf::Color::White, Alignement anchorPosition = TopLeftCorner);
 
-    void set(const sf::Text& t, bool rightAligned = false);
-    void set(const char* text, sf::Vector2f pos, const sf::Font& f = sf::Font::getDefaultFont(), const sf::Color& c = sf::Color::White, bool rightAligned = false);
-    void setRightAligned(bool right = false);
-    void setPosition(sf::Vector2f pos, bool rightAligned = false);
+    void set(const sf::Text& t, Alignement anchorPosition = TopLeftCorner);
+    void set(const char* text, sf::Vector2f pos, const sf::Font& f = sf::Font(), const sf::Color& c = sf::Color::White, Alignement anchorPosition = TopLeftCorner);
+    void setAlignement(Alignement anchorPosition);
+    void setPosition(sf::Vector2f pos, Alignement anchorPosition);
+    void setPosition(sf::Vector2f pos);
     void setFont(const sf::Font& f, int size = 1);
     void setColor(const sf::Color& c);
 
     void setDisplayedText(const char* text);
 
+    virtual void drawIn(AbstractDrawer& cible) const;
+
 
     protected :
-
-    const sf::Drawable& sprite() const;
-    sf::Drawable& sprite();
     void realign();
 
 
     private :
 
     sf::Text m_image;
-    bool m_rightAligned;
+    sf::Font m_font;
+    Alignement m_anchorPosition;
 };
 
 

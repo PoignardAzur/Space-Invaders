@@ -3,118 +3,104 @@
 #include "BoucleJeu.h"
 
 
-BoucleJeu::BoucleJeu(Inputs* tableauEntrees, sf::RenderWindow* cible) :
-m_level(new LoadingSpaceLevel), m_textureDrawer(&m_mainTexture), m_deathTimer(TIME_BEFORE_RESPAWN)
+BoucleJeu::BoucleJeu(AbstractInputs* tableauEntrees, sf::RenderWindow* cible) : m_level(new RandomSpaceLevel)
 {
-    m_mainTexture.create(LARGEUR_FENETRE, HAUTEUR_FENETRE - HAUTEUR_HUD);
     m_window = cible;
     set(tableauEntrees, cible);
+    m_level->setUserInputs(windowInputs());
 
-    m_level->set(sf::IntRect(0,0, LARGEUR_FENETRE, HAUTEUR_FENETRE), sf::IntRect(0, HAUTEUR_SPAWN, LARGEUR_FENETRE, 10));
+    SpaceHUD* hud = new SpaceHUD(m_level);
+    m_interface.addInterface(hud);
+
+    sf::Font f;
+    f.loadFromFile(DEFAULT_FONT_NAME);
+    m_interface.addInterface(new FirstScreen(f, sf::Color::White, windowInputs()));
+
+    drawEverything(0);
 
     sql3::Database db;
-    std::ifstream file(COMMAND_FILE);
+    setDatabase(db, MAIN_DATABASE, COMMAND_FILE);
+    setTextures(m_textureList);
+    setLevel(m_level, m_textureList, db);
+    setHUD(m_textureList, hud);
+}
+
+
+
+void BoucleJeu::setDatabase(sql3::Database& db, const char* mainDatabaseName, const char* commandFileName)
+{
+    std::ifstream file(commandFileName);
 
     if (file.is_open())
-    {
-        db.createFromFile(file, MAIN_DATABASE);
-    }
+    createDatabaseFromFile(db, file, mainDatabaseName, &std::cerr, true);
 
     else
-    {
-        db.open(MAIN_DATABASE);
-    }
-
-    m_level->setTexturesFromFiles(db);
-    m_level->setEnemiesFromFile(db);
-    m_level->setWavesFromFile(db);
-
-    if (!tex_player_life.loadFromFile("Ressources\\Images\\Vie.bmp"))
-    throw "The idle texture could not be charged";
-
-    if (!tex_player_idle.loadFromFile("Ressources\\Images\\Vaisseau_Joueur.bmp"))
-    throw "The idle texture could not be charged";
-
-    if (!tex_player_shoot.loadFromFile("Ressources\\Images\\Vaisseau_Joueur_Charge.bmp"))
-    throw "The shooter texture could not be charged";
-
-    if (!tex_player_bullet.loadFromFile("Ressources\\Images\\Tir.bmp"))
-    throw "The bullet texture could not be charged";
-
-    m_lifes = 3;
-    setPlayer();
-
-    m_interface.setLifeSprite(sf::Sprite(tex_player_life));
-    m_interface.setScoreCounter(DEFAULT_FONT_NAME, sf::Color::White);
+    db.open(mainDatabaseName);
 }
 
 
-void BoucleJeu::setPlayer()
+void BoucleJeu::setTextures(TextureList& t)
 {
-    m_player = boost::shared_ptr<PlayerShip>(new PlayerShip(windowInputs()));
+    std::map<std::string, std::string> textures;
 
-    m_player->set( new Sprite(sf::Sprite(tex_player_idle)), new Sprite(sf::Sprite(tex_player_shoot)) );
-    m_player->setBullets(sf::Sprite(tex_player_bullet));
+    textures[LIFE_TEXTURE_NAME] = "Ressources\\Images\\Vie.bmp";
+    textures[IDLE_PLAYER_TEXTURE_NAME] = "Ressources\\Images\\Vaisseau_Joueur.bmp";
+    textures[SHOOTING_PLAYER_TEXTURE_NAME] = "Ressources\\Images\\Vaisseau_Joueur_Charge.bmp";
+    textures[PLAYER_BULLET_SPRITE_NAME] = "Ressources\\Images\\Tir.bmp";
+    textures[DEFAULT_ENEMY_SHOT_NAME] = "Ressources\\Images\\Tir_Ennemi.bmp";
 
-    m_level->set(m_player.get());
+    t.loadBaseTextures(textures);
 }
 
 
-Level<float, SpaceStats>* BoucleJeu::playedLevel()
+void BoucleJeu::setLevel(RandomSpaceLevel* level, TextureList& t, sql3::Database& db)
 {
-    return m_level.get();
+    level->setZones(sf::IntRect(0,0, LARGEUR_FENETRE, HAUTEUR_FENETRE), 0, LARGEUR_FENETRE, HAUTEUR_SPAWN);
+    level->useTextureList(&t);
+
+    level->respawnPlayer();
+
+    loadTextureList(t, db);
+    loadEnemyStats(*level, db);
+///    loadEnemyWave(*level, db);                               - TO CHANGE
+
+    std::vector<std::string> names = {"mook", "boosted", "shooter", "invis"};
+    level->setNames(names);
+    level->setLives(NUMBER_OF_LIVES);
 }
 
-bool BoucleJeu::doContinue()
+
+void BoucleJeu::setHUD(TextureList& t, SpaceHUD* hud)
 {
-    return ( m_level->outputData().continuePlaying && ! windowInputs()->endGame() );
+    hud->setAllFonts(DEFAULT_FONT_NAME);
+    hud->setLifeSprite(sf::Sprite( *t.texture(LIFE_TEXTURE_NAME) ));
 }
 
-int BoucleJeu::finalScore()
+
+
+
+AbstractGameInterface<float>* BoucleJeu::interface()
 {
-    return m_score;
+    return &m_interface;
+}
+
+
+
+void BoucleJeu::drawEverything(float tickSize)
+{
+    m_interface.drawIn(*renderingWindow());
 }
 
 
 void BoucleJeu::update(float tickSize)
 {
-    m_textureDrawer.clear();
-    m_window->clear(sf::Color(128, 128, 128));
-
-    playedLevel()->update(tickSize);
-    playedLevel()->drawIn(m_textureDrawer);
-
-    sf::Sprite spr(m_mainTexture.getTexture());
-    spr.setPosition(sf::Vector2f(0, HAUTEUR_FENETRE));
-    spr.setScale(1, -1);
-    renderingWindow()->draw(Sprite(spr));
+    interface()->update(tickSize);
     windowInputs()->update();
 
-    m_score = m_level->outputData().score;
-
-
-    if (m_player)
-    {
-        if (m_player->doDelete())
-        {
-            m_player.reset();
-
-            if (!m_lifes)
-            m_level->gameOver();
-        }
-
-    }
-
-    else if (m_lifes && m_deathTimer.decrement(tickSize))
-    {
-        m_lifes--;
-        setPlayer();
-        m_deathTimer.resetTimeToMax();
-    }
-
-    m_interface.setRemainingLives(m_lifes);
-    m_interface.setScore(m_score);
-    m_interface.drawIn(*m_window);
-
+    drawEverything(tickSize);
 }
+
+
+
+
 

@@ -3,52 +3,70 @@
 #include "PlayerShip.h"
 
 
-PlayerShip::PlayerShip(Inputs* in, Sprite* spriteIdle, Sprite* spriteShoot) : m_weapon(COOLDOWN_TIME, 0)
+
+
+PlayerShip::PlayerShip()
+{
+
+}
+
+
+
+PlayerShip::PlayerShip(const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, AbstractInputs* in)
+{
+    setInputs(in);
+    setSprites(spriteIdle, spriteShoot);
+
+    BaseVart::set(POSITION_PLAYER_SHIP);
+    BaseVart::PhysicObject::setHitbox(HITBOX_PLAYER_SHIP);
+}
+
+
+
+void PlayerShip::set(AbstractInputs* in, const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, float leftLimit, float rightLimit)
+{
+    setInputs(in);
+    setSprites(spriteIdle, spriteShoot);
+    setLimits(leftLimit, rightLimit);
+}
+
+ PlayerShip::~PlayerShip()
+{
+    for (Weapon* w : m_weapons)
+    {
+        delete w;
+    }
+}
+
+
+
+void PlayerShip::setInputs(AbstractInputs* in)
 {
     m_inputs = in;
-    set(spriteIdle, spriteShoot);
-    Vart::set(POSITION_PLAYER_SHIP);
-    Vart::set(HITBOX_PLAYER_SHIP);
 }
 
-PlayerShip::PlayerShip(Sprite* spriteIdle, Sprite* spriteShoot) : m_weapon(COOLDOWN_TIME, 0)
+void PlayerShip::setSprites(const sf::Sprite& spriteIdle, const sf::Sprite spriteShoot)
 {
-    set(spriteIdle, spriteShoot);
-    Vart::set(POSITION_PLAYER_SHIP);
-    Vart::set(HITBOX_PLAYER_SHIP);
-}
+    m_spriteIdle = spriteIdle;
+    m_spriteShoot = spriteShoot;
 
-void PlayerShip::set(Inputs* in, Sprite* spriteIdle, Sprite* spriteShoot)
-{
-    m_inputs = in;
-    set(spriteIdle, spriteShoot);
-}
-
-void PlayerShip::set(Sprite* spriteIdle, Sprite* spriteShoot)
-{
-    if(spriteIdle)
-    {
-        m_spriteIdle = boost::shared_ptr<Sprite>(spriteIdle);
-    }
-
-    if (spriteShoot)
-    {
-        m_spriteShoot = boost::shared_ptr<Sprite>(spriteShoot);
-        Vart::setSprite(m_spriteShoot);
-    }
+    BaseVart::setSprite(m_spriteIdle);
 
     m_center = center(HITBOX_PLAYER_SHIP);
 }
 
 
-void PlayerShip::setBulletArray(VartArray<Bullet>* bulletArray)
+void PlayerShip::setLimits(float left, float right)
 {
-    m_weapon.set(bulletArray);
+    m_leftLimit = left;
+    m_rightLimit = right;
 }
 
-void PlayerShip::setBullets(sf::Sprite bulletSprite)
+
+void PlayerShip::addWeapon(Weapon* w)
 {
-    m_weapon.set(bulletSprite);
+    m_weapons.push_back(w);
+    m_selectedWeaponSlot = m_weapons.size() - 1;
 }
 
 
@@ -67,7 +85,7 @@ int PlayerShip::kill()
 
 void PlayerShip::update(float tick_size)
 {
-    Vart::update(tick_size);
+    BaseVart::update(tick_size);
 
     reload(tick_size);
 
@@ -90,7 +108,7 @@ void PlayerShip::update(float tick_size)
 
 bool PlayerShip::tryToShoot()
 {
-    if (m_weapon.tryToShoot(position() + m_center))
+    if (selectedWeapon() && selectedWeapon()->tryToShoot(position() + m_center))
     {
         Vart::setSprite(m_spriteShoot);
         return true;
@@ -102,21 +120,65 @@ bool PlayerShip::tryToShoot()
 
 void PlayerShip::reload(float ammo)
 {
-    if (m_weapon.update(ammo))
-    Vart::setSprite(m_spriteIdle);
+    if (selectedWeapon())
+    {
+        if (selectedWeapon()->update(ammo))
+        Vart::setSprite(m_spriteIdle);
+
+        if (selectedWeapon()->ammo() == 0)
+        {
+            delete selectedWeapon();
+            m_weapons.erase(m_weapons.begin() + m_selectedWeaponSlot);
+            m_selectedWeaponSlot --;
+
+            if (m_selectedWeaponSlot < 0)
+            m_selectedWeaponSlot = m_weapons.size() - 1;
+        }
+    }
 }
+
 
 
 void PlayerShip::gotoLeft(float x)
 {
-    Vart::move(sf::Vector2f(-x,0), true);
+    BaseVart::move(sf::Vector2f(-x,0), true);
+
+    if (BaseVart::position().x < m_leftLimit)
+    BaseVart::move(sf::Vector2f(m_leftLimit, BaseVart::position().y), false);
 }
 
 
 void PlayerShip::gotoRight(float x)
 {
-    Vart::move(sf::Vector2f(x,0), true);
+    BaseVart::move(sf::Vector2f(x,0), true);
+
+    if (BaseVart::position().x + internBox().width > m_rightLimit)
+    BaseVart::move(sf::Vector2f(m_rightLimit - internBox().width, BaseVart::position().y), false);
 }
+
+
+
+
+Weapon* PlayerShip::selectedWeapon()
+{
+    if (m_selectedWeaponSlot >= 0 && m_selectedWeaponSlot < m_weapons.size())
+    return m_weapons[m_selectedWeaponSlot];
+
+    else
+    return nullptr;
+}
+
+const Weapon* PlayerShip::selectedWeapon() const
+{
+    return const_cast<PlayerShip*>(this)->selectedWeapon();
+}
+
+
+
+
+
+
+
 
 
 

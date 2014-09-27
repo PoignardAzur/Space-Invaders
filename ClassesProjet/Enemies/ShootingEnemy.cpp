@@ -16,14 +16,14 @@ ShootingEnemy::ShootingEnemy(const Weapon& w) : m_weapon(w)
 
 }
 
-void ShootingEnemy::set(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
+void ShootingEnemy::setBullets(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
 {
-    m_weapon.set(bulletSpr, bulletArray);
+    m_weapon.setBullets(bulletSpr, bulletArray);
 }
 
-void ShootingEnemy::set(float shootCoolDown, float timeToNextShoot)
+void ShootingEnemy::setStats(float shootCoolDown, float timeToNextShoot)
 {
-    m_weapon.set(shootCoolDown, timeToNextShoot);
+    m_weapon.setStats(shootCoolDown, timeToNextShoot);
 }
 
 void ShootingEnemy::setHitbox(const PhysicObject& hitbox)

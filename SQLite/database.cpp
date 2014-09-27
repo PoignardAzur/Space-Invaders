@@ -1,95 +1,51 @@
 
 
 #include "statement.hpp"
-#include <sstream>
 
 
-sql3::Database::Database()
-{}
 
-sql3::Database::Database(const char* filename, int flags, const char *zVFS)
+sql3::Database::Database(std::ostream* err)
 {
-	open(filename, flags, zVFS);
+    p_err = err;
 }
 
-sql3::Database::Database(std::istream &commandFile, const char* dbName)
+sql3::Database::Database(const char* filename, int flags, std::ostream* err, bool* noError, const char *zVFS)
 {
-    createFromFile(commandFile, dbName);
+    if (noError)
+	*noError = open(filename, flags, err, zVFS);
+
+	else
+    open(filename, flags, err, zVFS);
 }
 
-
-void sql3::Database::open(const char* filename, int flags, const char *zVFS)
+bool sql3::Database::open(const char* filename, int flags, std::ostream* err, const char *zVFS)
 {
-//	int errorCode = sqlite3_open_v2(filename, &p_database, flags, zVFS);
-	testCode(sqlite3_open_v2(filename, &p_database, flags, zVFS));
+    p_err = err;
+	return testCode(sqlite3_open_v2(filename, &p_database, flags, zVFS), OPENING_DATABASE, nullptr, err);
 }
 
-void sql3::Database::createFromFile(std::istream &commandFile, const char* dbName)
+bool sql3::Database::isOpen() const
 {
-    Statement stmt;
-    std::string str;
-    std::string str02;
-    int line = 0;
-    bool end = false;
-
-    if (dbName == 0)
-    {
-        std::getline(commandFile, str);
-        dbName = str.c_str();
-    }
-
-    open(dbName, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE);
-
-    try
-    {
-
-        while (std::getline(commandFile, str) && (!end) )
-        {
-            if (str.size() > 1)
-            {
-                if (str.substr(0,3) == "END")
-                end = true;
-
-                else if (str.substr(0,2) != "//")
-                {
-                    prepare(str.c_str(), str.size(), stmt);
-                    stmt.makeAllSteps();
-                }
-            }
-
-            line ++;
-
-        }
-    }
-
-    catch (const char* error)
-    {
-        std::string errorText;
-        std::stringstream(errorText) << "Error line " << line << " : " << std::endl << error;
-        error = errorText.c_str();
-        throw;
-    }
+    return p_database != nullptr;
 }
 
 
-void sql3::Database::prepare(const char *query, int maxSize, Statement& modifiedStmt)
+bool sql3::Database::prepare(const char *query, int maxSize, Statement& modifiedStmt)
 {
-	modifiedStmt.prepareIn(p_database, query, maxSize);
+	return modifiedStmt.prepareIn(p_database, query, maxSize, p_err);
 }
 
-void sql3::Database::prepare(const char *query, int maxSize, sqlite3_stmt*& modifiedStmt)
+bool sql3::Database::executeQuery(const char *query, int maxSize)
 {
-	prepareStatementIn(p_database, query, maxSize, modifiedStmt);
+    Statement stmt(*this, query, maxSize);
+    return stmt.makeAllSteps();
 }
 
-void sql3::Database::prepareSelectAll(const char *table, int sizeTableName, Statement& modifiedStmt)
-{
-	modifiedStmt.prepareIn(p_database, SELECT_ALL_FROM(table).c_str());
-}
+
 void sql3::Database::close()
 {
 	sqlite3_close_v2(p_database);
-	p_database = 0;
+	p_database = nullptr;
 }
 
 sql3::Database::~Database()
@@ -98,9 +54,9 @@ sql3::Database::~Database()
 }
 
 
-void sql3::Database::testCode(int sqlCode)
+bool sql3::Database::testCode(int sqlCode, char origin, const char* query, std::ostream* err)
 {
-	testErrorCode(sqlCode);
+	return testErrorCode(sqlCode, origin, query, err);
 }
 
 
@@ -109,24 +65,71 @@ void sql3::Database::testCode(int sqlCode)
 namespace sql3
 {
 
-    void prepareStatementIn(sqlite3* target, const char *query, int maxSize, sqlite3_stmt*& modifiedStmt)
+    bool prepareStatementIn(sqlite3* target, const char *query, int maxSize, sqlite3_stmt*& modifiedStmt, std::ostream* err)
     {
-    //	int errorCode = sqlite3_prepare_v2(&target, query, maxSize, &modifiedStmt, 0);
-        testErrorCode(sqlite3_prepare_v2(target, query, maxSize, &modifiedStmt, 0));
+        return testErrorCode(sqlite3_prepare_v2(target, query, maxSize, &modifiedStmt, nullptr), PREPARING_STATEMENT, query, err);
     }
 
 
-    void testErrorCode(int sqlCode)
+    bool testErrorCode(int sqlCode, char origin, const char* query, std::ostream* e)
     {
-        if (sqlCode != SQLITE_OK)
+        if (sqlCode != SQLITE_OK && sqlCode != SQLITE_ROW)
         {
-            throw sqlite3_errstr(sqlCode);
+            std::ostream& err = *e;
+
+            if (origin == RUNNING_STATEMENT)
+            err << "Error encountered when running the statement";
+
+            if (origin == PREPARING_STATEMENT)
+            err << "Error encountered when preparing the statement";
+
+            if (origin == OPENING_DATABASE)
+            err << "Error encountered opening the database";
+
+            if (origin == USING_INCORRECT_STATEMENT)
+            err << "Error encountered dealing with the corrupted statement";
+
+            if (origin == BINDING_STATEMENT)
+            err << "Error encountered binding elements to the statement";
+
+
+            if (query)
+            err << " :" << std::endl << query;
+
+            err << std::endl << "Reason given : " << sqlite3_errstr(sqlCode) << std::endl << std::endl;
+
+
+            return false;
         }
+
+        return true;
     }
 
 
+    bool execute(Statement* modifiedStmt)
+    {
+        bool noError = modifiedStmt->makeAllSteps();
+        delete modifiedStmt;
+        return noError;
+    }
+
+    bool execute(Database& db, std::function<void(const Statement&, unsigned int)> f, const char *query, int maxSize)
+    {
+        sql3::Statement stmt(db, query, maxSize);
+        unsigned int i = 0;
+        bool noError = true;
+
+        while (stmt.step(&noError) == CONTINUE_STEPS && noError)
+        {
+            f(stmt, i);
+            i++;
+        }
+
+        return noError;
+    }
 
 }
+
 
 
 

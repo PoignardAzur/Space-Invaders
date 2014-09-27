@@ -5,12 +5,14 @@
 #define HEADER_BOUCLE
 
 #include "Moteur2D.h"
-#include "LoadingSpaceLevel.h"
+#include "Levels/loadFromFile.h"
 #include <fstream>
 #include "MainDimensions.h"
-#include "GameInterface.h"
+#include "Levels/FirstScreen.h"
+#include "Levels/SpaceHUD.h"
+#include "Levels/RandomSpaceLevel.h"
 
-#define TITRE_FENETRE "Space !"
+#define TITRE_FENETRE "Spaceship !"
 #define FRAMERATE 60
 #define FRAME_SIZE (1.0f / FRAMERATE) * 2
 
@@ -19,38 +21,30 @@
 
 
 
-class BoucleJeu : public BlossClass<float, SpaceStats>
+class BoucleJeu : public GameController<float>
 {
     public :
 
-    BoucleJeu(Inputs* tableauEntrees = 0, sf::RenderWindow* cible = 0);
+    explicit BoucleJeu(AbstractInputs* tableauEntrees = nullptr, sf::RenderWindow* cible = nullptr);
+    void setDatabase(sql3::Database& db, const char* mainDatabaseName, const char* commandFileName);
+    void setTextures(TextureList& t);
+    void setLevel(RandomSpaceLevel* level, TextureList& t, sql3::Database& db);
+    void setHUD(TextureList& t, SpaceHUD* hud);
 
-    virtual void update(float tickSize);
-    virtual Level<float, SpaceStats>* playedLevel();
-    bool doContinue();
-    int finalScore();
+    virtual void update(float tickSize);                // updates everything in the game
+    virtual void drawEverything(float tickSize);
+    virtual AbstractGameInterface<float>* interface();
 
 
     private :
 
-    GameInterface m_interface;
-    ObjectDrawer m_textureDrawer;
-    sf::RenderTexture m_mainTexture;
-    sf::RenderWindow* m_window;
+    sf::RenderWindow* m_window;             //use-a
+    MetaInterface<float> m_interface;
 
-    boost::shared_ptr<PlayerShip> m_player; // has-a
-    boost::shared_ptr<LoadingSpaceLevel> m_level; // has-a
-    void setPlayer();
+    TextureList m_textureList;
+//    WaveSpaceLevel* m_level; // has-a
+    RandomSpaceLevel* m_level;  /// TO CHANGE
 
-    sf::Texture tex_player_life;
-    sf::Texture tex_player_idle;
-    sf::Texture tex_player_shoot;
-    sf::Texture tex_player_bullet;
-
-    int m_score;
-    int m_lifes;
-
-    Timer m_deathTimer;
 };
 
 

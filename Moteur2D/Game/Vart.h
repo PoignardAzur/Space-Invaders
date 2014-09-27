@@ -3,37 +3,133 @@
 #define HEADER_VARTS
 
 #include "AbsVart.h"
-#include "../Graphic/Sprite.h"
 #include "Physic/PhysicObject.h"
 
 
 /*
-Objet representant un objet de jeu avec un sprite, un comportement et une hitbox.
+Represents a basic object with a provided hitbox and appearance.
 */
-class Vart : public AbsVart, public PhysicObject
+
+template <typename Phys, typename Spr>
+class Vart : public AbsVart, public Phys
 {
     public :
 
-    Vart(Sprite* sprite = 0, sf::IntRect parametres = RECT_NUL, sf::Vector2f position = PT_NUL, sf::Vector2f vitesse = PT_NUL);
+    Vart();
+    explicit Vart(const Phys& hitbox);
+    explicit Vart(const Spr& sprite, sf::Vector2f relativePosition = sf::Vector2f(0,0));
+    Vart(const Spr& sprite, const Phys& hitbox);
+    virtual ~Vart();
 
     virtual void update(float tickSize);
     virtual bool doDelete() const;
-    virtual void drawIn(AbstractDrawer&); // Classique
+    virtual void drawIn(AbstractDrawer&); // inherited virtual methods ; have to be defined here
+
 
     protected :
 
-    void setSprite(Sprite* para); // Setters
-    void setSprite(boost::shared_ptr<Sprite> para);
-    void setHitbox(const PhysicObject&);
-
+    void setSprite(const Spr& sprite);
+    void setSprite(const Spr& sprite, sf::Vector2f relativePosition);
+    void setSpriteRelativePosition(sf::Vector2f pos);
     virtual void removeThis();
 
 
     private :
 
-    boost::shared_ptr<Sprite> m_sprite; // has a
-    bool m_detruit;
+    Spr m_sprite;
+    bool m_toDelete = false;
+    sf::Vector2f m_spriteRelativePosition;
 };
+
+
+using BaseVart = Vart<PhysicObject, sf::Sprite>;
+
+
+template <typename Phys, typename Spr>
+Vart<Phys, Spr>::Vart()
+{
+
+}
+
+template <typename Phys, typename Spr>
+Vart<Phys, Spr>::Vart(const Phys& hitbox) : Phys(hitbox)
+{
+
+}
+
+template <typename Phys, typename Spr>
+Vart<Phys, Spr>::Vart(const Spr& sprite, sf::Vector2f relativePosition) :
+m_sprite(sprite), m_spriteRelativePosition(relativePosition)
+{
+
+}
+
+template <typename Phys, typename Spr>
+Vart<Phys, Spr>::Vart(const Spr& sprite, const Phys& hitbox) : Phys(hitbox), m_sprite(sprite)
+{
+
+}
+
+template <typename Phys, typename Spr>
+Vart<Phys, Spr>::~Vart()
+{
+
+}
+
+
+template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::update(float tickSize)
+{
+    Phys::update(tickSize);
+}
+
+
+template <typename Phys, typename Spr>
+bool Vart<Phys, Spr>::doDelete() const
+{
+    return m_toDelete;
+}
+
+
+template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::drawIn(AbstractDrawer& cible)
+{
+    m_sprite.setPosition(Phys::position() + m_spriteRelativePosition);
+    cible.draw(m_sprite);
+}
+
+
+
+template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::removeThis()
+{
+    m_toDelete = true;
+}
+
+
+template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::setSprite(const Spr& para)
+{
+    m_sprite = para;
+}
+
+
+template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::setSprite(const Spr& para, sf::Vector2f relativePosition)
+{
+    setSprite(para);
+    setSpriteRelativePosition(relativePosition);
+}
+
+
+template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::setSpriteRelativePosition(sf::Vector2f pos)
+{
+    m_spriteRelativePosition = pos;
+}
+
+
+
 
 
 

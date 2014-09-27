@@ -21,14 +21,14 @@ void PhysicObject::set(sf::Vector2f position, sf::Vector2f vitesse, sf::Vector2f
     changeAcceleration(acceleration);
 }
 
-void PhysicObject::set(sf::IntRect boite)
+void PhysicObject::setHitbox(sf::IntRect boite)
 {
     m_boite = boite;
 }
 
 void PhysicObject::set(const PhysicObject& other)
 {
-    set(other.internBox());
+    setHitbox(other.internBox());
     set(other.position(), other.speed(), other.acceleration());
 }
 
@@ -36,6 +36,7 @@ sf::Vector2f PhysicObject::gap() const
 {
     return sf::Vector2f(m_boite.left, m_boite.top);
 }
+
 
 
 sf::IntRect PhysicObject::internBox() const

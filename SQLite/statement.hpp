@@ -4,8 +4,8 @@
 #define STATEMENT_HEADER
 
 #include "database.hpp"
-#include <string>
-#define SELECT_ALL_FROM(table) (std::string("SELECT * FROM ") + std::string(table))
+#define SELECT_ALL_FROM(TABLE) "SELECT * FROM " TABLE
+#define CONTINUE_STEPS false
 
 namespace sql3
 {
@@ -15,42 +15,47 @@ namespace sql3
 		public :
 
 		Statement();
-		Statement(Database& target, const char *query, int maxSize = -1);
+		Statement(Database& target, const char *query, int maxSize = -1, bool* noError = nullptr);
 
-		void prepareSelectAllIn(Database& target, const char *table, int sizeTableName = -1);		// each function is basically an indirect call of
-		void prepareIn(Database& target, const char *query, int maxSize = -1);		// prepareStatementIn(target, query, maxSize, modifiedStatement)
-		void prepareIn(sqlite3* target, const char *query, int maxSize = -1);
+		// each function is basically an indirect call of prepareStatementIn(target, query, maxSize, modifiedStatement)
+		bool prepareIn(Database& target, const char *query, int maxSize = -1);
+		bool prepareIn(sqlite3* target, const char *query, int maxSize, std::ostream* err);
 
-		bool step();													// selects the next column, returns false is there isn't any
-		void makeAllSteps();
-		void reset(bool doResetBindings = false);						// returns to the first line
-		void resetBindings();											// deletes all bindings
+		bool step(bool* noError = nullptr);													// selects the next column, returns false is there isn't any
+		bool makeAllSteps();
+		bool reset(bool doResetBindings = false);						// returns to the first line
+		bool resetBindings();											// deletes all bindings
+		const char* getQuery();
 
-		void bindInt(int i, int value);
-		void bindDouble(int i, double value);							// binds the argument(s) n°[i] with [value]
-		void bindNull(int i);
-		void bindText(int i, const char* value, int size = -1);
-//		void bindText16(int i, const char* value, int size = -1, void(*)(void*) = SQLITE_STATIC); // does what ??
+		bool bindInt(int i, int value);
+		bool bindDouble(int i, double value);							// binds the argument(s) n°[i] with [value]
+		bool bindNull(int i);
+		bool bindText(int i, const char* value, int size = -1);
 
-		int columnByte(int i) const;											// give the value (if it's in the asked format)
-		int columnByte16(int i) const;										// of the element n°[i] of the selected column
+		int columnByte(int i) const;									// give the value (if it's in the asked format)
+		int columnByte16(int i) const;									// of the element n°[i] of the selected column
 		int columnInt(int i) const;
 		double columnDouble(int i) const;
 		const unsigned char* columnText(int i) const;
 		const char* columnStandardText(int i) const;
-		//const unsigned char* columnText16(int i) const;
 
-		void checkColumn(int i) const;										// throw an exception if (i > columnCount)
+		bool checkColumn(int i) const;							    	// throw an exception if (i > columnCount)
 		int columnCount() const;
-		void testCode(int sqlCode) const;
 
 		void erase();													// must be called after all statements are erased
 		~Statement();
 
+//		const unsigned char* columnText16(int i) const;
+//      bool prepareSelectAllIn(Database& target, const char *table, int sizeTableName = -1);
+//		void bindText16(int i, const char* value, int size = -1, void(*)(void*) = SQLITE_STATIC); // does what ??
 
 		private :
 
+		bool testCode(int sqlCode, char origin, const char* query, std::ostream* err) const;
+
 		sqlite3_stmt* p_stmt;
+		std::ostream* p_err;      // use-a
+		bool m_prepared;
 	};
 }
 
@@ -79,10 +84,12 @@ sql3Statement
 
 const sql3Statement
 {
-	int 		columnInt(int i);
-	double 		columnDouble(int i);
-	char*		columnText(int i);
-	int 		columnCount();
+	int             columnInt(int i);
+	double          columnDouble(int i);
+	char*           columnText(int i);
+    unsigned char*  columnText(int i);
+    char*           columnStandardText(int i);
+	int             columnCount();
 };
 
 

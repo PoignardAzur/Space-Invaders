@@ -4,7 +4,7 @@
 
 
 Timer::Timer(float tempsDepart, float tempsMax, bool razAuto) :
-m_temps(tempsDepart), m_autoRaz(razAuto)
+m_temps(tempsDepart), m_autoReset(razAuto)
 {
     if (tempsMax)
     m_tempsMax = tempsMax;
@@ -13,7 +13,7 @@ m_temps(tempsDepart), m_autoRaz(razAuto)
     m_tempsMax = tempsDepart;
 }
 
-Timer::Timer(const Timer& t) : m_temps(t.m_temps), m_tempsMax(t.m_tempsMax), m_autoRaz(t.m_autoRaz)
+Timer::Timer(const Timer& t) : m_temps(t.m_temps), m_tempsMax(t.m_tempsMax), m_autoReset(t.m_autoReset)
 {
 
 }
@@ -45,7 +45,7 @@ bool Timer::decrement(float ticks)
         if (ticks <= m_temps)
         m_temps -= ticks;
 
-        else if (m_autoRaz)
+        else if (m_autoReset)
         {
             resetTimeToMax();
             return true;
@@ -76,10 +76,15 @@ bool Timer::decrement(float ticks)
 std::vector<bool> decrement(std::vector<Timer> tableau, float ticks)
 {
     std::vector<bool> tableauRetour (tableau.size(), true);
+    auto p1 = tableau.begin();
+    auto p2 = tableauRetour.begin();
 
-    for (unsigned short i = 0; i < tableau.size(); ++i)
+    while (p1 != tableau.end())
     {
-        tableauRetour[i] = tableau[i].decrement(ticks);
+        *p2 = p1->decrement(ticks);
+
+        p1++;
+        p2++;
     }
 
     return tableauRetour;

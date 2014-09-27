@@ -18,11 +18,12 @@ class PhysicObject : public Updatable
 {
     public :
 
-    PhysicObject(sf::IntRect parametres = RECT_NUL, sf::Vector2f position = PT_NUL, sf::Vector2f vitesse = PT_NUL, sf::Vector2f acceleration = PT_NUL);
+    explicit PhysicObject(sf::IntRect parametres = RECT_NUL, sf::Vector2f position = PT_NUL, sf::Vector2f vitesse = PT_NUL, sf::Vector2f acceleration = PT_NUL);
     PhysicObject(const PhysicObject&);
+    virtual ~PhysicObject() {}
 
     void set(sf::Vector2f position, sf::Vector2f vitesse = PT_NUL, sf::Vector2f acceleration = PT_NUL);
-    void set(sf::IntRect parametres);
+    void setHitbox(sf::IntRect nInternBox);
     void set(const PhysicObject&);
 
     sf::IntRect internBox() const;
@@ -44,7 +45,7 @@ class PhysicObject : public Updatable
 
     sf::IntRect m_boite;
 
-    sf::Vector2f m_position;
+    sf::Vector2f m_position;                // position = placed center
     Derivee<sf::Vector2f> m_vitesse;
     Derivee<sf::Vector2f> m_acceleration;
 

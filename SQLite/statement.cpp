@@ -5,89 +5,109 @@
 
 sql3::Statement::Statement()
 {
-
+    p_stmt = nullptr;
 }
 
-sql3::Statement::Statement(Database& target, const char *query, int maxSize)
+sql3::Statement::Statement(Database& target, const char *query, int maxSize, bool* noError)
 {
+    p_stmt = nullptr;
+
+    if (noError)
+    *noError = prepareIn(target, query, maxSize);
+
+    else
     prepareIn(target, query, maxSize);
 }
 
-void sql3::Statement::prepareIn(Database& target, const char *query, int maxSize)
+bool sql3::Statement::prepareIn(Database& target, const char *query, int maxSize)
 {
-	target.prepare(query, maxSize, *this);
+	return target.prepare(query, maxSize, *this);
 }
 
-void sql3::Statement::prepareIn(sqlite3* target, const char *query, int maxSize)
+bool sql3::Statement::prepareIn(sqlite3* target, const char *query, int maxSize, std::ostream* err)
 {
-	prepareStatementIn(target, query, maxSize, p_stmt);
+    p_err = err;
+	return prepareStatementIn(target, query, maxSize, p_stmt, err);
 }
 
-void sql3::Statement::prepareSelectAllIn(Database& target, const char *table, int sizeTableName)
+
+bool sql3::Statement::resetBindings()
 {
-	prepareIn(target, SELECT_ALL_FROM(table).c_str());
+	return testCode(sqlite3_clear_bindings(p_stmt), USING_INCORRECT_STATEMENT, getQuery(), p_err);
 }
 
-void sql3::Statement::resetBindings()
-{
-	testCode(sqlite3_clear_bindings(p_stmt));
-}
-
-void sql3::Statement::reset(bool doResetBindings)
+bool sql3::Statement::reset(bool doResetBindings)
 {
 	if (doResetBindings)
-	resetBindings();
+	{
+	    if (!resetBindings())
+        return false;
+	}
 
-	testCode(sqlite3_reset(p_stmt));
+	return testCode(sqlite3_reset(p_stmt), USING_INCORRECT_STATEMENT, getQuery(), p_err);
 }
 
-bool sql3::Statement::step()
+bool sql3::Statement::step(bool* noError)
 {
 	int resultCode = sqlite3_step(p_stmt);
 
 	if (resultCode == SQLITE_DONE)
-	return true;
+	return !CONTINUE_STEPS;
 
 	if (resultCode == SQLITE_ROW)
-	return false;
+	return CONTINUE_STEPS;
 
 /// else
-	testCode(resultCode);
-	return true;
+
+    if (noError)
+    *noError = testCode(resultCode, RUNNING_STATEMENT, getQuery(), p_err);
+
+	return !CONTINUE_STEPS;
 }
 
 
-void sql3::Statement::makeAllSteps()
+bool sql3::Statement::makeAllSteps()
 {
-    while (!step());
+    bool noError = true;
+
+    while (step(&noError) == CONTINUE_STEPS && noError);;
+
+    return noError;
 }
 
 
-void sql3::Statement::bindInt(int i, int value)
+const char* sql3::Statement::getQuery()
 {
-	testCode(sqlite3_bind_int(p_stmt,i,value));
-}
-
-void sql3::Statement::bindDouble(int i, double value)
-{
-	testCode(sqlite3_bind_double(p_stmt,i,value));
-}
-
-void sql3::Statement::bindNull(int i)
-{
-	testCode(sqlite3_bind_null(p_stmt,i));
+    return sqlite3_sql(p_stmt);
 }
 
 
-void sql3::Statement::bindText(int i, const char* value, int size)
+
+bool sql3::Statement::bindInt(int i, int value)
 {
-	testCode(sqlite3_bind_text(p_stmt,i,value, size, SQLITE_STATIC));
+	return testCode(sqlite3_bind_int(p_stmt,i,value), BINDING_STATEMENT, getQuery(), p_err);
+}
+
+bool sql3::Statement::bindDouble(int i, double value)
+{
+	return testCode(sqlite3_bind_double(p_stmt,i,value), BINDING_STATEMENT, getQuery(), p_err);
+}
+
+bool sql3::Statement::bindNull(int i)
+{
+	return testCode(sqlite3_bind_null(p_stmt,i), BINDING_STATEMENT, getQuery(), p_err);
+}
+
+
+bool sql3::Statement::bindText(int i, const char* value, int size)
+{
+	return testCode(sqlite3_bind_text(p_stmt, i, value, size, SQLITE_STATIC), BINDING_STATEMENT, getQuery(), p_err);
 }
 
 /*
-void sql3::Statement::bindText16(int i, const char* value, int size)
+bool sql3::Statement::bindText16(int i, const char* value, int size)
 {
-	testCode(sqlite3_bind_text16(p_stmt,i,value, size, SQLITE_STATIC));
+	return testCode(sqlite3_bind_text16(p_stmt,i,value, size, SQLITE_STATIC), BINDING_STATEMENT, getQuery(), p_err);
 }
 */
 
@@ -132,18 +152,25 @@ int sql3::Statement::columnCount() const
 	return sqlite3_column_count(p_stmt);
 }
 
-void sql3::Statement::checkColumn(int i) const
+bool sql3::Statement::checkColumn(int i) const
 {
 	if (i > columnCount())
-	throw "Error : asked column is out of range";
+	{
+        (*p_err) << "Error : asked column is out of range";
+        return false;
+	}
+
+/// else
+	return true;
 }
+
 
 void sql3::Statement::erase()
 {
 	if (p_stmt)
-//	sqlite3_finalize(p_stmt);
-	testCode(sqlite3_finalize(p_stmt));
-	p_stmt = 0;
+	testCode(sqlite3_finalize(p_stmt), USING_INCORRECT_STATEMENT, nullptr, p_err);
+
+	p_stmt = nullptr;
 }
 
 sql3::Statement::~Statement()
@@ -151,9 +178,9 @@ sql3::Statement::~Statement()
 	erase();
 }
 
-void sql3::Statement::testCode(int sqlCode) const
+bool sql3::Statement::testCode(int sqlCode, char origin, const char* query, std::ostream* err) const
 {
-	testErrorCode(sqlCode);
+	return testErrorCode(sqlCode, origin, query, err);
 }
 
 
