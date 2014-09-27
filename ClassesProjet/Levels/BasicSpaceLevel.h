@@ -17,13 +17,13 @@ class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
 {
     public :
 
-    BasicSpaceLevel(unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count(), PlayerShip* player = nullptr, sf::IntRect visibleZone = sf::IntRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
-    BasicSpaceLevel(std::seed_seq& seed, PlayerShip* player = nullptr, sf::IntRect visibleZone = sf::IntRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
+    BasicSpaceLevel(unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count(), PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
+    BasicSpaceLevel(std::seed_seq& seed, PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
     virtual ~BasicSpaceLevel();
 
     void useTextureList(TextureList* t);
     void setStats(const std::map<std::string, EnemiesStats>& statsList);
-    virtual void setZones(sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
+    virtual void setZones(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
 
     virtual void update(const float& tickSize);
     virtual void drawIn(AbstractDrawer& fenetre);

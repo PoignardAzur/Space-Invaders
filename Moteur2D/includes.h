@@ -21,6 +21,11 @@ Inclus tous les fichiers du moteur
     #include "Entries/Alea.h"
     #include "StartEndBool.h"
     #include "Timer.h"
+
+    #include "Interfaces/Items/LifeCounter.h"
+    #include "Interfaces/Items/ItemStack.h"
+    #include "Interfaces/Items/VariableItem.h"
+    #include "Interfaces/Items/Label.h"
 //}
 
 

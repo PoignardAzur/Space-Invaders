@@ -10,13 +10,13 @@ Enemy::Enemy()
 }
 
 
-Enemy::Enemy(const sf::Sprite& sprite, sf::IntRect hitbox, float nSpeed, int hp, int nScore)
+Enemy::Enemy(const sf::Sprite& sprite, sf::FloatRect hitbox, float nSpeed, int hp, int nScore)
 {
     set(sprite, hitbox, nSpeed, hp, nScore);
 }
 
 
-void Enemy::set(const sf::Sprite& sprite, sf::IntRect hitbox, float nSpeed, int hp, int nScore)
+void Enemy::set(const sf::Sprite& sprite, sf::FloatRect hitbox, float nSpeed, int hp, int nScore)
 {
     m_has_entered = false;
 
@@ -33,7 +33,7 @@ void Enemy::setHitbox(const PhysicObject& hitbox)
     BaseVart::PhysicObject::set(hitbox);
 }
 
-bool Enemy::recycle(const sf::IntRect& visibleZone)
+bool Enemy::recycle(const sf::FloatRect& visibleZone)
 {
     if (testCollision(BaseVart::PhysicObject::placedBox(), visibleZone))
     {
@@ -61,7 +61,7 @@ int Enemy::takeDamage(int dm)
 
     else
     {
-        explode();
+        kill(true, true);
         dm = m_hp;
         m_hp = 0;
     }
@@ -95,5 +95,10 @@ int Enemy::score() const
 void Enemy::explode()
 {
     /// TODO
+}
+
+Enemy::~Enemy()
+{
+
 }
 

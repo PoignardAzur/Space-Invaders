@@ -2,30 +2,32 @@
 #include "FirstScreen.h"
 #include "../MainDimensions.h"
 
-FirstScreen::FirstScreen(const sf::Font& f, sf::Color c, AbstractInputs* in)
+FirstScreen::FirstScreen(const sf::Font* f, sf::Color c, AbstractInputs* in)
 {
+    m_text_1 = new Menu::Text(FIRST_SCREEN_TEXT_L1);
+    m_text_2 = new Menu::Text(FIRST_SCREEN_TEXT_L2);
+
+    std::vector<std::shared_ptr<Menu::AbstractItem>> items =
+    {std::shared_ptr<Menu::AbstractItem>(m_text_1), std::shared_ptr<Menu::AbstractItem>(m_text_2)};
+
+    m_grid.setAsColumn(items, 0);
+    m_grid.setInternPosition(Menu::MiddleBottomSide, sf::Vector2f(0, 10));
+
     setText(f, c);
     setUserInputs(in);
 }
 
-void FirstScreen::setText(const sf::Font& f, sf::Color c)
+void FirstScreen::setText(const sf::Font* f, sf::Color c)
 {
-    m_font = f;
+    m_text_1->setFont(f, TEXT_SIZE);
+    m_text_1->setColor(c);
 
-    m_text_1.setFont(m_font, 50);
-    m_text_1.setColor(c);
-    m_text_1.setDisplayedText("Invasion");
-    m_text_1.setPosition(sf::Vector2f(LARGEUR_FENETRE / 2, (HAUTEUR_FENETRE - HAUTEUR_HUD) / 2 - 60), Center);
-
-    m_text_2.setFont(m_font, 50);
-    m_text_2.setColor(c);
-    m_text_2.setDisplayedText("de l'ESPACE");
-    m_text_2.setPosition(sf::Vector2f(LARGEUR_FENETRE / 2, (HAUTEUR_FENETRE - HAUTEUR_HUD) / 2), Center);
+    m_text_2->setFont(f, TEXT_SIZE);
+    m_text_2->setColor(c);
 }
 
 void FirstScreen::drawIn(AbstractDrawer& window)
 {
-    window.draw(m_text_1);
-    window.draw(m_text_2);
+    m_grid.drawInBox(window, sf::FloatRect(0, 0, LARGEUR_FENETRE, 0.6 * HAUTEUR_FENETRE), Menu::Center);
 }
 

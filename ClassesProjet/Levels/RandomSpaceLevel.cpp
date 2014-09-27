@@ -12,13 +12,13 @@
 
 
 
-RandomSpaceLevel::RandomSpaceLevel(unsigned int seed, PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
+RandomSpaceLevel::RandomSpaceLevel(unsigned int seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
 BasicSpaceLevel(seed, player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight)
 {
     build();
 }
 
-RandomSpaceLevel::RandomSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
+RandomSpaceLevel::RandomSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
 BasicSpaceLevel(seed, player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight)
 {
 }

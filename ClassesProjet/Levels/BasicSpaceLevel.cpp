@@ -7,13 +7,13 @@
 #define DEFAULT_FIRE_RATE 0.5f
 
 
-BasicSpaceLevel::BasicSpaceLevel(unsigned int seed, PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
+BasicSpaceLevel::BasicSpaceLevel(unsigned int seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
 Battlefield(player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight), BasicArcadeLevel<float>(seed)
 {
     setRespawnTime(TIME_BEFORE_RESPAWN);
 }
 
-BasicSpaceLevel::BasicSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
+BasicSpaceLevel::BasicSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
 Battlefield(player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight), BasicArcadeLevel<float>(seed)
 {
     setRespawnTime(TIME_BEFORE_RESPAWN);
@@ -44,7 +44,7 @@ void BasicSpaceLevel::setLimits(float leftLimit, float rightLimit)
 }
 
 
-void BasicSpaceLevel::setZones(sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
+void BasicSpaceLevel::setZones(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
 {
     Battlefield::setZones(visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight);
     setLimits(leftSpawnLimit, rightSpawnLimit);

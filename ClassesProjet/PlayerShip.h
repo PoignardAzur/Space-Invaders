@@ -8,7 +8,7 @@
 
 #define SHOOT_BUTTON sf::Keyboard::Space
 #define COOLDOWN_TIME 0.3f
-#define HITBOX_PLAYER_SHIP sf::IntRect(0,20, 60,40)
+#define HITBOX_PLAYER_SHIP sf::FloatRect(0,20, 60,40)
 #define POSITION_PLAYER_SHIP sf::Vector2f( (LARGEUR_FENETRE / 2) - 10, HAUTEUR_FENETRE - 50 )
 
 

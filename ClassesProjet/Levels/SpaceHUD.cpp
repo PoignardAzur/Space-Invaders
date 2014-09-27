@@ -2,95 +2,84 @@
 
 #include "SpaceHUD.h"
 
+#define GAP_BETWEEN_LIFE_INDICATORS 10
+#define HAUTEUR_HUD 75
+#define BOTTOM_GAP 10
+#define SIDE_GAP 10
+
+#define SCORE_FONT_SIZE 30
+#define LIFE_FONT_SIZE 30
+#define GAME_OVER_FONT_SIZE 90
 
 
-
-SpaceHUD::SpaceHUD(const sf::Font& f, sf::Color c, BasicSpaceLevel* level) : SpaceHUD(level)
+SpaceHUD::SpaceHUD(BasicSpaceLevel* level, const sf::Font* f, sf::Color c) : AbstractHUD<float, BasicSpaceLevel>(level)
 {
-    setAllFonts(f, c);
-}
-
-SpaceHUD::SpaceHUD(BasicSpaceLevel* level) : AbstractHUD<float, BasicSpaceLevel>(level)
-{
-    m_gameOverText.setDisplayedText("Game Over");
     m_gameOver = false;
     m_score = 0;
+    m_lives = 0;
+
+    m_gameOverText.setString("Game Over");
+    m_scoreDrawer = new Menu::Counter();
+    m_scoreDrawer->setBounds(0, 99999);
+    m_scoreDrawer->setRightAligned(true);
+    m_scoreLabel.setItem(m_scoreDrawer, "Score :");
+    m_scoreLabel.setAlignement(true, GAP_BETWEEN_LIFE_INDICATORS);
+
+    m_livesDrawer.setBounds(3, 99);
+    m_livesDrawer.setGaps(GAP_BETWEEN_LIFE_INDICATORS);
+    m_livesDrawer.setRightAligned(false);
+
+    setAllFonts(f, c);
 }
 
 
 
 void SpaceHUD::setLifeSprite(sf::Sprite s)
 {
-    m_spriteLife_1 = s;
-    m_spriteLife_2 = s;
-    m_spriteLife_3 = s;
-
-    m_spriteLife_1.setPosition(FIRST_LIFE_INDICATOR_POSITION);
-    m_spriteLife_2.setPosition(SECOND_LIFE_INDICATOR_POSITION);
-    m_spriteLife_3.setPosition(THIRD_LIFE_INDICATOR_POSITION);
+    m_livesDrawer.setSprite(s);
 }
 
 
-void SpaceHUD::setAllFonts(const sf::Font& f, sf::Color c)
+void SpaceHUD::setAllFonts(const sf::Font* f, sf::Color c)
 {
     setScoreCounterFont(f, c);
     setLifeCounterFont(f, c);
     setGameOverTextFont(f, c);
 }
 
-void SpaceHUD::setAllFonts(const char* fontFile, sf::Color c)
+void SpaceHUD::setScoreCounterFont(const sf::Font* f, sf::Color c)
 {
-    setScoreCounterFont(fontFile, c);
-    setLifeCounterFont(fontFile, c);
-    setGameOverTextFont(fontFile, c);
+    m_scoreDrawer->setFont(f, SCORE_FONT_SIZE);
+    m_scoreDrawer->setColor(c);
+
+    m_scoreLabel.setFont(f, LIFE_FONT_SIZE);
+    m_scoreLabel.setColor(c);
 }
 
-void SpaceHUD::setScoreCounterFont(const sf::Font& f, sf::Color c)
+void SpaceHUD::setScoreCounterFont(const sf::Font* f, sf::Color scoreColor, sf::Color labelColor)
 {
-    m_scoreFont = f;
-    m_scoreText.setFont(m_scoreFont, 30);
-    m_scoreText.setColor(c);
-    m_scoreText.setPosition(SCORE_POSITION, TopRightCorner);
+    m_scoreDrawer->setFont(f, LIFE_FONT_SIZE);
+    m_scoreDrawer->setColor(scoreColor);
+
+    m_scoreLabel.setFont(f, LIFE_FONT_SIZE);
+    m_scoreLabel.setColor(labelColor);
 }
 
-void SpaceHUD::setScoreCounterFont(const char* fontFile, sf::Color c)
+void SpaceHUD::setLifeCounterFont(const sf::Font* f, sf::Color c)
 {
-    m_scoreFont.loadFromFile(fontFile);
-    setScoreCounterFont(m_scoreFont, c);
+    m_livesDrawer.setFont(f, LIFE_FONT_SIZE);
+    m_livesDrawer.setColor(c);
 }
 
-void SpaceHUD::setLifeCounterFont(const sf::Font& f, sf::Color c)
+void SpaceHUD::setGameOverTextFont(const sf::Font* f, sf::Color c)
 {
-    m_livesNumberFont = f;
-    m_livesNumberDisplay.setFont(f, 30);
-    m_livesNumberDisplay.setColor(c);
-    m_livesNumberDisplay.setPosition(LIFE_NUMBER_INDICATOR_POSITION, DownLeftCorner);
-}
-
-void SpaceHUD::setLifeCounterFont(const char* fontFile, sf::Color c)
-{
-    m_livesNumberFont.loadFromFile(fontFile);
-    setLifeCounterFont(m_livesNumberFont, c);
-}
-
-void SpaceHUD::setGameOverTextFont(const sf::Font& f, sf::Color c)
-{
-    m_gameOverFont = f;
-    m_gameOverText.setFont(m_gameOverFont, 90);
-
+    m_gameOverText.setFont(f, GAME_OVER_FONT_SIZE);
     m_gameOverText.setColor(c);
-    m_gameOverText.setPosition(GAME_OVER_TEXT_POSITION, MiddleDownSide);
 }
 
 
-void SpaceHUD::setGameOverTextFont(const char* fontFile, sf::Color c)
-{
-    m_gameOverFont.loadFromFile(fontFile);
-    setGameOverTextFont(m_gameOverFont, c);
-}
 
-
-void SpaceHUD::gameOver()
+void SpaceHUD::startGameOverMode()
 {
     m_gameOver = true;
 }
@@ -104,7 +93,7 @@ void SpaceHUD::update(const float& ticks)   // updates the level and measures it
     setScore( level()->score() );
 
     if (level()->gameOver())
-    gameOver();
+    startGameOverMode();
 }
 
 
@@ -115,29 +104,9 @@ void SpaceHUD::drawHUD(AbstractDrawer& window)
     r.setFillColor(sf::Color(128, 128, 128));
     window.draw(r);
 
-    if (m_lives >= 1)
-    window.draw(m_spriteLife_1);
-
-    if (m_lives == 2 || m_lives == 3)
-    window.draw(m_spriteLife_2);
-
-    if (m_lives == 3)
-    window.draw(m_spriteLife_3);
-
-    if (m_lives > 3)
-    {
-        std::stringstream sstr;
-        sstr << "x" << m_lives;
-        m_livesNumberDisplay.setDisplayedText(sstr.str().c_str());
-
-        window.draw(m_livesNumberDisplay);
-    }
-
-    //    setDisplayedNumber(m_scoreText, nScore);
-    std::stringstream sstr;
-    sstr << m_score;
-    m_scoreText.setDisplayedText(sstr.str().c_str());
-    window.draw(m_scoreText);
+    sf::FloatRect box(SIDE_GAP, 0, LARGEUR_FENETRE - 2 * SIDE_GAP, HAUTEUR_HUD - BOTTOM_GAP);
+    m_livesDrawer.drawInBox(window, box, Menu::BottomLeftCorner);
+    m_scoreLabel.drawInBox(window, box, Menu::BottomRightCorner);
 }
 
 
@@ -153,7 +122,7 @@ void SpaceHUD::drawIn(AbstractDrawer& window, BasicSpaceLevel* level)
     level->drawIn(window);
 
     if(m_gameOver)
-    m_gameOverText.drawIn(d);
+    m_gameOverText.drawInBox(d, sf::FloatRect(0, 0, LARGEUR_FENETRE, 0.6 * HAUTEUR_FENETRE), Menu::Center);
 
     sf::Sprite spr(texture.getTexture());
     spr.setPosition(sf::Vector2f(0, HAUTEUR_FENETRE));
@@ -166,12 +135,12 @@ void SpaceHUD::drawIn(AbstractDrawer& window, BasicSpaceLevel* level)
 
 void SpaceHUD::setRemainingLives(int nLives)
 {
-    m_lives = nLives;
+    m_livesDrawer.setValue(nLives);
 }
 
 void SpaceHUD::setScore(int nScore)
 {
-    m_score = nScore;
+    m_scoreDrawer->setValue(nScore);
 }
 
 

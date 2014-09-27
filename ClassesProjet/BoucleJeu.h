@@ -5,12 +5,9 @@
 #define HEADER_BOUCLE
 
 #include "Moteur2D.h"
-#include "Levels/loadFromFile.h"
-#include <fstream>
+#include "Loading/LoadingClass.h"
 #include "MainDimensions.h"
 #include "Levels/FirstScreen.h"
-#include "Levels/SpaceHUD.h"
-#include "Levels/RandomSpaceLevel.h"
 
 #define TITRE_FENETRE "Spaceship !"
 #define FRAMERATE 60
@@ -25,7 +22,7 @@ class BoucleJeu : public GameController<float>
 {
     public :
 
-    explicit BoucleJeu(AbstractInputs* tableauEntrees = nullptr, sf::RenderWindow* cible = nullptr);
+    explicit BoucleJeu(AbstractInputs* in = nullptr, sf::RenderWindow* cible = nullptr);
     void setDatabase(sql3::Database& db, const char* mainDatabaseName, const char* commandFileName);
     void setTextures(TextureList& t);
     void setLevel(RandomSpaceLevel* level, TextureList& t, sql3::Database& db);
@@ -44,7 +41,9 @@ class BoucleJeu : public GameController<float>
     TextureList m_textureList;
 //    WaveSpaceLevel* m_level; // has-a
     RandomSpaceLevel* m_level;  /// TO CHANGE
+    sf::Font m_font;
 
+    Loader m_loader;
 };
 
 

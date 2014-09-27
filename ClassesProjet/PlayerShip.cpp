@@ -92,17 +92,20 @@ void PlayerShip::update(float tick_size)
     if (m_inputs->keyboardButtons()[SHOOT_BUTTON])
     tryToShoot();
 
-    if (m_inputs->keyboardButtons()[sf::Keyboard::Left] && ! m_inputs->keyboardButtons()[sf::Keyboard::Down])
-    gotoLeft(tick_size*200);
+    float speed = m_inputs->keyboardButtons()[sf::Keyboard::Down] ? 500 : 200;
 
-    if (m_inputs->keyboardButtons()[sf::Keyboard::Right] && ! m_inputs->keyboardButtons()[sf::Keyboard::Down])
-    gotoRight(tick_size*200);
+    if (m_inputs->keyboardButtons()[sf::Keyboard::Left])
+    gotoLeft(tick_size * speed);
 
-    if (m_inputs->keyboardButtons()[sf::Keyboard::Left] && m_inputs->keyboardButtons()[sf::Keyboard::Down])
-    gotoLeft(tick_size*500);
+    if (m_inputs->keyboardButtons()[sf::Keyboard::Right])
+    gotoRight(tick_size * speed);
 
-    if (m_inputs->keyboardButtons()[sf::Keyboard::Right] && m_inputs->keyboardButtons()[sf::Keyboard::Down])
-    gotoRight(tick_size*500);
+
+    if (BaseVart::position().x < m_leftLimit)
+    BaseVart::move(sf::Vector2f(m_leftLimit, BaseVart::position().y), false);
+
+    if (BaseVart::position().x + internBox().width > m_rightLimit)
+    BaseVart::move(sf::Vector2f(m_rightLimit - internBox().width, BaseVart::position().y), false);
 }
 
 
@@ -142,18 +145,12 @@ void PlayerShip::reload(float ammo)
 void PlayerShip::gotoLeft(float x)
 {
     BaseVart::move(sf::Vector2f(-x,0), true);
-
-    if (BaseVart::position().x < m_leftLimit)
-    BaseVart::move(sf::Vector2f(m_leftLimit, BaseVart::position().y), false);
 }
 
 
 void PlayerShip::gotoRight(float x)
 {
     BaseVart::move(sf::Vector2f(x,0), true);
-
-    if (BaseVart::position().x + internBox().width > m_rightLimit)
-    BaseVart::move(sf::Vector2f(m_rightLimit - internBox().width, BaseVart::position().y), false);
 }
 
 

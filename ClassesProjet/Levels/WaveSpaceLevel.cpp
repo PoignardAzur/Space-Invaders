@@ -5,13 +5,13 @@
 
 
 
-WaveSpaceLevel::WaveSpaceLevel(unsigned int seed, PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
+WaveSpaceLevel::WaveSpaceLevel(unsigned int seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
 BasicSpaceLevel(seed, player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight)
 {
 
 }
 
-WaveSpaceLevel::WaveSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
+WaveSpaceLevel::WaveSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
 BasicSpaceLevel(seed, player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight)
 {
 

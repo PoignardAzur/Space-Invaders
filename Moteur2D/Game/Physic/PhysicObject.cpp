@@ -6,11 +6,12 @@
 
 
 
-PhysicObject::PhysicObject(sf::IntRect nBoite, sf::Vector2f position, sf::Vector2f vitesse, sf::Vector2f acceleration) :
-m_boite(nBoite), m_position(position), m_vitesse(vitesse), m_acceleration(acceleration)
+PhysicObject::PhysicObject(sf::FloatRect nBoite, sf::Vector2f position, sf::Vector2f vitesse, sf::Vector2f acceleration) :
+m_boite(nBoite), m_position(position), m_vitesse(vitesse), m_acceleration(acceleration), m_color(sf::Color::Green)
 { }
 
-PhysicObject::PhysicObject(const PhysicObject& other) : m_boite(other.m_boite), m_position(other.m_position), m_vitesse(other.m_vitesse)
+PhysicObject::PhysicObject(const PhysicObject& other) :
+m_boite(other.m_boite), m_position(other.m_position), m_vitesse(other.m_vitesse), m_color(other.m_color)
 { }
 
 
@@ -21,7 +22,7 @@ void PhysicObject::set(sf::Vector2f position, sf::Vector2f vitesse, sf::Vector2f
     changeAcceleration(acceleration);
 }
 
-void PhysicObject::setHitbox(sf::IntRect boite)
+void PhysicObject::setHitbox(sf::FloatRect boite)
 {
     m_boite = boite;
 }
@@ -39,14 +40,14 @@ sf::Vector2f PhysicObject::gap() const
 
 
 
-sf::IntRect PhysicObject::internBox() const
+sf::FloatRect PhysicObject::internBox() const
 {
     return m_boite;
 }
 
-sf::IntRect PhysicObject::placedBox() const
+sf::FloatRect PhysicObject::placedBox() const
 {
-    return sf::IntRect(m_boite.left + position().x, m_boite.top + position().y, m_boite.width, m_boite.height);
+    return sf::FloatRect(m_boite.left + position().x, m_boite.top + position().y, m_boite.width, m_boite.height);
 }
 
 void PhysicObject::changeAcceleration(sf::Vector2f n_acceleration, bool relatif)
@@ -98,8 +99,18 @@ void PhysicObject::update(float tickSize)
     m_acceleration.deriver(m_vitesse.value, tickSize);
 }
 
+void PhysicObject::drawIn(AbstractDrawer& cible)
+{
+    sf::RectangleShape r(sf::Vector2f(m_boite.width, m_boite.height));
+    r.setFillColor(m_color);
+    r.setPosition(placedBox().left, placedBox().top);
 
-sf::Vector2f center(const sf::IntRect& rect)
+    cible.draw(r);
+}
+
+
+
+sf::Vector2f center(const sf::FloatRect& rect)
 {
     return sf::Vector2f(rect.left + (rect.width / 2), rect.top + (rect.height / 2));
 }

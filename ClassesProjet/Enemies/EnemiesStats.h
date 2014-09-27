@@ -10,7 +10,7 @@
 struct EnemiesStats
 {
     std::string spriteName;
-    sf::IntRect hitbox;
+    sf::FloatRect hitbox;
     float speed;
     int scoreValue;
     int hp;
@@ -18,12 +18,12 @@ struct EnemiesStats
     bool shoots;
 
     EnemiesStats() {}
-    EnemiesStats(const std::string& sprName, sf::IntRect nHitbox, float nSpeed, int nScoreValue, int nHP, bool nShoots = false) :
+    EnemiesStats(const std::string& sprName, sf::FloatRect nHitbox, float nSpeed, int nScoreValue, int nHP, bool nShoots = false) :
     spriteName(sprName), hitbox(nHitbox), speed(nSpeed), scoreValue(nScoreValue), hp(nHP), shoots(nShoots) {}
 };
 
 
-/*EnemiesStats::EnemiesStats(sf::Sprite nSpr, sf::IntRect nHitbox) : spr(nSpr), hitbox(nHitbox)
+/*EnemiesStats::EnemiesStats(sf::Sprite nSpr, sf::FloatRect nHitbox) : spr(nSpr), hitbox(nHitbox)
 {
 
 }

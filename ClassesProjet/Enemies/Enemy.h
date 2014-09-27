@@ -17,14 +17,14 @@ class Enemy : public BaseVart, public HurtableEntity
     public :
 
     Enemy();
-    Enemy(const sf::Sprite& sprite, sf::IntRect hitbox, float nSpeed, int hp, int nScore);
-    void set(const sf::Sprite& sprite, sf::IntRect hitbox, float nSpeed, int hp, int nScore);
-    virtual ~Enemy() {}
+    Enemy(const sf::Sprite& sprite, sf::FloatRect hitbox, float nSpeed, int hp, int nScore);
+    void set(const sf::Sprite& sprite, sf::FloatRect hitbox, float nSpeed, int hp, int nScore);
+    virtual ~Enemy();
 
     int takeDamage(int dm);
     int score() const;
     bool isDead() const;
-    bool recycle(const sf::IntRect& visibleZone);
+    bool recycle(const sf::FloatRect& visibleZone);
     void kill(bool doExplode = true, bool givePoints = true);
 
 

@@ -5,21 +5,24 @@
 
 #include "../Moteur2D.h"
 #include "SpaceStats.h"
-#include "../../Moteur2D/Graphic/Text.h"
+
+#define TEXT_SIZE 50
+#define FIRST_SCREEN_TEXT_L1 "Invasion"
+#define FIRST_SCREEN_TEXT_L2 "de L'ESPACE"
 
 class FirstScreen : public PressAnyKeyMenu<float>
 {
     public :
 
-    explicit FirstScreen(const sf::Font& f = sf::Font(), sf::Color c = sf::Color::White, AbstractInputs* in = nullptr);
-    void setText(const sf::Font& f, sf::Color c = sf::Color::White);
+    explicit FirstScreen(const sf::Font* f = nullptr, sf::Color c = sf::Color::White, AbstractInputs* in = nullptr);
+    void setText(const sf::Font* f, sf::Color c = sf::Color::White);
     void drawIn(AbstractDrawer& window);
 
     private :
 
-    DrawableText m_text_1;
-    DrawableText m_text_2;
-    sf::Font m_font;
+    Menu::ItemGrid m_grid;
+    Menu::Text* m_text_1;
+    Menu::Text* m_text_2;
 };
 
 

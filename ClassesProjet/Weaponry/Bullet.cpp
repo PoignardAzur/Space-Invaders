@@ -24,14 +24,14 @@ void Bullet::set(sf::Vector2f pos, float maxSpeed, const sf::Sprite& bulletSprit
 {
     BaseVart::PhysicObject::move(pos, false);
     BaseVart::setSprite(bulletSprite);
-    Vart::setSpriteRelativePosition(bulletSprite.getGlobalBounds())
+    BaseVart::setSpriteRelativePosition(sf::Vector2f(- bulletSprite.getGlobalBounds().width / 2, - bulletSprite.getGlobalBounds().height / 2));
 
     BaseVart::PhysicObject::changeSpeed(sf::Vector2f(0, maxSpeed), false);
     m_power = DEFAULT_BULLET_POWER;
 //  m_maxSpeed = maxSpeed;
 }
 
-void Bullet::recycle(sf::IntRect visibleZone)
+void Bullet::recycle(sf::FloatRect visibleZone)
 {
     if (! testCollision(Vart::PhysicObject::placedBox(), visibleZone))
     {

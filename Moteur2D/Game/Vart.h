@@ -5,6 +5,8 @@
 #include "AbsVart.h"
 #include "Physic/PhysicObject.h"
 
+#define DRAW_VART_SPRITE true
+#define DRAW_VART_HITBOX true
 
 /*
 Represents a basic object with a provided hitbox and appearance.
@@ -23,7 +25,8 @@ class Vart : public AbsVart, public Phys
 
     virtual void update(float tickSize);
     virtual bool doDelete() const;
-    virtual void drawIn(AbstractDrawer&); // inherited virtual methods ; have to be defined here
+    void drawIn(AbstractDrawer&); // inherited virtual methods ; has to be defined here
+    virtual void drawIn(AbstractDrawer&, bool drawSprite, bool drawHitbox = DRAW_VART_HITBOX);
 
 
     protected :
@@ -92,10 +95,24 @@ bool Vart<Phys, Spr>::doDelete() const
 
 
 template <typename Phys, typename Spr>
+void Vart<Phys, Spr>::drawIn(AbstractDrawer& cible, bool drawSprite, bool drawHitbox)
+{
+    if (drawSprite)
+    {
+        m_sprite.setPosition(Phys::position() + m_spriteRelativePosition);
+        cible.draw(m_sprite);
+    }
+
+    if (drawHitbox)
+    {
+        Phys::drawIn(cible);
+    }
+}
+
+template <typename Phys, typename Spr>
 void Vart<Phys, Spr>::drawIn(AbstractDrawer& cible)
 {
-    m_sprite.setPosition(Phys::position() + m_spriteRelativePosition);
-    cible.draw(m_sprite);
+    drawIn(cible, DRAW_VART_SPRITE, DRAW_VART_HITBOX);
 }
 
 

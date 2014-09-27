@@ -16,20 +16,16 @@ class SpaceHUD : public AbstractHUD<float, BasicSpaceLevel>
 {
     public :
 
-    SpaceHUD(BasicSpaceLevel* l);
-    SpaceHUD(const sf::Font& f, sf::Color c = sf::Color::White, BasicSpaceLevel* l = nullptr);
+    SpaceHUD(BasicSpaceLevel* l /*= nullptr*/, const sf::Font* f = nullptr, sf::Color c = sf::Color::White);
     //void setLevel(BasicSpaceLevel* level);
 
     void setLifeSprite(sf::Sprite s);
 
-    void setAllFonts(const sf::Font& f, sf::Color c = sf::Color::White);
-    void setAllFonts(const char* fontFile, sf::Color c = sf::Color::White);
-    void setScoreCounterFont(const sf::Font& f, sf::Color c = sf::Color::White);
-    void setScoreCounterFont(const char* fontFile, sf::Color c = sf::Color::White);
-    void setLifeCounterFont(const sf::Font& f, sf::Color c = sf::Color::White);
-    void setLifeCounterFont(const char* fontFile, sf::Color c = sf::Color::White);
-    void setGameOverTextFont(const sf::Font& f, sf::Color c = sf::Color::White);
-    void setGameOverTextFont(const char* fontFile, sf::Color c = sf::Color::White);
+    void setAllFonts(const sf::Font* f, sf::Color c = sf::Color::White);
+    void setLifeCounterFont(const sf::Font* f, sf::Color c = sf::Color::White);
+    void setGameOverTextFont(const sf::Font* f, sf::Color c = sf::Color::White);
+    void setScoreCounterFont(const sf::Font* f, sf::Color c = sf::Color::White);
+    void setScoreCounterFont(const sf::Font* f, sf::Color scoreColor, sf::Color labelColor);
 
     void update(const float& ticks);
 
@@ -41,23 +37,16 @@ class SpaceHUD : public AbstractHUD<float, BasicSpaceLevel>
 
     void setRemainingLives(int nLives);
     void setScore(int nScore);
-    void gameOver();
+    void startGameOverMode();
 
 
     private :
 
-    DrawableText m_scoreText;
-    sf::Font m_scoreFont;
+    Menu::Text m_gameOverText;
+    Menu::LifeCounter m_livesDrawer;
 
-    DrawableText m_gameOverText;
-    sf::Font m_gameOverFont;
-
-    DrawableText m_livesNumberDisplay;
-    sf::Font m_livesNumberFont;
-
-    sf::Sprite m_spriteLife_1;
-    sf::Sprite m_spriteLife_2;
-    sf::Sprite m_spriteLife_3;
+    Menu::Label m_scoreLabel;
+    Menu::Counter* m_scoreDrawer;
 
     int m_lives;
     int m_score;

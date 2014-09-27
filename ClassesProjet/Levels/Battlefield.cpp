@@ -3,13 +3,13 @@
 #include "Battlefield.h"
 
 
-Battlefield::Battlefield(PlayerShip* player, sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
+Battlefield::Battlefield(PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
 {
     setPlayer(player);
     setZones(visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight);
 }
 
-Battlefield::Battlefield(sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight, PlayerShip* player)
+Battlefield::Battlefield(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight, PlayerShip* player)
 {
     setPlayer(player);
     setZones(visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight);
@@ -20,7 +20,7 @@ void Battlefield::setPlayer(PlayerShip* player)
     m_player.reset(player);
 }
 
-void Battlefield::setZones(sf::IntRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
+void Battlefield::setZones(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
 {
     m_visibleZone = visibleZone;
     m_leftSpawnLimit = leftSpawnLimit;
@@ -80,7 +80,7 @@ void Battlefield::updateEnemies(float tickSize)
 
     for (auto p = t_enemies.begin(); p != t_enemies.end(); p++)
     {
-        auto enemy_p = *p;
+        auto& enemy_p = *p;
 
         if (enemy_p->isDead())
         {
@@ -90,7 +90,10 @@ void Battlefield::updateEnemies(float tickSize)
         else if (enemy_p->recycle(m_visibleZone))
         {
             if (!enemyEscapes(enemy_p))
-            t_enemies.erase(p);
+            {
+                p = t_enemies.erase(p);
+                p--;
+            }
         }
     }
 

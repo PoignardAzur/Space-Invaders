@@ -13,8 +13,8 @@ class WaveSpaceLevel : public BasicSpaceLevel
 {
     public :
 
-    WaveSpaceLevel(unsigned int seed = epoch_to_now().count(), PlayerShip* player = nullptr, sf::IntRect visibleZone = sf::IntRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
-    WaveSpaceLevel(std::seed_seq& seed, PlayerShip* player = nullptr, sf::IntRect visibleZone = sf::IntRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
+    WaveSpaceLevel(unsigned int seed = epoch_to_now().count(), PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
+    WaveSpaceLevel(std::seed_seq& seed, PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
 
     virtual void generateEnemyWaves(float tickSize);
     void setVictoryDelay(float d);
