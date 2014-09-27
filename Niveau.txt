@@ -1,0 +1,38 @@
+6
+TirEnnemi Images\Tir_Ennemi.bmp
+Vaisseau_Ennemi        Images\Vaisseau_Ennemi.bmp
+Vaisseau_Ennemi_Blinde Images\Vaisseau_Ennemi_Blinde.bmp
+Vaisseau_Ennemi_Booste Images\Vaisseau_Ennemi_Booste.bmp
+Vaisseau_Ennemi_Rapide Images\Vaisseau_Ennemi_Rapide.bmp
+Vaisseau_Ennemi_Tireur Images\Vaisseau_Ennemi_Tireur.bmp
+
+300
+150
+
+Vaisseau_Ennemi
+0 0 38 89
+3.0
+0 200
+100 100
+0
+
+Vaisseau_Ennemi_Blinde
+0 0 38 89
+2.0
+0 200
+150 103
+0
+
+Vaisseau_Ennemi_Booste
+0 0 38 89
+5.0
+0 200
+120 102
+0
+
+Vaisseau_Ennemi_Rapide
+17 0 38 89
+4.0
+0 200
+110 101
+0

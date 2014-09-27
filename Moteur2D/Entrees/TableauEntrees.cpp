@@ -4,7 +4,7 @@
 #include "TableauEntrees.h"
 
 
-void CtB::MajTouche::operator()(std::pair<const sf::Mouse::Button, CtB::Touche>& x)
+void MajTouche::operator()(std::pair<const sf::Mouse::Button, Touche>& x)
 {
     if (x.second == Pressee)
     x.second = Activee;
@@ -13,7 +13,7 @@ void CtB::MajTouche::operator()(std::pair<const sf::Mouse::Button, CtB::Touche>&
     x.second = Desactivee;
 }
 
-void CtB::MajTouche::operator()(std::pair<const sf::Keyboard::Key, CtB::Touche>& x)
+void MajTouche::operator()(std::pair<const sf::Keyboard::Key, Touche>& x)
 {
     if (x.second == Pressee)
     x.second = Activee;
@@ -27,22 +27,22 @@ void CtB::MajTouche::operator()(std::pair<const sf::Keyboard::Key, CtB::Touche>&
 
 
 
-CtB::Entrees::Entrees(sf::Window* fenetre) : m_fenetre(fenetre), m_fin(false)
+Entrees::Entrees(sf::Window* fenetre) : m_fenetre(fenetre), m_fin(false)
 {
 
 }
 
-bool CtB::Entrees::fini()
+bool Entrees::fini()
 {
     return m_fin;
 }
 
-sf::Vector2f CtB::Entrees::curseur()
+sf::Vector2f Entrees::curseur()
 {
     return m_curseur;
 }
 
-void CtB::Entrees::MAJ()
+void Entrees::MAJ()
 {
     if (!m_fenetre)
     return;
@@ -94,12 +94,12 @@ void CtB::Entrees::MAJ()
     }
 }
 
-std::map<sf::Mouse::Button, CtB::Touche>& CtB::Entrees::boutonsSouris()
+std::map<sf::Mouse::Button, Touche>& Entrees::boutonsSouris()
 {
     return t_boutonsSouris;
 }
 
-std::map<sf::Keyboard::Key , CtB::Touche> CtB::Entrees::boutonsClavier()
+std::map<sf::Keyboard::Key , Touche> Entrees::boutonsClavier()
 {
     return t_boutonsClavier;
 }

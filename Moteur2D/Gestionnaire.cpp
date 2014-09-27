@@ -2,50 +2,34 @@
 
 #include "Gestionnaire.h"
 
+// Fuuuuuuuuuuuuuuuuu
 
-
-CtB::Gestionnaire::Gestionnaire(AfficheurObjets* cible, Entrees* entrees) :
-m_fenetreCible(cible), m_tableau15(new TableauVart<VartAbs>()), m_entrees(entrees)
+Gestionnaire::Gestionnaire(Niveau* niveauJoue, Entrees* tableauEntrees, sf::RenderWindow* cible)
 {
-
+    attribuer(niveauJoue, tableauEntrees, cible);
 }
 
-void CtB::Gestionnaire::MAJ()
+void Gestionnaire::attribuer(Niveau* niveauJoue, Entrees* tableauEntrees, sf::RenderWindow* cible)
 {
-    if (m_entrees)
-    m_entrees->MAJ();
+    m_niveauJoue = boost::shared_ptr<Niveau>(niveauJoue);
+    m_entrees = boost::shared_ptr<Entrees>(tableauEntrees);
+    m_cible = cible;
 
-    m_fenetreCible->effacer();
-
-    if (m_tableau15)
-    {
-        m_tableau15->MAJ();
-        m_tableau15->afficherDans(*m_fenetreCible);
-    }
-
-    m_fenetreCible->afficherTout();
+    m_fenetre = boost::shared_ptr<AfficheurObjets>(new AfficheurObjets(cible));
+    m_cible->setFramerateLimit(LIMITE_NOMBRE_FPS);
 }
 
-void CtB::Gestionnaire::ajouter(VartAbs* ajout)
+void Gestionnaire::MAJ()
 {
-    if (m_tableau15)
-    m_tableau15->ajouter(ajout);
+    m_fenetre->effacer();
+    m_niveauJoue->MAJ();
+    m_niveauJoue->afficherDans(*m_fenetre);
+
+    m_cible->display();
 }
 
-CtB::Entrees& CtB::Gestionnaire::entreesFenetre()
+bool Gestionnaire::continuer()
 {
-    return *m_entrees;
-}
-
-
-bool CtB::Gestionnaire::finDuJeu() const
-{
-    return m_entrees->fini() || m_fin;
-}
-
-
-void CtB::Gestionnaire::finirJeu()
-{
-    m_fin = true;
+    return ! m_niveauJoue->detruire();
 }
 

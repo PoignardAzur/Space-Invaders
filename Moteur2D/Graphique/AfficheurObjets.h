@@ -10,31 +10,26 @@
 #define LIMITE_NOMBRE_FPS 60
 
 
-namespace CtB
+class AfficheurObjets
 {
+    public :
 
-    class AfficheurObjets
-    {
-        public :
+    AfficheurObjets(sf::RenderTarget* cible);
 
-        AfficheurObjets(sf::RenderWindow* cible);
+    void afficher(const ObjetAffichable& objet, const ParametresAffichage& para);
+    void afficher(const ObjetAffichable& objet);
 
-        void afficher(const ObjetAffichable& objet, const ParametresAffichage& para);
-        void afficher(const ObjetAffichable& objet);
+    void effacer();
 
-        void effacer();
-        void afficherTout();
+    protected :
 
-        protected :
+    private :
 
-        private :
-
-        sf::RenderWindow* m_fenetreCible; /// use-a
-    };
+    sf::RenderTarget* m_fenetreCible; /// use-a
+};
 
 
 
-}
 
 #endif
 

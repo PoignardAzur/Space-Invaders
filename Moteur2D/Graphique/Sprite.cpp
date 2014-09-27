@@ -2,25 +2,34 @@
 #include "Sprite.h"
 
 
-CtB::Sprite::Sprite(const Parametres& paraObjet) : m_sprite(*( paraObjet.adresseImage() ))
+Sprite::Sprite(const sf::Texture& paraObjet) : m_sprite(paraObjet)
 {
 
 }
 
+Sprite::Sprite()
+{
+
+}
+
+void Sprite::attribuer(const sf::Texture& paraObjet)
+{
+    m_sprite.setTexture(paraObjet);
+}
 
 
-sf::Sprite& CtB::Sprite::afficher()
+sf::Sprite& Sprite::afficher()
 {
     return m_sprite;
 }
 
-const sf::Sprite& CtB::Sprite::afficher() const
+const sf::Sprite& Sprite::afficher() const
 {
     return m_sprite;
 }
 
 
-void CtB::Sprite::deplacer(const sf::Vector2f& distance)
+void Sprite::deplacer(const sf::Vector2f& distance)
 {
     m_sprite.setPosition(distance);
 }

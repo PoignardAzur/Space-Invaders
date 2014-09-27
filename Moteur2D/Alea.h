@@ -9,30 +9,26 @@
 //#include <cstdlib>
 
 
-namespace CtB
+
+class Alea
 {
+    public :
 
-    class Alea
+    Alea()
     {
-        public :
+        srand(time(0));
+    }
 
-        Alea()
-        {
-            srand(time(0));
-        }
+    int operator()(int maximum)
+    {
+        return rand() % (maximum + 1); // on obtient un nombre dans l'intervalle [0;max]
+    }
 
-        int operator()(int maximum)
-        {
-            return rand() % (maximum + 1); // on obtient un nombre dans l'intervalle [0;max]
-        }
-
-        int operator()(int minimum, int maximum)
-        {
-            return rand() % (maximum + 1 - minimum) + minimum; // on obtient un nombre dans l'intervalle [min;max]
-        }
-    };
-
-}
+    int operator()(int minimum, int maximum)
+    {
+        return rand() % (maximum + 1 - minimum) + minimum; // on obtient un nombre dans l'intervalle [min;max]
+    }
+};
 
 
 

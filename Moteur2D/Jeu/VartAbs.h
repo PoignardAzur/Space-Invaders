@@ -8,17 +8,13 @@
 #include "../Graphique/Forme.h"
 
 
-namespace CtB
+class VartAbs : public Majable
 {
+    public :
 
-    class VartAbs : public Majable
-    {
-        public :
+    virtual void afficherDans(AfficheurObjets&) = 0;
+};
 
-        virtual void afficherDans(AfficheurObjets&) = 0;
-    };
-
-}
 
 
 #endif

@@ -7,20 +7,19 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 
-namespace CtB
+
+class ObjetAffichable
 {
+    public :
 
-    class ObjetAffichable
-    {
-        public :
-
-        virtual const sf::Drawable& afficher() const = 0;
-    };
+    virtual const sf::Drawable& afficher() const = 0;
+    virtual void MAJ() {}
+};
 
 
 
 
-}
+
 
 #endif
 

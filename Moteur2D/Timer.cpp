@@ -3,18 +3,18 @@
 #include "Timer.h"
 
 
-CtB::Chronometre::Chronometre(int tempsDepart, int tempsMax, bool razAuto) :
+Chronometre::Chronometre(int tempsDepart, int tempsMax, bool razAuto) :
 m_temps(tempsDepart), m_tempsMax(tempsMax), m_autoRaz(razAuto)
 {
 
 }
 
-void CtB::Chronometre::modifierTempsMax(int nTemps)
+void Chronometre::modifierTempsMax(int nTemps)
 {
     m_tempsMax = nTemps;
 }
 
-void CtB::Chronometre::modifierTemps(int nTemps, bool limiter)
+void Chronometre::modifierTemps(int nTemps, bool limiter)
 {
     if (!limiter || nTemps <= m_tempsMax)
     m_temps = nTemps;
@@ -23,12 +23,12 @@ void CtB::Chronometre::modifierTemps(int nTemps, bool limiter)
     nTemps = m_tempsMax;
 }
 
-void CtB::Chronometre::razTemps()
+void Chronometre::razTemps()
 {
     m_temps = m_tempsMax;
 }
 
-bool CtB::Chronometre::decrementer()
+bool Chronometre::decrementer()
 {
     if (m_temps)
     {
@@ -43,19 +43,19 @@ bool CtB::Chronometre::decrementer()
     return false;
 }
 
-inline int CtB::Chronometre::tempsMax() const
+inline int Chronometre::tempsMax() const
 {
     return m_tempsMax;
 }
 
-inline int CtB::Chronometre::temps() const
+inline int Chronometre::temps() const
 {
     return m_temps;
 }
 
 
 
-std::vector<bool> CtB::decrementer(std::vector<Chronometre> tableau)
+std::vector<bool> decrementer(std::vector<Chronometre> tableau)
 {
     std::vector<bool> tableauRetour (tableau.size(), true);
 

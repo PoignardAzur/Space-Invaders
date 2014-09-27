@@ -3,38 +3,27 @@
 #ifndef HEADER_GESTIONNAIRE
 #define HEADER_GESTIONNAIRE
 
-#include "Jeu/Emmeteur.h"
-#include "Jeu/Entrees/TableauEntrees.h"
+#include "Niveau.h"
 
 
-namespace CtB
+class Gestionnaire
 {
+    public :
 
-    class Gestionnaire
-    {
-        public :
+    Gestionnaire(Niveau* niveauJoue = 0, Entrees* tableauEntrees = 0, sf::RenderWindow* cible = 0);
+    void attribuer(Niveau* niveauJoue, Entrees* tableauEntrees, sf::RenderWindow* cible);
 
-        Gestionnaire(AfficheurObjets* cible = 0, Entrees* entrees = 0);
+    virtual void MAJ();
+    virtual bool continuer();
 
-        virtual void MAJ();
-        virtual bool finDuJeu() const;
 
-        protected :
+    private :
 
-        void ajouter(VartAbs* ajout);
-        Entrees& entreesFenetre();
-        virtual void finirJeu();
-
-        private :
-
-        AfficheurObjets* m_fenetreCible; // use-a
-        boost::shared_ptr< TableauVart<VartAbs> > m_tableau15; // has-a
-        boost::shared_ptr<Entrees> m_entrees; // has-a
-
-        bool m_fin;
-    };
-
-}
+    boost::shared_ptr<Niveau> m_niveauJoue; // has-a
+    boost::shared_ptr<Entrees> m_entrees; // has-a
+    boost::shared_ptr<AfficheurObjets> m_fenetre; // has-a
+    sf::RenderWindow* m_cible; // has-a
+};
 
 
 #endif

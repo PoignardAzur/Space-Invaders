@@ -1,38 +1,30 @@
 
 
 
-
 #ifndef HEADER_TIR
 #define HEADER_TIR
 
-#include "Moteur2D/includes.h"
 
 
-struct ParaTir
+#include "Moteur2D/Jeu/Vart.h"
+
+
+class Tir : public Vart
 {
     public :
 
-    float vitesseMax;
-    float acceleration;
-    CtB::ParaVart parametres;
+    Tir(const ParaVart& paraobjet, sf::Vector2f position) :
+    Vart(paraobjet, position) {}
 
-    ParaTir(float nVitesseMax, float nAcceleration, const CtB::ParaVart& nParametres);
+    virtual float degats() = 0;
+
+    virtual bool detruitApresImpact()
+    {
+        return true;
+    }
+
 };
 
 
-class Tir : public CtB::Vart
-{
-    public :
-
-    Tir(const ParaTir& para);
-    Tir(const ParaTir& para, sf::Vector2f position);
-
-    void MAJ();
-
-    private :
-
-    float m_vitesseMax;
-    float m_acceleration;
-};
 
 #endif

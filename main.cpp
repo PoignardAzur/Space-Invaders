@@ -1,23 +1,26 @@
 
 
 #include "BoucleJeu.h"
+#include <fstream>
+#include "NiveauShoot.h"
 //#include "Moteur2D/includes.h"
 
 #define TITRE_FENETRE "Faudrait penser à modifier ce titre"
+#define ADRESSE_FICHIER "Niveau.txt"
+
 
 int main()
 {
     try
     {
-
         sf::RenderWindow fenetre(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE);
-        CtB::AfficheurObjets afficheur(&fenetre);
+        std::ifstream fichier(ADRESSE_FICHIER);
+        Entrees* p_entrees = new Entrees(&fenetre);
+        Gestionnaire boucle(new NiveauShoot(fichier, p_entrees), p_entrees, &fenetre);
 
-        BoucleJeu bigBrother(&afficheur, new CtB::Entrees(&fenetre));
-
-        while (!bigBrother.finDuJeu())
+        while (boucle.continuer())
         {
-            bigBrother.MAJ();
+            boucle.MAJ();
         }
 
         return EXIT_SUCCESS;

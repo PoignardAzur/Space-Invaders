@@ -1,44 +1,25 @@
 
 
 
-
 #ifndef HEADER_ENNEMI
 #define HEADER_ENNEMI
 
-#include "Moteur2D/includes.h"
+#include "Tir.h"
+#include "Arme.h"
 
-
-struct ParaEnnemi
+class Ennemi : public Vart
 {
     public :
 
-    float vitesse;
-    int vie;
-    CtB::ParaVart parametres;
-
-    ParaEnnemi(float nVitesse, int nVie, CtB::ParaVart& nParametres) : parametres(nParametres)
-    {
-        vitesse = nVitesse;
-        vie = nVie;
-    }
-};
-
-
-class Ennemi : public CtB::Vart
-{
-    public :
-
-    Ennemi(const ParaEnnemi& para);
-    Ennemi(const ParaEnnemi& para, sf::Vector2f position);
-
+    Ennemi(const ParaVart& paraobjet, sf::Vector2f position, Arme<Tir>* arme);
     void MAJ();
-    void enleverVie(int quantite);
 
     private :
 
-    int m_vie;
+    boost::shared_ptr< Arme<Tir> > m_arme;
 };
 
 
 
 #endif
+
