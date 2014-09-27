@@ -7,6 +7,8 @@
 #include "ObjetAffichable.h"
 #include "ParametresAffichage.h"
 
+#define LIMITE_NOMBRE_FPS 60
+
 
 namespace CtB
 {
@@ -15,16 +17,19 @@ namespace CtB
     {
         public :
 
-        AfficheurObjets(sf::RenderTarget* cible);
+        AfficheurObjets(sf::RenderWindow* cible);
 
         void afficher(const ObjetAffichable& objet, const ParametresAffichage& para);
         void afficher(const ObjetAffichable& objet);
+
+        void effacer();
+        void afficherTout();
 
         protected :
 
         private :
 
-        boost::shared_ptr<sf::RenderTarget> m_fenetreCible; // has-a
+        sf::RenderWindow* m_fenetreCible; /// use-a
     };
 
 

@@ -17,12 +17,13 @@ namespace CtB
         Gestionnaire(AfficheurObjets* cible = 0, Entrees* entrees = 0);
 
         virtual void MAJ();
-        virtual bool finDuJeu() = 0;
+        virtual bool finDuJeu() const;
 
         protected :
 
         void ajouter(VartAbs* ajout);
         Entrees& entreesFenetre();
+        virtual void finirJeu();
 
         private :
 
@@ -30,6 +31,7 @@ namespace CtB
         boost::shared_ptr< TableauVart<VartAbs> > m_tableau15; // has-a
         boost::shared_ptr<Entrees> m_entrees; // has-a
 
+        bool m_fin;
     };
 
 }

@@ -30,7 +30,7 @@ namespace CtB
         {
             return rand() % (maximum + 1 - minimum) + minimum; // on obtient un nombre dans l'intervalle [min;max]
         }
-    }
+    };
 
 }
 

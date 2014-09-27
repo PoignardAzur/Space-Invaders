@@ -4,6 +4,8 @@
 
 #include "Majable.h"
 #include "../Graphique/AfficheurObjets.h"
+#include "../Graphique/Sprite.h"
+#include "../Graphique/Forme.h"
 
 
 namespace CtB
@@ -13,7 +15,7 @@ namespace CtB
     {
         public :
 
-        virtual void afficherDans(const AfficheurObjets&) = 0;
+        virtual void afficherDans(AfficheurObjets&) = 0;
     };
 
 }

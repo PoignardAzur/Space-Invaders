@@ -4,19 +4,21 @@
 #define HEADER_VARTS
 
 #include "VartAbs.h"
+#include "../Graphique/Sprite.h"
 #include "../Physique/ObjetPhysique.h"
+
 
 namespace CtB
 {
+    class ParaVart;
 
     class Vart : public VartAbs
     {
         public :
 
-        class Parametres;
-
-        Vart(Parametres& para);
-        Vart(Parametres& para, sf::Vector2f position);
+        Vart();
+        Vart(const ParaVart& para);
+        Vart(const ParaVart& para, sf::Vector2f position);
 
         virtual void MAJ();
         virtual bool detruire() const;
@@ -27,18 +29,26 @@ namespace CtB
 
         virtual void detruireObjet();
 
+        void attribuer(const ParaVart& para);
+        void attribuer(Sprite* para);
+        void attribuer(ObjetPhysique* para);
 
-        private :
+
+   //     private :
 
         bool m_detruit;
 
-        boost::shared_ptr<ObjetAffichable> m_sprite; // has a
+        boost::shared_ptr<Sprite> m_sprite; // has a
         boost::shared_ptr<ObjetPhysique>   m_hitbox; // has a
+
     };
+
 
 
 }
 
+
+#include "ParametresVart.h"
 
 
 #endif

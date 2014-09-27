@@ -39,6 +39,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="BoucleJeu.cpp" />
+		<Unit filename="BoucleJeu.h" />
+		<Unit filename="Ennemi.cpp" />
+		<Unit filename="Ennemi.h" />
 		<Unit filename="Moteur2D\Alea.h" />
 		<Unit filename="Moteur2D\Gestionnaire.cpp" />
 		<Unit filename="Moteur2D\Gestionnaire.h" />
@@ -47,11 +51,12 @@
 		<Unit filename="Moteur2D\Graphique\ObjetAffichable.cpp" />
 		<Unit filename="Moteur2D\Graphique\ObjetAffichable.h" />
 		<Unit filename="Moteur2D\Graphique\ParametresAffichage.h" />
+		<Unit filename="Moteur2D\Graphique\Sprite.cpp" />
+		<Unit filename="Moteur2D\Graphique\Sprite.h" />
 		<Unit filename="Moteur2D\Jeu\Emmeteur.h" />
 		<Unit filename="Moteur2D\Jeu\Entrees\TableauEntrees.cpp" />
 		<Unit filename="Moteur2D\Jeu\Entrees\TableauEntrees.h" />
 		<Unit filename="Moteur2D\Jeu\Majable.h" />
-		<Unit filename="Moteur2D\Jeu\ParametresVart.cpp" />
 		<Unit filename="Moteur2D\Jeu\ParametresVart.h" />
 		<Unit filename="Moteur2D\Jeu\TableauVarts.cpp" />
 		<Unit filename="Moteur2D\Jeu\TableauVarts.h" />
@@ -67,7 +72,11 @@
 		<Unit filename="Moteur2D\Timer.cpp" />
 		<Unit filename="Moteur2D\Timer.h" />
 		<Unit filename="Moteur2D\includes.h" />
-		<Unit filename="Moteur2D\main.cpp" />
+		<Unit filename="Tir.cpp" />
+		<Unit filename="Tir.h" />
+		<Unit filename="Vaisseau.cpp" />
+		<Unit filename="Vaisseau.h" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

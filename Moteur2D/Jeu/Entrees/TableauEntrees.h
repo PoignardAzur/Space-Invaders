@@ -48,7 +48,7 @@ namespace CtB
 
         protected :
 
-        sf::Window* m_fenetre;
+        sf::Window* m_fenetre;  // use-a
         sf::Event m_event;
 
         std::map<sf::Mouse::Button, Touche> t_boutonsSouris;

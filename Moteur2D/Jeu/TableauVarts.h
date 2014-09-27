@@ -61,7 +61,7 @@ namespace CtB
             return false;
         }
 
-        virtual void afficherDans(const AfficheurObjets& cible)
+        virtual void afficherDans(AfficheurObjets& cible)
         {
             for (unsigned short i = 0; i < t_varts.size(); i++)
             {

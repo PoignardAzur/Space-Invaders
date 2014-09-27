@@ -9,19 +9,30 @@
 namespace CtB
 {
 
-    class Vart::Parametres
+    class ParaVart
     {
         public :
 
-        Parametres(ObjetAffichable* nsprite, ObjetPhysique* nhitbox);
+        ParaVart(pSpr nsprite, const ObjetPhysique& nhitbox) :
+        m_sprite(nsprite), m_hitbox(nhitbox)
+        {
 
-        ObjetAffichable* sprite();
-        ObjetPhysique* hitbox();
+        }
+
+        Sprite sprite() const
+        {
+            return m_sprite;
+        }
+
+        ObjetPhysique hitbox() const
+        {
+            return m_hitbox;
+        }
 
         private :
 
-        ObjetAffichable* m_sprite;
-        ObjetPhysique* m_hitbox;
+        Sprite m_sprite;
+        ObjetPhysique m_hitbox;
     };
 
 
