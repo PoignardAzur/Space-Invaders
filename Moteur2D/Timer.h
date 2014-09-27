@@ -6,34 +6,36 @@
 
 #include <vector>
 
-
-class Chronometre
+/*
+Un bete timer. Les prototypes parlent d'eux mêmes.
+*/
+class Timer
 {
     public :
 
-    Chronometre(int tempsDepart = 0, int tempsMax = 0, bool razAuto = true);
+    Timer(float tempsDepart = 0, float tempsMax = 0, bool razAuto = true);
 
-    void modifierTempsMax(int nTemps);
-    void modifierTemps(int nTemps, bool limiter = false);
-    virtual void razTemps();
+    void setMaxTime(float nTemps);
+    void setTime(float nTemps, bool limiter = false);
+    virtual void setTimeToMax();
 
-    bool decrementer();
+    bool decrement(float ticks);
 
-    inline int tempsMax() const;
-    inline int temps() const;
+    inline float maxTime() const;
+    inline float time() const;
 
     protected :
 
     private :
 
-    int m_temps;
-    int m_tempsMax;
+    float m_temps;
+    float m_tempsMax;
 
     bool m_autoRaz;
 
 };
 
-std::vector<bool> decrementer(std::vector<Chronometre> tableau);
+std::vector<bool> decrement(std::vector<Timer> tableau, float ticks);
 
 
 

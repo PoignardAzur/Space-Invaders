@@ -3,18 +3,18 @@
 #include "Timer.h"
 
 
-Chronometre::Chronometre(int tempsDepart, int tempsMax, bool razAuto) :
+Timer::Timer(float tempsDepart, float tempsMax, bool razAuto) :
 m_temps(tempsDepart), m_tempsMax(tempsMax), m_autoRaz(razAuto)
 {
 
 }
 
-void Chronometre::modifierTempsMax(int nTemps)
+void Timer::setMaxTime(float nTemps)
 {
     m_tempsMax = nTemps;
 }
 
-void Chronometre::modifierTemps(int nTemps, bool limiter)
+void Timer::setTime(float nTemps, bool limiter)
 {
     if (!limiter || nTemps <= m_tempsMax)
     m_temps = nTemps;
@@ -23,45 +23,50 @@ void Chronometre::modifierTemps(int nTemps, bool limiter)
     nTemps = m_tempsMax;
 }
 
-void Chronometre::razTemps()
+void Timer::setTimeToMax()
 {
     m_temps = m_tempsMax;
 }
 
-bool Chronometre::decrementer()
+bool Timer::decrement(float ticks)
 {
     if (m_temps)
     {
-        m_temps --;
+        if (ticks >= m_temps)
+        m_temps -= ticks;
+
+        else
+        m_temps = 0;
+
         return !m_temps;
     }
 
 /// else
     if (m_autoRaz)
-    razTemps();
+    setTimeToMax();
 
     return false;
 }
 
-inline int Chronometre::tempsMax() const
+inline float Timer::maxTime() const
 {
     return m_tempsMax;
 }
 
-inline int Chronometre::temps() const
+inline float Timer::time() const
 {
     return m_temps;
 }
 
 
 
-std::vector<bool> decrementer(std::vector<Chronometre> tableau)
+std::vector<bool> decrement(std::vector<Timer> tableau, float ticks)
 {
     std::vector<bool> tableauRetour (tableau.size(), true);
 
     for (unsigned short i = 0; i < tableau.size(); ++i)
     {
-        tableauRetour[i] = tableau[i].decrementer();
+        tableauRetour[i] = tableau[i].decrement(ticks);
     }
 
     return tableauRetour;

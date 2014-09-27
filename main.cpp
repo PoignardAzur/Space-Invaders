@@ -1,26 +1,26 @@
 
 
-#include "BoucleJeu.h"
-#include <fstream>
-#include "NiveauShoot.h"
+#include "ClassesProjet/BoucleJeu.h"
 //#include "Moteur2D/includes.h"
+//#include <Clock.hpp>
 
-#define TITRE_FENETRE "Faudrait penser à modifier ce titre"
-#define ADRESSE_FICHIER "Niveau.txt"
-
+#define TITRE_FENETRE "TODO : Modifier ce titre"
+#define FRAMERATE 60
+//#define FRAME_SIZE 1.0f / FRAMERATE
 
 int main()
 {
     try
     {
-        sf::RenderWindow fenetre(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE);
-        std::ifstream fichier(ADRESSE_FICHIER);
-        Entrees* p_entrees = new Entrees(&fenetre);
-        Gestionnaire boucle(new NiveauShoot(fichier, p_entrees), p_entrees, &fenetre);
 
-        while (boucle.continuer())
+        sf::RenderWindow* fenetre = new sf::RenderWindow(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE);
+        fenetre->setFramerateLimit(FRAMERATE);
+        BoucleJeu bigBrother(new Level, new Inputs(fenetre), fenetre);
+        sf::Clock chrono;
+
+        while (bigBrother.doContinue())
         {
-            boucle.MAJ();
+            bigBrother.update(chrono.restart().asSeconds());
         }
 
         return EXIT_SUCCESS;
