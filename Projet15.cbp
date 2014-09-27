@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Projet15" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\Moteur2D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics-d" />
+					<Add library="sfml-window-d" />
+					<Add library="sfml-system-d" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\Moteur2D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Moteur2D\Alea.h" />
+		<Unit filename="Moteur2D\Gestionnaire.cpp" />
+		<Unit filename="Moteur2D\Gestionnaire.h" />
+		<Unit filename="Moteur2D\Graphique\AfficheurObjets.cpp" />
+		<Unit filename="Moteur2D\Graphique\AfficheurObjets.h" />
+		<Unit filename="Moteur2D\Graphique\ObjetAffichable.cpp" />
+		<Unit filename="Moteur2D\Graphique\ObjetAffichable.h" />
+		<Unit filename="Moteur2D\Graphique\ParametresAffichage.h" />
+		<Unit filename="Moteur2D\Jeu\Emmeteur.h" />
+		<Unit filename="Moteur2D\Jeu\Entrees\TableauEntrees.cpp" />
+		<Unit filename="Moteur2D\Jeu\Entrees\TableauEntrees.h" />
+		<Unit filename="Moteur2D\Jeu\Majable.h" />
+		<Unit filename="Moteur2D\Jeu\ParametresVart.cpp" />
+		<Unit filename="Moteur2D\Jeu\ParametresVart.h" />
+		<Unit filename="Moteur2D\Jeu\TableauVarts.cpp" />
+		<Unit filename="Moteur2D\Jeu\TableauVarts.h" />
+		<Unit filename="Moteur2D\Jeu\Vart.cpp" />
+		<Unit filename="Moteur2D\Jeu\Vart.h" />
+		<Unit filename="Moteur2D\Jeu\VartAbs.h" />
+		<Unit filename="Moteur2D\Physique\Hitbox.cpp" />
+		<Unit filename="Moteur2D\Physique\Hitbox.h" />
+		<Unit filename="Moteur2D\Physique\Mouvement.cpp" />
+		<Unit filename="Moteur2D\Physique\Mouvement.h" />
+		<Unit filename="Moteur2D\Physique\ObjetPhysique.cpp" />
+		<Unit filename="Moteur2D\Physique\ObjetPhysique.h" />
+		<Unit filename="Moteur2D\Timer.cpp" />
+		<Unit filename="Moteur2D\Timer.h" />
+		<Unit filename="Moteur2D\includes.h" />
+		<Unit filename="Moteur2D\main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
