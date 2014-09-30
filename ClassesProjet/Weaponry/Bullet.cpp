@@ -70,9 +70,9 @@ void Bullet::decreasePower(int powerCut)
 }
 
 
-void Bullet::update(float tickSize)
+void Bullet::update(float dt)
 {
-    Vart::update(tickSize);
+    Vart::update(dt);
 /*
     if (!m_maxSpeedReached)
     {

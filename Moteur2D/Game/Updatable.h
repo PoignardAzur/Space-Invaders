@@ -9,7 +9,7 @@ Interface d'objet pouvant etre mis a jour.
 */
 class Updatable
 {
-    public : virtual void update(float tickSize) = 0;
+    public : virtual void update(float dt) = 0;
 };
 
 

@@ -26,9 +26,11 @@ class AbstractLevel : public AbstractGameInterface<In>
 
     AbstractLevel(unsigned int seed = epoch_to_now().count());
     AbstractLevel(std::seed_seq& seed);
+    void setSeed(unsigned int seed = epoch_to_now().count());
+    void setSeed(std::seed_seq& seed);
     virtual ~AbstractLevel();
 
-    virtual std::default_random_engine& randomGenerator();
+    virtual std::default_random_engine& rng();
 
     virtual void drawIn(AbstractDrawer& window) = 0;
     virtual void update(const In& inputData) = 0;
@@ -58,6 +60,19 @@ AbstractLevel<In>::AbstractLevel(std::seed_seq& seed) : m_randomGenerator(seed)
 }
 
 template <typename In>
+void AbstractLevel<In>::setSeed(unsigned int seed)
+{
+    m_randomGenerator.seed(seed);
+}
+
+template <typename In>
+void AbstractLevel<In>::setSeed(std::seed_seq& seed)
+{
+    m_randomGenerator.seed(seed);
+}
+
+
+template <typename In>
 AbstractLevel<In>::~AbstractLevel()
 {
 
@@ -65,7 +80,7 @@ AbstractLevel<In>::~AbstractLevel()
 
 
 template <typename In>
-std::default_random_engine& AbstractLevel<In>::randomGenerator()
+std::default_random_engine& AbstractLevel<In>::rng()
 {
     return m_randomGenerator;
 }

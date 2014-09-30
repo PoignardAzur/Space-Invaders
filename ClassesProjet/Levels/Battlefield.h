@@ -14,31 +14,19 @@ class Battlefield
 {
     public :
 
-    Battlefield(PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
-    Battlefield(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight = DEFAULT_SPAWN_HEIGHT, PlayerShip* player = nullptr);
+    Battlefield(PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0));
+    Battlefield(sf::FloatRect visibleZone);
+    virtual void setVisibleZone(sf::FloatRect visibleZone);
 
-    virtual void setPlayer(PlayerShip* player);
-    virtual void setZones(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
-
-    void updateAll(float tickSize);
+    void updateAll(float dt);
     void drawAllIn(AbstractDrawer& fenetre);
 
 
     protected :
 
-    void add(Enemy* e);
-    void placeInBounds(Enemy& e, std::default_random_engine& randomGenerator);
-    void placeInBounds(Enemy& e, std::default_random_engine& randomGenerator, float x_min, float x_max);
-    void placeInBounds(Enemy& e, std::default_random_engine& randomGenerator, float x_min, float x_max, float y);
-    void placeAtPosition(Enemy& e, float x, float y);
-
-//    Enemy* generateBasicEnemyFrom(const EnemiesStats& stats, const sf::Texture* texture_enemies);
-//    ShootingEnemy* generateShootingEnemyFrom(const EnemiesStats& stats, const sf::Texture* texture_enemies, const sf::Texture* texture_enemyBullets);
-    void generateFromStats(const EnemiesStats& stats, std::default_random_engine& randomGenerator, const sf::Texture* texture_enemies, const sf::Texture* texture_enemyBullets = nullptr);
-
-    void givePlayer(Weapon* w);
     PlayerShip* player();
     const PlayerShip* player() const;
+    virtual void setPlayer(PlayerShip* player);
 
     virtual bool enemyEscapes(std::shared_ptr<Enemy>& e) = 0;
     virtual void enemyDies(std::shared_ptr<Enemy>& e) = 0;
@@ -47,15 +35,14 @@ class Battlefield
     void deleteFriendlyShots();
     void deleteEnemyShots();
 
-    void updatePlayer(float tickSize);
-    void updateRedBullets(float tickSize);
-    void updateBlueBullets(float tickSize);
-    void updateEnemies(float tickSize);
+    void updatePlayer(float dt);
+    void updateRedBullets(float dt);
+    void updateBlueBullets(float dt);
+    void updateEnemies(float dt);
 
-    void drawEnemiesIn(AbstractDrawer& fenetre);
-    void drawBlueShotsIn(AbstractDrawer& fenetre);
-    void drawRedShotsIn(AbstractDrawer& fenetre);
-    void drawPlayerIn(AbstractDrawer& fenetre);
+    VartPusher<Enemy>* enemies();
+    VartPusher<Bullet>* redBullets();
+    VartPusher<Bullet>* blueBullets();
 
 
     private :
@@ -67,9 +54,6 @@ class Battlefield
     VartArray<Bullet> t_blue_bullets;
 
     sf::FloatRect m_visibleZone;
-    float m_leftSpawnLimit;
-    float m_rightSpawnLimit;
-    float m_spawnHeight;
 };
 
 

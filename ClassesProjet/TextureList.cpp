@@ -20,7 +20,7 @@ std::function<bool(sf::Texture&, std::string*)> loadTextureFrom(const std::strin
 
 
 
-void TextureList::loadTextures(const std::map<std::string, std::string>& textureAdresses, bool reloadAll)
+void TextureList::loadTextures(const std::map<std::string, std::string>& textureAdresses, bool reloadIfPresent)
 {
     std::map<std::string, loadingFunction> textures;
 
@@ -29,7 +29,7 @@ void TextureList::loadTextures(const std::map<std::string, std::string>& texture
         textures[p.first] = loadTextureFrom(p.second);
     }
 
-    RessourceList<sf::Texture>::load(textures, reloadAll);
+    ResourceList<sf::Texture>::load(textures, reloadIfPresent);
 }
 
 

@@ -15,7 +15,7 @@ Weapon::Weapon(const Weapon& otherWeapon) : m_timer(otherWeapon.m_timer), m_bull
     m_ammo = -1;
 }
 
-Weapon::Weapon(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
+Weapon::Weapon(const sf::Sprite& bulletSpr, VartPusher<Bullet>* bulletArray)
 {
     setBullets(bulletSpr, bulletArray);
     m_ammo = -1;
@@ -33,20 +33,20 @@ void Weapon::setBulletSprite(const sf::Sprite& bulletSpr)
     m_bulletSprite = bulletSpr;
 }
 
-void Weapon::setBulletArray(VartArray<Bullet>* bulletArray)
+void Weapon::setBulletArray(VartPusher<Bullet>* bulletArray)
 {
     p_bulletArray = bulletArray;
 }
 
-void Weapon::setBullets(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
+void Weapon::setBullets(const sf::Sprite& bulletSpr, VartPusher<Bullet>* bulletArray)
 {
     m_bulletSprite = bulletSpr;
     p_bulletArray = bulletArray;
 }
 
-bool Weapon::update(float tickSize)
+bool Weapon::update(float dt)
 {
-    m_timer.decrement(tickSize);
+    m_timer.decrement(dt);
     return readyToShoot();
 }
 

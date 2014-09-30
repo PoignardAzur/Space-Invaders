@@ -28,8 +28,8 @@ class BoucleJeu : public GameController<float>
     void setLevel(RandomSpaceLevel* level, TextureList& t, sql3::Database& db);
     void setHUD(TextureList& t, SpaceHUD* hud);
 
-    virtual void update(float tickSize);                // updates everything in the game
-    virtual void drawEverything(float tickSize);
+    virtual void update(float dt);                // updates everything in the game
+    virtual void drawEverything(float dt);
     virtual AbstractGameInterface<float>* interface();
 
 
@@ -38,6 +38,8 @@ class BoucleJeu : public GameController<float>
     MetaInterface<float> m_interface;
 
     TextureList m_textureList;
+    ResourceList<EnemiesStats> m_statsList;
+
 //    WaveSpaceLevel* m_level; // has-a
     RandomSpaceLevel* m_level;  /// TO CHANGE
     sf::Font m_font;

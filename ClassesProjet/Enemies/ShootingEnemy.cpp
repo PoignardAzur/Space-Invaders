@@ -33,10 +33,10 @@ void ShootingEnemy::setHitbox(const PhysicObject& hitbox)
 }
 
 
-void ShootingEnemy::update(float tickSize)
+void ShootingEnemy::update(float dt)
 {
-    Enemy::update(tickSize);
-    m_weapon.update(tickSize);
+    Enemy::update(dt);
+    m_weapon.update(dt);
     m_weapon.tryToShoot(position() + m_center, -MAX_BULLET_SPEED);
 }
 

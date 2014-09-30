@@ -18,7 +18,7 @@ BoucleJeu::BoucleJeu(AbstractInputs* in, sf::RenderWindow* cible) : m_level(new 
     drawEverything(0);
 
     m_loader.setBaseTextureList(m_textureList);
-    m_loader.setLevel(m_level, m_textureList);
+    m_loader.setLevel(m_level, m_textureList, m_statsList);
     m_loader.setHUD(m_textureList, hud, &m_font);
 }
 
@@ -35,18 +35,18 @@ AbstractGameInterface<float>* BoucleJeu::interface()
 
 
 
-void BoucleJeu::drawEverything(float tickSize)
+void BoucleJeu::drawEverything(float dt)
 {
     m_interface.drawIn(*renderingWindow());
 }
 
 
-void BoucleJeu::update(float tickSize)
+void BoucleJeu::update(float dt)
 {
-    interface()->update(tickSize);
+    interface()->update(dt);
     windowInputs()->update();
 
-    drawEverything(tickSize);
+    drawEverything(dt);
 }
 
 

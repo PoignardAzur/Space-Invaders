@@ -38,7 +38,7 @@ class PhysicObject : public Updatable
     sf::Vector2f speed() const;
     sf::Vector2f acceleration() const;
 
-    void update(float tickSize);
+    void update(float dt);
     void drawIn(AbstractDrawer&);
 
 

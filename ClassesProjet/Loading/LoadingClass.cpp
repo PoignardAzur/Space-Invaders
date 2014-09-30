@@ -59,11 +59,10 @@ Creating table :
 CREATE TABLE tableName (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, spriteName TEXT, x1 INTEGER, x2 INTEGER,
                         width INTEGER, height INTEGER, speed REAL, score INTEGER, life INTEGER, canShoot INTEGER)
 **/
-void Loader::setEnemyStats(BasicSpaceLevel& level)
+void Loader::setEnemyStats(ResourceList<EnemiesStats>& statsList)
 {
     std::string query = "SELECT * FROM ";
     query += ENEMIES_TABLE_NAME;
-    std::map<std::string, EnemiesStats> statsList;
 
     std::function<void(const sql3::Statement&, unsigned int)> f = [&statsList](const sql3::Statement& stmt, unsigned int i)
     {
@@ -85,52 +84,33 @@ void Loader::setEnemyStats(BasicSpaceLevel& level)
     };
 
     sql3::execute(m_database, f, query.c_str(), query.size());
-    level.setStats(statsList);
 }
 
 
-/**
-Creating table :
-CREATE TABLE tableName (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, enemyName TEXT, delay REAL)
-**/
-void Loader::setEnemyWave(WaveSpaceLevel& level)
+
+void Loader::setLevel(RandomSpaceLevel* level, TextureList& t, ResourceList<EnemiesStats>& s)
 {
-    std::string query = "SELECT * FROM ";
-    query += WAVES_TABLE_NAME;
-
-    std::function<void(const sql3::Statement&, unsigned int)> f = [&level](const sql3::Statement& stmt, unsigned int i)
-    {
-        std::string statsName = stmt.columnStandardText(1);
-        float delayUntilNext = stmt.columnDouble(2);
-
-        level.addEnemy(statsName, delayUntilNext);
-    };
-
-    sql3::execute(m_database, f, query.c_str(), query.size());
-}
-
-
-void Loader::setLevel(RandomSpaceLevel* level, TextureList& t)
-{
-    level->setZones(sf::FloatRect(0,0, LARGEUR_FENETRE, HAUTEUR_FENETRE), 0, LARGEUR_FENETRE, HAUTEUR_SPAWN);
-    level->useTextureList(&t);
-
-    level->respawnPlayer();
+    level->setVisibleZone(sf::FloatRect(0,0, LARGEUR_FENETRE, HAUTEUR_FENETRE));
+    level->setResources(&t, &s);
 
     setTextureList(t);
-    setEnemyStats(*level);
-///    loadEnemyWave(*level, m_database);                               - TO CHANGE
+    setEnemyStats(s);
 
-    std::vector<std::string> names = {"mook", "boosted", "shooter", "invis"};
-    level->setNames(names);
+    sf::Sprite idlePlayer(t[IDLE_PLAYER_TEXTURE_NAME]);
+    sf::Sprite shootingPlayer(t[SHOOTING_PLAYER_TEXTURE_NAME]);
+    sf::Sprite bulletSprite(t[PLAYER_BULLET_SPRITE_NAME]);
+
     level->setLives(NUMBER_OF_LIVES);
+    level->setSprites(idlePlayer, shootingPlayer, bulletSprite);
+
+    level->respawnPlayer();
 }
 
 
 void Loader::setHUD(TextureList& t, SpaceHUD* hud, sf::Font* f)
 {
     hud->setAllFonts(f, sf::Color::White);
-    hud->setLifeSprite(sf::Sprite( t.texture(LIFE_TEXTURE_NAME) ));
+    hud->setLifeSprite(sf::Sprite(t[LIFE_TEXTURE_NAME]));
 }
 
 

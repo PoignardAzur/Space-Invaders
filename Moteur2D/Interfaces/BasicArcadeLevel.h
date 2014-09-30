@@ -13,7 +13,7 @@ class BasicArcadeLevel : public AbstractLevel<In>
 {
     public :
 
-    BasicArcadeLevel(unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count());
+    BasicArcadeLevel(unsigned int seed = epoch_to_now().count());
     BasicArcadeLevel(std::seed_seq& seed);
     virtual ~BasicArcadeLevel();
 

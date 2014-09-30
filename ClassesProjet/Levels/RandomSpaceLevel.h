@@ -4,29 +4,22 @@
 #define RANDOM_SPACE_LEVEL_HEADER
 
 #include "BasicSpaceLevel.h"
+#include "Waves/RandomWave.h"
 
 
 class RandomSpaceLevel : public BasicSpaceLevel
 {
     public :
 
-    RandomSpaceLevel(unsigned int seed = epoch_to_now().count(), PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
-    RandomSpaceLevel(std::seed_seq& seed, PlayerShip* player = nullptr, sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0), float leftSpawnLimit = 0, float rightSpawnLimit = 0, float spawnHeight = DEFAULT_SPAWN_HEIGHT);
+    RandomSpaceLevel(sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0));
+    virtual void generateEnemyWaves(float dt);
 
-    virtual void generateEnemyWaves(float tickSize);
-    void setNames(const std::vector<std::string>& names);
+    void setResources(const TextureList* t, const ResourceList<EnemiesStats>* statsList);
 
 
     private :
 
-    Timer m_timer;
-    std::vector<std::string> m_names;
-
-    void createEnemy();
-    void build();
-
-    float m_minDelay;
-    float m_maxDelay;
+    RandomWave m_wave;
 };
 
 

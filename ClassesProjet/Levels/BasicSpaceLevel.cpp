@@ -7,14 +7,7 @@
 #define DEFAULT_FIRE_RATE 0.5f
 
 
-BasicSpaceLevel::BasicSpaceLevel(unsigned int seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
-Battlefield(player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight), BasicArcadeLevel<float>(seed)
-{
-    setRespawnTime(TIME_BEFORE_RESPAWN);
-}
-
-BasicSpaceLevel::BasicSpaceLevel(std::seed_seq& seed, PlayerShip* player, sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight) :
-Battlefield(player, visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight), BasicArcadeLevel<float>(seed)
+BasicSpaceLevel::BasicSpaceLevel(sf::FloatRect visibleZone) : Battlefield(visibleZone)
 {
     setRespawnTime(TIME_BEFORE_RESPAWN);
 }
@@ -25,40 +18,29 @@ BasicSpaceLevel::~BasicSpaceLevel()
 }
 
 
-
-void BasicSpaceLevel::useTextureList(TextureList* t)
+void BasicSpaceLevel::setVisibleZone(sf::FloatRect visibleZone)
 {
-    m_textureList = t;
+    Battlefield::setVisibleZone(visibleZone);
+    m_leftLimit = visibleZone.left;
+    m_rightLimit = visibleZone.left + visibleZone.width;
 }
 
-void BasicSpaceLevel::setStats(const std::map<std::string, EnemiesStats>& statsList)
+void BasicSpaceLevel::setSprites(sf::Sprite idlePlayer, sf::Sprite shootingPlayer, sf::Sprite bulletSprite)
 {
-    m_statsList = statsList;
-}
-
-
-void BasicSpaceLevel::setLimits(float leftLimit, float rightLimit)
-{
-    m_leftLimit = leftLimit;
-    m_rightLimit = rightLimit;
-}
-
-
-void BasicSpaceLevel::setZones(sf::FloatRect visibleZone, float leftSpawnLimit, float rightSpawnLimit, float spawnHeight)
-{
-    Battlefield::setZones(visibleZone, leftSpawnLimit, rightSpawnLimit, spawnHeight);
-    setLimits(leftSpawnLimit, rightSpawnLimit);
+    m_idlePlayer = idlePlayer;
+    m_shootingPlayer = shootingPlayer;
+    m_bulletSprite = bulletSprite;
 }
 
 
 
-void BasicSpaceLevel::update(const float& tickSize)
+void BasicSpaceLevel::update(const float& dt)
 {
-    Battlefield::updateAll(tickSize);
-    BasicArcadeLevel<float>::updateLivesAndTimer(tickSize);
+    Battlefield::updateAll(dt);
+    BasicArcadeLevel<float>::updateLivesAndTimer(dt);
 
     if (isPlayerAlive())
-    generateEnemyWaves(tickSize);
+    generateEnemyWaves(dt);
 }
 
 
@@ -73,25 +55,24 @@ bool BasicSpaceLevel::isPlayerAlive() const
     return player();
 }
 
+
 void BasicSpaceLevel::respawnPlayer()
 {
     PlayerShip* p = new PlayerShip();
-    sf::Sprite idlePlayer(*texture(IDLE_PLAYER_TEXTURE_NAME));
-    sf::Sprite shootingPlayer(*texture(SHOOTING_PLAYER_TEXTURE_NAME));
-    sf::Sprite bulletSprite(*texture(PLAYER_BULLET_SPRITE_NAME));
 
     p->setLimits(m_leftLimit, m_rightLimit);
-    p->setSprites(idlePlayer, shootingPlayer);
+    p->setSprites(m_idlePlayer, m_shootingPlayer);
     p->setInputs(BasicArcadeLevel<float>::getInputs());
 
     p->move(POSITION_PLAYER_SHIP, false);
     p->setHitbox(HITBOX_PLAYER_SHIP);
 
-    Battlefield::setPlayer(p);
-
     Weapon* w = new Weapon(DEFAULT_FIRE_RATE);
-    w->setBulletSprite(bulletSprite);
-    givePlayer(w);
+    w->setBulletSprite(m_bulletSprite);
+    w->setBulletArray(redBullets());
+    p->addWeapon(w);
+
+    Battlefield::setPlayer(p);
 }
 
 
@@ -99,25 +80,6 @@ void BasicSpaceLevel::playerKilled(bool isGameOver)
 {
     if (!isGameOver)
     bomb(false);
-}
-
-
-
-TextureList* BasicSpaceLevel::textureList()
-{
-    return m_textureList;
-}
-
-const sf::Texture* BasicSpaceLevel::texture(const std::string& name) const
-{
-    return &m_textureList->texture(name);
-}
-
-
-void BasicSpaceLevel::generateEnemy(const std::string& name)
-{
-    const EnemiesStats& stats = m_statsList[name];
-    generateFromStats(stats, randomGenerator(), texture(stats.spriteName), texture(DEFAULT_ENEMY_SHOT_NAME));
 }
 
 

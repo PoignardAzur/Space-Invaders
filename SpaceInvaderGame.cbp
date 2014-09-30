@@ -72,9 +72,12 @@
 		<Unit filename="ClassesProjet/Levels/RandomSpaceLevel.h" />
 		<Unit filename="ClassesProjet/Levels/SpaceHUD.cpp" />
 		<Unit filename="ClassesProjet/Levels/SpaceHUD.h" />
-		<Unit filename="ClassesProjet/Levels/WaveSpaceLevel.cpp" />
-		<Unit filename="ClassesProjet/Levels/WaveSpaceLevel.h" />
-		<Unit filename="ClassesProjet/Levels/createEnemy.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/AbsWave.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/AbsWave.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomEnemyPlacer.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomEnemyPlacer.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomWave.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomWave.h" />
 		<Unit filename="ClassesProjet/Loading/LoadingClass.cpp" />
 		<Unit filename="ClassesProjet/Loading/LoadingClass.h" />
 		<Unit filename="ClassesProjet/MainDimensions.h" />
@@ -135,8 +138,7 @@
 		<Unit filename="Moteur2D/Interfaces/Items/VariableItem.h" />
 		<Unit filename="Moteur2D/Interfaces/MetaInterface.h" />
 		<Unit filename="Moteur2D/Interfaces/PressAnyKeyMenu.h" />
-		<Unit filename="Moteur2D/RessourceList.cpp" />
-		<Unit filename="Moteur2D/RessourceList.h" />
+		<Unit filename="Moteur2D/ResourceList.h" />
 		<Unit filename="Moteur2D/StartEndBool.cpp" />
 		<Unit filename="Moteur2D/StartEndBool.h" />
 		<Unit filename="Moteur2D/TileArrayFormat.h" />

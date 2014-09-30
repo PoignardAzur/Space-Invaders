@@ -8,18 +8,28 @@
 
 
 #include "AbsVart.h"
-#include <deque>
+#include <list>
 #include <memory>
 
 
+
 template <typename T = AbsVart>
-class VartArray : public std::deque<std::shared_ptr<T>>
+class VartPusher
+{
+    public :
+
+    virtual void add(T* vart) = 0;
+};
+
+
+template <typename T = AbsVart>
+class VartArray : public std::list<std::shared_ptr<T>>, public VartPusher<T>
 {
     public :
 
     ~VartArray();
 
-    virtual void updateAll(float tickSize, bool delDeadVarts = true); // Quand le tableau est mis à jour, tous ses éléments le sont.
+    virtual void updateAll(float dt, bool delDeadVarts = true); // Quand le tableau est mis à jour, tous ses éléments le sont.
     virtual void drawAllIn(AbstractDrawer& cible); // Quand le tableau est affiche, tous ses éléments le sont.
     virtual void add(T* vart);
 
@@ -28,8 +38,7 @@ class VartArray : public std::deque<std::shared_ptr<T>>
 
     private :
 
-    typedef std::deque<std::shared_ptr<T>> dpT;
-//  using std::deque<std::shared_ptr<T>>::deque();
+    typedef std::list<std::shared_ptr<T>> lpT;
 };
 
 
@@ -41,11 +50,11 @@ VartArray<T>::~VartArray()
 
 
 template <typename T>
-void VartArray<T>::updateAll(float tickSize, bool delDeadVarts)
+void VartArray<T>::updateAll(float dt, bool delDeadVarts)
 {
-    for (auto p = dpT::begin(); p != dpT::end(); ++p)
+    for (auto p = lpT::begin(); p != lpT::end(); ++p)
     {
-        (*p)->update(tickSize);
+        (*p)->update(dt);
     }
 
     if (delDeadVarts)
@@ -58,7 +67,7 @@ void VartArray<T>::updateAll(float tickSize, bool delDeadVarts)
 template <typename T>
 void VartArray<T>::drawAllIn(AbstractDrawer& cible)
 {
-    for (auto p = dpT::begin(); p != dpT::end(); ++p)
+    for (auto p = lpT::begin(); p != lpT::end(); ++p)
     {
         (*p)->drawIn(cible);
     }
@@ -68,7 +77,7 @@ void VartArray<T>::drawAllIn(AbstractDrawer& cible)
 template <typename T>
 void VartArray<T>::add(T* vart)
 {
-    dpT::push_back(std::shared_ptr<T>(vart));
+    lpT::push_back(std::shared_ptr<T>(vart));
 }
 
 
@@ -76,14 +85,15 @@ void VartArray<T>::add(T* vart)
 template <typename T>
 void VartArray<T>::deleteDeadVarts()
 {
-    for (auto p = dpT::begin(); p != dpT::end(); )
+    lpT::remove_if([](const std::shared_ptr<T>& p) { return p->doDelete(); });
+/*  for (auto p = lpT::begin(); l != lpT::end(); )
     {
         if ((*p)->doDelete())
-        p = dpT::erase(p);
+        p = lpT::erase(p);
 
         else
         p++;
-    }
+    }*/
 }
 
 

@@ -5,7 +5,6 @@
 #define LOADING_CLASS_HEADER
 
 
-#include "../Levels/WaveSpaceLevel.h"
 #include "../Levels/RandomSpaceLevel.h"
 #include "../Levels/SpaceHUD.h"
 
@@ -32,9 +31,8 @@ class Loader
 
     void setTextureList(TextureList& list);
     void setBaseTextureList(TextureList& list);
-    void setEnemyStats(BasicSpaceLevel& level);
-    void setEnemyWave(WaveSpaceLevel& level);
-    void setLevel(RandomSpaceLevel* level, TextureList& t);
+    void setEnemyStats(ResourceList<EnemiesStats>& statsList);
+    void setLevel(RandomSpaceLevel* level, TextureList& t, ResourceList<EnemiesStats>& s);
     void setHUD(TextureList& t, SpaceHUD* hud, sf::Font* f);
 
 

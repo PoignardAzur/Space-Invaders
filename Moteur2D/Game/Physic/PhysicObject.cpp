@@ -93,10 +93,10 @@ sf::Vector2f PhysicObject::acceleration() const
 }
 
 
-void PhysicObject::update(float tickSize)
+void PhysicObject::update(float dt)
 {
-    m_vitesse.deriver(m_position, tickSize);
-    m_acceleration.deriver(m_vitesse.value, tickSize);
+    m_vitesse.deriver(m_position, dt);
+    m_acceleration.deriver(m_vitesse.value, dt);
 }
 
 void PhysicObject::drawIn(AbstractDrawer& cible)

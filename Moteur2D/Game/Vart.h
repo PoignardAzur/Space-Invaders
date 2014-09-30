@@ -23,7 +23,7 @@ class Vart : public AbsVart, public Phys
     Vart(const Spr& sprite, const Phys& hitbox);
     virtual ~Vart();
 
-    virtual void update(float tickSize);
+    virtual void update(float dt);
     virtual bool doDelete() const;
     void drawIn(AbstractDrawer&); // inherited virtual methods ; has to be defined here
     virtual void drawIn(AbstractDrawer&, bool drawSprite, bool drawHitbox = DRAW_VART_HITBOX);
@@ -81,9 +81,9 @@ Vart<Phys, Spr>::~Vart()
 
 
 template <typename Phys, typename Spr>
-void Vart<Phys, Spr>::update(float tickSize)
+void Vart<Phys, Spr>::update(float dt)
 {
-    Phys::update(tickSize);
+    Phys::update(dt);
 }
 
 
