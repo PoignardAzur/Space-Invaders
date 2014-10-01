@@ -23,7 +23,6 @@ namespace Menu
 
         void addItem(AbstractItem* item);
         void setItems(const std::vector<std::shared_ptr<AbstractItem>>& items, size_t selectedOne = 0);
-        void setItems(const std::vector<std::shared_ptr<AbstractItem>>& items, size_t selectedOne, ItemSize s);
         const std::vector<std::shared_ptr<AbstractItem>>& getItems() const;
 
         void selectItem(size_t n);

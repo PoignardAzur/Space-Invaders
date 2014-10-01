@@ -26,9 +26,9 @@ class Bullet : public BaseVart
     void set(sf::Vector2f pos, float maxSpeed, const sf::Sprite& bulletSprite);
 
     void update(float dt);
-    void recycle(sf::FloatRect visibleZone);          // deletes the bullet one it exits that zone
+    void recycle(sf::FloatRect visibleZone);          // deletes the bullet once it exits that zone
 
-    void testHarming(Enemy& e);                     // if the bullet his touching 'e', then 'e' takes up to m_power damage and the bullet loses power
+    void testHarming(Enemy& e);                     // if the bullet is touching 'e', then 'e' takes up to m_power damage and the bullet loses power
     void testHarming(PlayerShip& e);
 
 

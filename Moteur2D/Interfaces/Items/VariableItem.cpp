@@ -11,7 +11,8 @@ Menu::VariableItem::VariableItem()
 
 Menu::VariableItem::VariableItem(const std::vector<std::shared_ptr<AbstractItem>>& items, size_t selectedOne, ItemSize s)
 {
-    setItems(items, selectedOne, s);
+    setItems(items, selectedOne);
+    setSize(s);
 }
 
 void Menu::VariableItem::addItem(AbstractItem* item)
@@ -21,13 +22,9 @@ void Menu::VariableItem::addItem(AbstractItem* item)
 
 void Menu::VariableItem::setItems(const std::vector<std::shared_ptr<AbstractItem>>& items, size_t selectedOne)
 {
-    setItems(items, selectedOne, m_size);
-}
-
-void Menu::VariableItem::setItems(const std::vector<std::shared_ptr<AbstractItem>>& items, size_t selectedOne, ItemSize s)
-{
     m_items = items;
-    setSize(s);
+    m_drawnItem = selectedOne;
+    setSize(m_size);
 }
 
 const std::vector<std::shared_ptr<Menu::AbstractItem>>& Menu::VariableItem::getItems() const

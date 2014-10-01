@@ -17,7 +17,7 @@ class ShootingEnemy : public Enemy
     explicit ShootingEnemy(const Weapon& w);
     virtual ~ShootingEnemy() {}
 
-    void setBullets(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray);
+    void setBullets(const sf::Sprite& bulletSpr, VartPusher<Bullet>* bulletArray);
     void setStats(float shootCoolDown, float timeToNextShoot = TIME_TO_FIRST_SHOOT);
     //void setWeapon(const Weapon& w);
     void update(float dt);

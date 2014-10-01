@@ -16,7 +16,7 @@ ShootingEnemy::ShootingEnemy(const Weapon& w) : m_weapon(w)
 
 }
 
-void ShootingEnemy::setBullets(const sf::Sprite& bulletSpr, VartArray<Bullet>* bulletArray)
+void ShootingEnemy::setBullets(const sf::Sprite& bulletSpr, VartPusher<Bullet>* bulletArray)
 {
     m_weapon.setBullets(bulletSpr, bulletArray);
 }

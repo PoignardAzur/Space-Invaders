@@ -18,7 +18,6 @@ Inclus tous les fichiers du moteur
     #include "Game/Vart.h"
     #include "Game/VartArray.h"
 
-    #include "Entries/Alea.h"
     #include "StartEndBool.h"
     #include "Timer.h"
 

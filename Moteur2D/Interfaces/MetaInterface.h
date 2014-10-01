@@ -10,7 +10,7 @@
 
 
 template <typename In>
-class MetaInterface : public AbstractGameInterface<In>     // abstract class
+class MetaInterface : public AbstractGameInterface<In>
 {
     typedef AbstractGameInterface<In> AGIi;
 

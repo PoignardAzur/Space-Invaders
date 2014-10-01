@@ -16,7 +16,7 @@ Sert à extraire les inputs de la classe sf::Event
 
 
 /*
-Classe servant à mesurer précisément les entrées, sans gestion des events
+Class used to check the state of inputs without dealing with event handling
 */
 class Inputs : public AbstractInputs
 {
@@ -25,16 +25,16 @@ class Inputs : public AbstractInputs
     explicit Inputs(sf::Window* fenetre = nullptr, bool escapeMeansClose = true);
     void set(sf::Window* fenetre, bool escapeMeansClose = true);
 
-    bool closeWindow() const;             // Vrai quand la fin du jeu a ete demandee
-    sf::Vector2f cursor() const;          // Position du curseur
+    bool closeWindow() const;             // true when the window must be closed
+    sf::Vector2f cursor() const;          // cursor position
 
     void update(float ticks = 0);
 
-    std::map<sf::Mouse::Button, bool>& mouseButtons();           // Liste des boutons presses
-    std::map<sf::Keyboard::Key , bool>& keyboardButtons();       // Liste des touches pressees
 
-    const std::map<sf::Mouse::Button, bool>& mouseButtons() const;
-    const std::map<sf::Keyboard::Key , bool>& keyboardButtons() const;
+    protected :
+
+    std::map<sf::Mouse::Button, bool>& _mouseButtons();           // array of pressed mouse buttons
+    std::map<sf::Keyboard::Key , bool>& _keyboardButtons();       // array of pressed keyboard keys
 
 
     private :

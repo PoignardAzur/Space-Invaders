@@ -24,7 +24,6 @@ class PlayerShip : public BaseVart, public HurtableEntity
     PlayerShip(const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, AbstractInputs* in = nullptr);
     virtual ~PlayerShip();
 
-    void set(AbstractInputs* in, const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, float leftLimit, float rightLimit);
     void setSprites(const sf::Sprite& spriteIdle, const sf::Sprite spriteShoot);
     void setLimits(float left, float right);
     void setInputs(AbstractInputs* in);

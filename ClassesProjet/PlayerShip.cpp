@@ -7,27 +7,14 @@
 
 PlayerShip::PlayerShip()
 {
-
-}
-
-
-
-PlayerShip::PlayerShip(const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, AbstractInputs* in)
-{
-    setInputs(in);
-    setSprites(spriteIdle, spriteShoot);
-
     BaseVart::set(POSITION_PLAYER_SHIP);
     BaseVart::PhysicObject::setHitbox(HITBOX_PLAYER_SHIP);
 }
 
-
-
-void PlayerShip::set(AbstractInputs* in, const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, float leftLimit, float rightLimit)
+PlayerShip::PlayerShip(const sf::Sprite& spriteIdle, const sf::Sprite& spriteShoot, AbstractInputs* in) : PlayerShip()
 {
     setInputs(in);
     setSprites(spriteIdle, spriteShoot);
-    setLimits(leftLimit, rightLimit);
 }
 
  PlayerShip::~PlayerShip()
