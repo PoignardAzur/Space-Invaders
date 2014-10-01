@@ -32,6 +32,11 @@ void BasicSpaceLevel::setSprites(sf::Sprite idlePlayer, sf::Sprite shootingPlaye
     m_bulletSprite = bulletSprite;
 }
 
+void BasicSpaceLevel::addWave(AbsWave* wave)
+{
+    wave->setLevel(this);
+    m_waves.push(std::shared_ptr<AbsWave>(wave));
+}
 
 
 void BasicSpaceLevel::update(const float& dt)
@@ -48,6 +53,17 @@ void BasicSpaceLevel::drawIn(AbstractDrawer& fenetre)
 {
     Battlefield::drawAllIn(fenetre);
 }
+
+
+void BasicSpaceLevel::generateEnemyWaves(float dt)
+{
+    if (!m_waves.size())
+    return;
+
+    else if (m_waves.front()->update(dt))
+    m_waves.pop();
+}
+
 
 
 bool BasicSpaceLevel::isPlayerAlive() const

@@ -15,7 +15,7 @@ class AbsWave
 
     void setLevel(BasicSpaceLevel* l);   // The level in which enemies spawn
     virtual bool update(float dt) = 0;
-    virtual bool isDone() const = 0;                // No more enemies can spawn
+    virtual bool isDone() const = 0;     // No more enemies can spawn
 
 
     protected :

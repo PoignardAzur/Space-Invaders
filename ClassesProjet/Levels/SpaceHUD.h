@@ -9,7 +9,6 @@
 #include "../Moteur2D.h"
 #include "BasicSpaceLevel.h"
 #include "../MainDimensions.h"
-#include "../../Moteur2D/Graphic/Text.h"
 
 
 class SpaceHUD : public AbstractHUD<float, BasicSpaceLevel>

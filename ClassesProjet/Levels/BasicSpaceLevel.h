@@ -9,8 +9,11 @@
 #define PLAYER_BULLET_SPRITE_NAME "redBullet"
 
 #include "../../Moteur2D/Interfaces/BasicArcadeLevel.h"
-#include "Battlefield.h"
 #include "../TextureList.h"
+#include "Battlefield.h"
+
+#include <queue>
+#include "Waves/AbsWave.h"
 
 
 class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
@@ -22,6 +25,8 @@ class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
 
     virtual void setVisibleZone(sf::FloatRect visibleZone);
     virtual void setSprites(sf::Sprite idlePlayer, sf::Sprite shootingPlayer, sf::Sprite bulletSprite);
+
+    virtual void addWave(AbsWave* wave);
 
     virtual void update(const float& dt);
     virtual void drawIn(AbstractDrawer& fenetre);
@@ -39,7 +44,7 @@ class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
     virtual void enemyDies(std::shared_ptr<Enemy>& e);
     void bomb(bool scorePoints = true);
 
-    virtual void generateEnemyWaves(float dt) = 0;
+    virtual void generateEnemyWaves(float dt);
 
 
     private :
@@ -53,6 +58,8 @@ class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
     sf::Sprite m_idlePlayer;
     sf::Sprite m_shootingPlayer;
     sf::Sprite m_bulletSprite;
+
+    std::queue<std::shared_ptr<AbsWave>> m_waves;
 };
 
 

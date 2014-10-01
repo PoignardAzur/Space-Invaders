@@ -12,14 +12,12 @@ class RandomSpaceLevel : public BasicSpaceLevel
     public :
 
     RandomSpaceLevel(sf::FloatRect visibleZone = sf::FloatRect(0,0,0,0));
-    virtual void generateEnemyWaves(float dt);
-
     void setResources(const TextureList* t, const ResourceList<EnemiesStats>* statsList);
 
 
     private :
 
-    RandomWave m_wave;
+    RandomWave* m_wave;
 };
 
 
