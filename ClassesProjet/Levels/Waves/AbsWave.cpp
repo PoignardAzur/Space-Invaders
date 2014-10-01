@@ -5,15 +5,15 @@
 
 
 
-void AbsWave::setLevel(BasicSpaceLevel* l)
+void AbsWave::setTarget(VartPusher<Enemy>* t)
 {
-    m_level = l;
+    m_target = t;
 }
 
 
-void AbsWave::spawn(Enemy* e)
+VartPusher<Enemy>* AbsWave::target()
 {
-    m_level->enemies()->add(e);
+    return m_target;
 }
 
 

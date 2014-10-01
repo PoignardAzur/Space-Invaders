@@ -46,17 +46,7 @@ bool RandomWave::update(float dt)
 
     if (m_timer.decrement(dt))
     {
-        std::uniform_int_distribution<int> selectedEnemy(0, stats().list().size() - 1);
-        int i = selectedEnemy(*m_rng);
-        auto p = stats().list().begin();
-
-        while (i)
-        {
-            p ++;
-            i --;
-        }
-
-        placeEnemy(p->first, m_rng);
+        placeEnemy(m_rng);
 
         std::uniform_real_distribution<float> timeBeforeNext(m_minDelay, m_maxDelay);
         m_timer.setTime(timeBeforeNext(*m_rng));

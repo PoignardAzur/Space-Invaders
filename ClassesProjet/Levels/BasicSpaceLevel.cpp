@@ -34,7 +34,7 @@ void BasicSpaceLevel::setSprites(sf::Sprite idlePlayer, sf::Sprite shootingPlaye
 
 void BasicSpaceLevel::addWave(AbsWave* wave)
 {
-    wave->setLevel(this);
+    wave->setTarget(enemies());
     m_waves.push(std::shared_ptr<AbsWave>(wave));
 }
 

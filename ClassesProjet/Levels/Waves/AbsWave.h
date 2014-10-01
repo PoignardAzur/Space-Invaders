@@ -13,19 +13,17 @@ class AbsWave
 {
     public :
 
-    void setLevel(BasicSpaceLevel* l);   // The level in which enemies spawn
+    virtual void setTarget(VartPusher<Enemy>* t);   // The level in which enemies spawn
     virtual bool update(float dt) = 0;
-    virtual bool isDone() const = 0;     // No more enemies can spawn
 
+    virtual bool isDone() const = 0;     // No more enemies can spawn
+    virtual ~AbsWave() {}
 
     protected :
-
-    void spawn(Enemy* e);
-
+    VartPusher<Enemy>* target();
 
     private :
-
-    BasicSpaceLevel* m_level;
+    VartPusher<Enemy>* m_target;
 };
 
 
