@@ -12,25 +12,24 @@ class AbstractHUD : public AbstractGameInterface<In>
     public :
 
     explicit AbstractHUD(LevelType* level = 0);
-    void setLevel(LevelType* level);
+    virtual void setLevel(LevelType* level);
     virtual ~AbstractHUD();
 
-    virtual void drawIn(AbstractDrawer& window);
-    virtual bool toDelete();
+    virtual void drawIn(AbstractDrawer& window, float dt);
     virtual void setUserInputs(AbstractInputs*);
 
-    virtual void update(const In& inputData);               // by default, In is the number of ticks since the last update
-    virtual AbstractGameInterface<In>* toLoad();            // mostly for menus, when a sub-menu is opened ; used by MetaInterface objects ; returns nulptr by default
+    virtual void update(const In& inputData);
+    virtual bool isDone() const;
+    virtual AbstractGameInterface<In>* next();
 
 
     protected :
 
-    virtual void deleteLater();
     virtual AbstractInputs* getInputs();
     virtual const AbstractInputs* getInputs() const;
 
-    virtual void drawIn(AbstractDrawer& window, LevelType* level) = 0;
-    virtual const LevelType* level() const;
+    virtual void drawIn(AbstractDrawer& window, LevelType* level, float dt) = 0;
+    virtual const LevelType* getLevel() const;
 
     private:
 
@@ -40,9 +39,9 @@ class AbstractHUD : public AbstractGameInterface<In>
 
 
 template <typename In, typename LevelType>
-AbstractHUD<In, LevelType>::AbstractHUD(LevelType* level) : m_level(level)
+AbstractHUD<In, LevelType>::AbstractHUD(LevelType* level)
 {
-
+    setLevel(level);
 }
 
 template <typename In, typename LevelType>
@@ -63,13 +62,13 @@ void AbstractHUD<In, LevelType>::setLevel(LevelType* level)
 
 
 template <typename In, typename LevelType>
-void AbstractHUD<In, LevelType>::drawIn(AbstractDrawer& window)
+void AbstractHUD<In, LevelType>::drawIn(AbstractDrawer& window, float dt)
 {
-    drawIn(window, m_level);
+    drawIn(window, m_level, dt);
 }
 
 template <typename In, typename LevelType>
-const LevelType* AbstractHUD<In, LevelType>::level() const
+const LevelType* AbstractHUD<In, LevelType>::getLevel() const
 {
     return m_level;
 }
@@ -79,9 +78,9 @@ const LevelType* AbstractHUD<In, LevelType>::level() const
 
 
 template <typename In, typename LevelType>
-bool AbstractHUD<In, LevelType>::toDelete()
+bool AbstractHUD<In, LevelType>::isDone() const
 {
-    return m_level->toDelete();
+    return m_level->isDone();
 }
 
 
@@ -101,30 +100,22 @@ void AbstractHUD<In, LevelType>::update(const In& inputData)
 
 
 template <typename In, typename LevelType>
-AbstractGameInterface<In>* AbstractHUD<In, LevelType>::toLoad()
+AbstractGameInterface<In>* AbstractHUD<In, LevelType>::next()
 {
-    return m_level->toLoad();
+    return m_level->next();
 }
-
-
-template <typename In, typename LevelType>
-void AbstractHUD<In, LevelType>::deleteLater()
-{
-    m_level->deleteLater();
-}
-
 
 template <typename In, typename LevelType>
 AbstractInputs* AbstractHUD<In, LevelType>::getInputs()
 {
-    return m_level->getInputs();
+    return nullptr;
 }
 
 
 template <typename In, typename LevelType>
 const AbstractInputs* AbstractHUD<In, LevelType>::getInputs() const
 {
-    return m_level->getInputs();
+    return nullptr;
 }
 
 

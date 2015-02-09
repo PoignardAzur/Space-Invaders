@@ -1,8 +1,9 @@
 
-
-#include "ClassesProjet/BoucleJeu.h"
-//#include "Moteur2D/includes.h"
+#include "ClassesProjet/BossClass.h"
 #include <iostream>
+
+#define WINDOW_TITLE "Carres couleur 2 : le retour de la vengeance"
+
 
 inline int catchError(const char* e)
 {
@@ -14,26 +15,21 @@ int main(int argc, char** argv)
 {
     try
     {
-        sf::RenderWindow* fenetre = new sf::RenderWindow(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE);
+        sf::RenderWindow* fenetre = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE);
 
-        fenetre->setFramerateLimit(FRAMERATE);
-        BoucleJeu bigBrother(new Inputs(fenetre), fenetre);
+        fenetre->setFramerateLimit(30);
+        BossClass bigBrother(new Inputs(fenetre, false), fenetre);
         sf::Clock chronos;
+        chronos.restart();
 
-        while (bigBrother.doContinue())
+        while (!bigBrother.isDone())
         {
             bigBrother.update(chronos.restart().asSeconds());
             fenetre->display();
         }
 
         fenetre->close();
-/*        std::cout << "Score : " << bigBrother.finalScore() << " points."
-        << std::endl << "Appuyer sur entree pour continuer" << std::endl;
-//        << std::endl << "Press enter to continue" << std::endl;
-//        << std::endl; return EXIT_SUCCESS;
-        std::string x;
-       // std::getline(std::cin, x);
-*/
+
         return EXIT_SUCCESS;
     }
 

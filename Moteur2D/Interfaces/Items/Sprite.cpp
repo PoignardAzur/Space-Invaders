@@ -3,7 +3,6 @@
 #include "Sprite.h"
 
 
-
 Menu::Sprite::Sprite()
 {
 
@@ -20,16 +19,15 @@ void Menu::Sprite::set(const sf::Sprite& spr)
     updateParentSize();
 }
 
+
 void Menu::Sprite::drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const
 {
     const_cast<Sprite*>(this)->m_sprite.setPosition(position);
     target.draw(m_sprite);
 }
 
-
-sf::Vector2f Menu::Sprite::size() const
+sf::Vector2f Menu::Sprite::getSize() const
 {
     return sf::Vector2f(m_sprite.getLocalBounds().width, m_sprite.getLocalBounds().height);
 }
-
 

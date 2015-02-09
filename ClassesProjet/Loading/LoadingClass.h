@@ -8,9 +8,8 @@
 #include "../Levels/RandomSpaceLevel.h"
 #include "../Levels/SpaceHUD.h"
 
-#include "../../SQLite/statement.hpp"
+#include "../../rapidjson/document.h"
 #include <functional>
-#include <fstream>
 
 #define TEXTURE_TABLE_NAME "EnemyTextures"
 #define ENEMIES_TABLE_NAME "EnemyStats"
@@ -18,10 +17,9 @@
 #define WAVES_TABLE_NAME "EnemyWaves"
 
 #define MAIN_DATABASE "Ressources\\DatabaseFile.txt"
-#define COMMAND_FILE  "Ressources\\CommandFile.txt"
 
 
-namespace sql3 { class Database; }
+namespace json = rapidjson;
 
 class Loader
 {
@@ -33,12 +31,18 @@ class Loader
     void setBaseTextureList(TextureList& list);
     void setEnemyStats(ResourceList<EnemiesStats>& statsList);
     void setLevel(RandomSpaceLevel* level, TextureList& t, ResourceList<EnemiesStats>& s);
-    void setHUD(TextureList& t, SpaceHUD* hud, sf::Font* f);
 
+    void loadFromFile(const char* fileName);
+    void loadFont(sf::Font& font);
+    void loadMenuTextures(TextureList& textureList);
+    void loadFirstScreen(FirstScreen& screen);
+    void loadTextures(TextureList& textureList);
+    //void loadMenu(Menu)
+    void loadCampaign(Campaign& mainCampaign);
 
     private :
 
-    sql3::Database m_database;
+    json::Document m_document;
 
 };
 

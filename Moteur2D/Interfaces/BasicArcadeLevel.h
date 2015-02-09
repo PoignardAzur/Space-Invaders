@@ -17,22 +17,22 @@ class BasicArcadeLevel : public AbstractLevel<In>
     BasicArcadeLevel(std::seed_seq& seed);
     virtual ~BasicArcadeLevel();
 
-    int score() const;
-    void setPoints(int p, bool rel = false);
-
-    int lives() const;
-    void setLives(int l, bool rel = false);
-
     bool gameOver() const;
     virtual bool isPlayerAlive() const = 0;
     virtual void respawnPlayer() = 0;
     virtual void playerKilled(bool isGameOver) = 0;
 
-    virtual void drawIn(AbstractDrawer& window) = 0;
-    virtual void update(const In& inputData) = 0;
+    virtual void drawThisIn(AbstractDrawer& window, float dt) = 0;
+    virtual void updateThis(const In& inputData) = 0;
 
 
     protected :
+
+    int score() const;
+    void setPoints(int p, bool rel = false);
+
+    int lives() const;
+    void setLives(int l, bool rel = false);
 
     void setRespawnTime(float ticks);
     void updateLivesAndTimer(float ticks);
@@ -55,7 +55,7 @@ void BasicArcadeLevel<In>::updateLivesAndTimer(float ticks)
 {
     if (!isPlayerAlive())
     {
-        if (m_timeBeforeRespawn.time())
+        if (m_timeBeforeRespawn.getCurrentTime())
         {
             if (m_timeBeforeRespawn.decrement(ticks))
             {

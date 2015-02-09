@@ -24,15 +24,17 @@ class ResourceList
     const R& operator[](const std::string& name) const;
     R& operator[](const std::string& name);
 
-    void load(const std::map<std::string, loadingFunction>& ressourceLoaders, bool reloadIfPresent = false);  // the first string stands for the ressource's name
-    void unload(const std::vector<std::string>& toUnload, bool keepLoaded = false);     // if keepLoaded = true, then only the names in toUnload are kept
+    void load(const std::map<std::string, loadingFunction>& resourceLoaders, bool reloadIfPresent = false);
+    // the first string stands for the resource's name
+    void unload(const std::vector<std::string>& toUnload, bool keepLoaded = false);
+    // if keepLoaded = true, then only the names in toUnload are kept
 
     void unload();    // unloads everything
 
 
     private :
 
-    std::map<std::string, R> m_ressources;
+    std::map<std::string, R> m_resources;
 
 
     public :
@@ -44,14 +46,14 @@ class ResourceList
         {
             const std::string& name = _name.first;
 
-            if (m_ressources.find(name) == m_ressources.end())  // if name isn't in m_ressources
+            if (m_resources.find(name) == m_resources.end())  // if name isn't in m_resources
             {
                 if (keepLoaded)
-                m_ressources.erase(name);
+                m_resources.erase(name);
             }
 
             else if (! keepLoaded)
-            m_ressources.erase(name);
+            m_resources.erase(name);
         }
     }
 };
@@ -65,33 +67,39 @@ ResourceList<R>::ResourceList()
 template <typename R>
 const std::map<std::string, R>& ResourceList<R>::list() const
 {
-    return m_ressources;
+    return m_resources;
 }
 
 template <typename R>
 const R& ResourceList<R>::operator[](const std::string& name) const
 {
-    return m_ressources.at(name);
+    return m_resources.at(name);
 }
 
 template <typename R>
 R& ResourceList<R>::operator[](const std::string& name)
 {
-    return m_ressources[name];
+    return m_resources[name];
 }
 
 // the first string stands for the ressource's name
 template <typename R>
-void ResourceList<R>::load(const std::map<std::string, loadingFunction>& ressourceLoaders, bool reloadIfPresent)
+void ResourceList<R>::load(const std::map<std::string, loadingFunction>& resourceLoaders, bool reloadIfPresent)
 {
     std::string error;
 
-    for (const auto& ressourceLoader : ressourceLoaders)
+    for (const auto& resourceLoader : resourceLoaders)
     {
-        if (list().find(ressourceLoader.first) == list().end() || reloadIfPresent)
+        if (list().find(resourceLoader.first) == list().end() || reloadIfPresent)
         {
-            if (! ressourceLoader.second(m_ressources[ressourceLoader.first], &error))
-            throw "Error while loading " + ressourceLoader.first + " :" "\n" + error;
+            if (! resourceLoader.second(m_resources[resourceLoader.first], &error))
+            {
+                if (error != "")
+                throw "Error while loading " + resourceLoader.first + " :" "\n" + error;
+
+                else
+                throw "Error while loading " + resourceLoader.first;
+            }
         }
     }
 }
@@ -103,21 +111,21 @@ void ResourceList<R>::unload(const std::vector<std::string>& toUnload, bool keep
 {
     for (const std::string& name : toUnload)
     {
-        if (m_ressources.find(name) == m_ressources.end())  // if name isn't in m_ressources
+        if (m_resources.find(name) == m_resources.end())  // if name isn't in m_resources
         {
             if (keepLoaded)
-            m_ressources.erase(name);
+            m_resources.erase(name);
         }
 
         else if (! keepLoaded)
-        m_ressources.erase(name);
+        m_resources.erase(name);
     }
 }
 
 template <typename R>
 void ResourceList<R>::unload()
 {
-    m_ressources.clear();
+    m_resources.clear();
 }
 
 

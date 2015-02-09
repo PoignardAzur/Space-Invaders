@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SpaceInvaders" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/SpaceInvaderGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="C:/Programmation/SFML/SFML-2.2/include" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics-d" />
+					<Add library="sfml-window-d" />
+					<Add library="sfml-system-d" />
+					<Add library="sfml-main-d" />
+					<Add directory="C:/Programmation/SFML/SFML_build_d/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/SpaceInvaderGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DSFML_STATIC" />
+					<Add directory="C:/Programmation/SFML/SFML-2.2/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add library="sfml-main" />
+					<Add directory="C:/Programmation/SFML/SFML_build/lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="ClassesProjet/BoucleJeu.cpp" />
+		<Unit filename="ClassesProjet/BoucleJeu.h" />
+		<Unit filename="ClassesProjet/Campaign.cpp" />
+		<Unit filename="ClassesProjet/Campaign.h" />
+		<Unit filename="ClassesProjet/Entities/Enemies/EnemiesStats.h" />
+		<Unit filename="ClassesProjet/Entities/Enemies/Enemy.cpp" />
+		<Unit filename="ClassesProjet/Entities/Enemies/Enemy.h" />
+		<Unit filename="ClassesProjet/Entities/Enemies/ShootingEnemy.cpp" />
+		<Unit filename="ClassesProjet/Entities/Enemies/ShootingEnemy.h" />
+		<Unit filename="ClassesProjet/Entities/Enemies/SpawningRates.h" />
+		<Unit filename="ClassesProjet/Entities/PlayerShip.cpp" />
+		<Unit filename="ClassesProjet/Entities/PlayerShip.h" />
+		<Unit filename="ClassesProjet/Entities/SpaceShip.h" />
+		<Unit filename="ClassesProjet/Entities/Weaponry/Bullet.cpp" />
+		<Unit filename="ClassesProjet/Entities/Weaponry/Bullet.h" />
+		<Unit filename="ClassesProjet/Entities/Weaponry/HurtableEntity.h" />
+		<Unit filename="ClassesProjet/Entities/Weaponry/Weapon.cpp" />
+		<Unit filename="ClassesProjet/Entities/Weaponry/Weapon.h" />
+		<Unit filename="ClassesProjet/Levels/BasicSpaceLevel.cpp" />
+		<Unit filename="ClassesProjet/Levels/BasicSpaceLevel.h" />
+		<Unit filename="ClassesProjet/Levels/Battlefield.cpp" />
+		<Unit filename="ClassesProjet/Levels/Battlefield.h" />
+		<Unit filename="ClassesProjet/Levels/FirstScreen.cpp" />
+		<Unit filename="ClassesProjet/Levels/FirstScreen.h" />
+		<Unit filename="ClassesProjet/Levels/RandomSpaceLevel.cpp" />
+		<Unit filename="ClassesProjet/Levels/RandomSpaceLevel.h" />
+		<Unit filename="ClassesProjet/Levels/SpaceHUD.cpp" />
+		<Unit filename="ClassesProjet/Levels/SpaceHUD.h" />
+		<Unit filename="ClassesProjet/Levels/SpaceStats.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/AbsWave.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/AbsWave.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomEnemyPlacer.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomEnemyPlacer.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomWave.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/RandomWave.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/VoidWave.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/VoidWave.h" />
+		<Unit filename="ClassesProjet/Levels/Waves/WaveQueue.cpp" />
+		<Unit filename="ClassesProjet/Levels/Waves/WaveQueue.h" />
+		<Unit filename="ClassesProjet/Loading/LevelSelector.h" />
+		<Unit filename="ClassesProjet/Loading/LoadingClass.cpp" />
+		<Unit filename="ClassesProjet/Loading/LoadingClass.h" />
+		<Unit filename="ClassesProjet/Loading/find_json_member.cpp" />
+		<Unit filename="ClassesProjet/Loading/find_json_member.h" />
+		<Unit filename="ClassesProjet/Loading/levelFromJson.cpp" />
+		<Unit filename="ClassesProjet/Loading/levelFromJson.h" />
+		<Unit filename="ClassesProjet/Loading/load_json.cpp" />
+		<Unit filename="ClassesProjet/Loading/load_json.h" />
+		<Unit filename="ClassesProjet/MainDimensions.h" />
+		<Unit filename="ClassesProjet/Moteur2D.h" />
+		<Unit filename="ClassesProjet/TextureList.cpp" />
+		<Unit filename="ClassesProjet/TextureList.h" />
+		<Unit filename="Moteur2D/Entries/AbstractInputsArray.cpp" />
+		<Unit filename="Moteur2D/Entries/AbstractInputsArray.h" />
+		<Unit filename="Moteur2D/Entries/InputsArray.cpp" />
+		<Unit filename="Moteur2D/Entries/InputsArray.h" />
+		<Unit filename="Moteur2D/GameController.cpp" />
+		<Unit filename="Moteur2D/GameController.h" />
+		<Unit filename="Moteur2D/Game/AbsVart.h" />
+		<Unit filename="Moteur2D/Game/SimpleHitbox.cpp" />
+		<Unit filename="Moteur2D/Game/SimpleHitbox.h" />
+		<Unit filename="Moteur2D/Game/SimpleVart.cpp" />
+		<Unit filename="Moteur2D/Game/SimpleVart.h" />
+		<Unit filename="Moteur2D/Game/VartArray.h" />
+		<Unit filename="Moteur2D/Graphic/AbstractDrawable.h" />
+		<Unit filename="Moteur2D/Graphic/AbstractDrawer.h" />
+		<Unit filename="Moteur2D/Graphic/AnimatedSprite.cpp" />
+		<Unit filename="Moteur2D/Graphic/AnimatedSprite.h" />
+		<Unit filename="Moteur2D/Graphic/ObjectDrawer.cpp" />
+		<Unit filename="Moteur2D/Graphic/ObjectDrawer.h" />
+		<Unit filename="Moteur2D/Graphic/SimpleSprite.cpp" />
+		<Unit filename="Moteur2D/Graphic/SimpleSprite.h" />
+		<Unit filename="Moteur2D/Interfaces/AbstractEndCreditsScreen.cpp" />
+		<Unit filename="Moteur2D/Interfaces/AbstractEndCreditsScreen.h" />
+		<Unit filename="Moteur2D/Interfaces/AbstractGameInterface.h" />
+		<Unit filename="Moteur2D/Interfaces/AbstractHUD.h" />
+		<Unit filename="Moteur2D/Interfaces/AbstractLevel.h" />
+		<Unit filename="Moteur2D/Interfaces/BasicArcadeLevel.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/AbstractItem.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/AbstractItem.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/AbstractTextObject.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/AbstractTextObject.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/Counter.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/Counter.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/ItemBox.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/ItemBox.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/ItemGrid.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/ItemGrid.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/ItemStack.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/ItemStack.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/Label.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/Label.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/LifeCounter.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/LifeCounter.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/Sprite.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/Sprite.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/Text.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/Text.h" />
+		<Unit filename="Moteur2D/Interfaces/Items/VariableItem.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Items/VariableItem.h" />
+		<Unit filename="Moteur2D/Interfaces/Menus/AbstractButton.h" />
+		<Unit filename="Moteur2D/Interfaces/Menus/AbstractMenu.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Menus/AbstractMenu.h" />
+		<Unit filename="Moteur2D/Interfaces/Menus/AbstractMenuInterface.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Menus/AbstractMenuInterface.h" />
+		<Unit filename="Moteur2D/Interfaces/Menus/SimpleButton.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Menus/SimpleButton.h" />
+		<Unit filename="Moteur2D/Interfaces/Menus/TextBox.cpp" />
+		<Unit filename="Moteur2D/Interfaces/Menus/TextBox.h" />
+		<Unit filename="Moteur2D/Interfaces/MetaInterface.h" />
+		<Unit filename="Moteur2D/Interfaces/PressAnyKeyMenu.h" />
+		<Unit filename="Moteur2D/Interfaces/SimpleEndCreditsScreen.cpp" />
+		<Unit filename="Moteur2D/Interfaces/SimpleEndCreditsScreen.h" />
+		<Unit filename="Moteur2D/ResourceList.h" />
+		<Unit filename="Moteur2D/StartEndBool.cpp" />
+		<Unit filename="Moteur2D/StartEndBool.h" />
+		<Unit filename="Moteur2D/Timer.cpp" />
+		<Unit filename="Moteur2D/Timer.h" />
+		<Unit filename="Moteur2D/includes.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

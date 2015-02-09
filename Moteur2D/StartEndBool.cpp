@@ -6,7 +6,7 @@
 
 
 
-StartEnd::StartEnd(bool nValue) : m_value(true), m_lastValue(true)
+StartEnd::StartEnd(bool nValue) : m_value(nValue), m_lastValue(nValue)
 {}
 
 inline bool StartEnd::value()

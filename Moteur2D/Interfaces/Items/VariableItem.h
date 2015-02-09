@@ -28,7 +28,7 @@ namespace Menu
         void selectItem(size_t n);
         size_t itemSelected() const;
 
-        sf::Vector2f size() const;
+        sf::Vector2f getSize() const;
         void setSize(ItemSize s);
 
 

@@ -1,89 +1,81 @@
+// Summary of the most important classes of the engine, do not compile
 
-
-class Vart
+class SimpleHitbox
 {
-    public :
-    Vart(Sprite* sprite = 0, sf::IntRect parametres = RECT_NUL, sf::Vector2f position = PT_NUL, sf::Vector2f vitesse = PT_NUL);
-    virtual void update(float tickSize);
+    SimpleHitbox(sf::FloatRect box = NULL_RECT, sf::Vector2f pos = NULL_PT, sf::Vector2f speed = NULL_PT);
+    void setHitbox(sf::FloatRect internBox);
+    void set(const SimpleHitbox&);
+
+    sf::FloatRect getHitbox(sf::Vector2f center = NULL_PT) const;     // get the placed hitbox of the object
+    void setSpeed(sf::Vector2f speed, bool relative = false);
+    sf::Vector2f getSpeed() const;
+};
+
+class SimpleVart : public SimpleHitbox
+{
+    SimpleVart(const SimpleHitbox& hitbox, AbstractDrawable* sprite = nullptr);
+    virtual void update(float dt);
+    virtual bool doDelete() const;
+    virtual void drawIn(sf::Vector2f pos, AbstractDrawer& target, sf::FloatRect limits, float dt) const;
 
     protected :
-    void setSprite(Sprite* para); // Setters
-    void setHitbox(const PhysicObject&);
+    std::unique_ptr<AbstractDrawable> setSprite(AbstractDrawable* sprite);
     virtual void removeThis();
 };
 
 
-class PhysicObject
-{
-    PhysicObject(sf::IntRect parametres = RECT_NUL, sf::Vector2f position = PT_NUL, sf::Vector2f vitesse = PT_NUL, sf::Vector2f acceleration = PT_NUL);
-
-    sf::IntRect absoluteBox() const;
-    sf::IntRect relativeBox() const;
-    sf::Vector2f gap() const;
-
-    void move(sf::Vector2f nposition, bool relatif = false);
-    virtual void changeSpeed(sf::Vector2f nvitesse, bool relatif = false);
-	virtual void changeAcceleration(sf::Vector2f nvitesse, bool relatif = false);
-
-    sf::Vector2f position() const;
-    sf::Vector2f speed() const;
-    sf::Vector2f acceleration() const;
-};
-
-
 template <typename T>
-class VartArray
+class VartArray : public std::list<std::unique_ptr<T>>
 {
-    VartArray();
+    virtual void updateAll(float dt, bool delDeadVarts = true);                           // Updates every Vart of the list
+    virtual void drawAllIn(AbstractDrawer& target, sf::FloatRect limits, float dt);       // Draws every Vart of the list
 
-    void add(T* nvart);
-    std::vector< boost::shared_ptr<T> >& array();
-    boost::shared_ptr<T> objectN(unsigned short lequel);
-    unsigned short size() const;
-    void clear();
-
-    void update(float tickSize); // Quand le tableau est mis à jour, tous ses éléments le sont.
-    void drawIn(AbstractDrawer& cible); // Quand le tableau est affiche, tous ses éléments le sont.
-
-
-    protected :
-    void remove(int lequel);
-    void deleteVarts();
+    virtual void add(T* vart);
+    virtual void deleteDeadVarts();
 };
 
 
 class ObjectDrawer : public AbstractDrawer
 {
-    public :
-
-    ObjectDrawer(sf::RenderWindow* cible);
-    sf::RenderTarget& target();
-
-    void clear();
-    void draw(const AbstractDrawable& objet);
-    void display();
-};
-
-
-class Sprite : public DrawableObject
-{
-    public :
-
-    Sprite() {}
-    Sprite(const sf::Sprite& image);
-    void set(const sf::Sprite& image);
-    void setPosition(const sf::Vector2f& nposition); // define better ?
-	
-    void drawIn(AbstractDrawer& cible) const;
-    void update(float tickSize) {}
+    ObjectDrawer(sf::RenderTarget* cible);
+    virtual void draw(const sf::Drawable& o);
+    virtual void clear(); // reset the screen
 
     protected :
-    virtual const sf::Drawable& sprite() const;
-    virtual sf::Drawable& sprite();
+    sf::RenderTarget& target();
 };
 
 
+class SimpleSprite : public AbstractDrawable
+{
+    SimpleSprite(const sf::Sprite& sprite, sf::Vector2f center = NULL_PT);
+    virtual void set(const sf::Sprite& sprite, sf::Vector2f center = NULL_PT);
+    virtual void drawIn(sf::Vector2f pos, AbstractDrawer& target, sf::FloatRect limits, float dt) const;
+
+    protected :
+    sf::Sprite& getSprite() const;
+};
+
+class AnimatedSprite : public SimpleSprite
+{
+    void setSprite(const sf::Sprite& sprite, sf::Vector2f center = NULL_PT, int nvFrames = 1, int nhFrames = 1, float animFrame = DEFAULT_ANIM_FRAME_LENGTH, bool loop = false);
+    void update(float dt);
+};
 
 
+template <typename In>
+class AbstractGameInterface
+{
+    virtual void drawIn(AbstractDrawer& window, float dt) = 0;
+    virtual void setUserInputs(AbstractInputs*);
+    virtual void update(const In& inputData) = 0;       // by default, 'In' is the number of ticks since the last update
+    virtual bool isDone() const;                        // if this returns true, the interface must be deleted and replaced by
+    virtual AbstractGameInterface<In>* next() = 0;      // the next interface
+
+    protected :
+    virtual void endThisLater();
+    virtual AbstractInputs* getInputs();
+    virtual const AbstractInputs* getInputs() const;
+};
 
 

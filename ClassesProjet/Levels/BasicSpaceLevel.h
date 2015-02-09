@@ -27,6 +27,7 @@ class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
     virtual void setSprites(sf::Sprite idlePlayer, sf::Sprite shootingPlayer, sf::Sprite bulletSprite);
 
     virtual void addWave(AbsWave* wave);
+    virtual bool levelComplete() const;
 
     virtual void update(const float& dt);
     virtual void drawIn(AbstractDrawer& fenetre);
@@ -34,9 +35,6 @@ class BasicSpaceLevel : public Battlefield, public BasicArcadeLevel<float>
     virtual bool isPlayerAlive() const;
     virtual void respawnPlayer();
     virtual void playerKilled(bool isGameOver);     // whenever the player dies, this function is called
-
-    friend class AbsWave;
-
 
     protected :
 

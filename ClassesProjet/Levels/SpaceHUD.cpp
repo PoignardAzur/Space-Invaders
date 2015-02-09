@@ -12,9 +12,10 @@
 #define GAME_OVER_FONT_SIZE 90
 
 
-SpaceHUD::SpaceHUD(BasicSpaceLevel* level, const sf::Font* f, sf::Color c) : AbstractHUD<float, BasicSpaceLevel>(level)
+SpaceHUD::SpaceHUD(const sf::Font* f, sf::Color c)
 {
     m_gameOver = false;
+    m_isComplete = false;
     m_score = 0;
     m_lives = 0;
 
@@ -79,34 +80,16 @@ void SpaceHUD::setGameOverTextFont(const sf::Font* f, sf::Color c)
 
 
 
-void SpaceHUD::startGameOverMode()
+void SpaceHUD::updateFrom(BasicSpaceLevel* level)   // gets the level's outputs
 {
-    m_gameOver = true;
-}
-
-
-void SpaceHUD::update(const float& ticks)   // updates the level and measures its outputs
-{
-    AbstractHUD<float, BasicSpaceLevel>::update(ticks);     // this is what updates the level itself
-
     setRemainingLives( level()->lives() );
     setScore( level()->score() );
 
     if (level()->gameOver())
-    startGameOverMode();
-}
+    m_gameOver = true;
 
-
-
-void SpaceHUD::drawHUD(AbstractDrawer& window)
-{
-    sf::RectangleShape r(sf::Vector2f(LARGEUR_FENETRE, HAUTEUR_HUD));
-    r.setFillColor(sf::Color(128, 128, 128));
-    window.draw(r);
-
-    sf::FloatRect box(SIDE_GAP, 0, LARGEUR_FENETRE - 2 * SIDE_GAP, HAUTEUR_HUD - BOTTOM_GAP);
-    m_livesDrawer.drawInBox(window, box, Menu::BottomLeftCorner);
-    m_scoreLabel.drawInBox(window, box, Menu::BottomRightCorner);
+    if (level()->levelComplete())
+    m_isComplete = true;
 }
 
 
@@ -119,7 +102,7 @@ void SpaceHUD::drawIn(AbstractDrawer& window, BasicSpaceLevel* level)
     ObjectDrawer d(&texture);
     texture.create(LARGEUR_FENETRE, HAUTEUR_FENETRE - HAUTEUR_HUD);
 
-    level->drawIn(window);
+    level->drawIn(d);
 
     if(m_gameOver)
     m_gameOverText.drawInBox(d, sf::FloatRect(0, 0, LARGEUR_FENETRE, 0.6 * HAUTEUR_FENETRE), Menu::Center);
@@ -129,7 +112,13 @@ void SpaceHUD::drawIn(AbstractDrawer& window, BasicSpaceLevel* level)
     spr.setScale(1, -1);
     window.draw(spr);
 
-    drawHUD(window);
+    sf::RectangleShape r(sf::Vector2f(LARGEUR_FENETRE, HAUTEUR_HUD));
+    r.setFillColor(sf::Color(128, 128, 128));
+    window.draw(r);
+
+    sf::FloatRect box(SIDE_GAP, 0, LARGEUR_FENETRE - 2 * SIDE_GAP, HAUTEUR_HUD - BOTTOM_GAP);
+    m_livesDrawer.drawInBox(window, box, Menu::BottomLeftCorner);
+    m_scoreLabel.drawInBox(window, box, Menu::BottomRightCorner);
 }
 
 

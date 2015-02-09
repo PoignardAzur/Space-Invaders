@@ -5,8 +5,7 @@
 #define META_INTERFACE_HEADER
 
 #include "AbstractGameInterface.h"
-#include <vector>
-#include <stack>
+#include <memory>
 
 
 template <typename In>
@@ -16,93 +15,93 @@ class MetaInterface : public AbstractGameInterface<In>
 
     public :
 
+    MetaInterface(AGIi* newInterface = nullptr);
+    void setInterface(AGIi* newInterface);
     ~MetaInterface();
-    void drawIn(AbstractDrawer& window);
-    void update(const In& inputData);
-    void addInterface(AGIi* newInterface);
 
-    virtual AbstractGameInterface<In>* toLoad();
+    void drawIn(AbstractDrawer& window, float dt);
+    void update(const In& inputData);
+
+    virtual AGIi* next();
+
 
     protected :
 
     AGIi* currentInterface();
     const AGIi* currentInterface() const;
 
+
     private :
 
-    std::stack<AGIi*> m_interfaces;        // has-a
+    std::unique_ptr<AGIi> m_interface;        // has-a
 };
 
 
 
 template <typename In>
-void MetaInterface<In>::drawIn(AbstractDrawer& window)
+MetaInterface<In>::MetaInterface(AGIi* newInterface)
 {
-    currentInterface()->drawIn(window);
+    setInterface(newInterface);
+}
+
+template <typename In>
+void MetaInterface<In>::setInterface(AGIi* newInterface)
+{
+    m_interface.reset(newInterface);
+}
+
+template <typename In>
+MetaInterface<In>::~MetaInterface()
+{
+
 }
 
 
+template <typename In>
+void MetaInterface<In>::drawIn(AbstractDrawer& window, float dt)
+{
+    if (currentInterface())
+    currentInterface()->drawIn(window, dt);
+}
 
 template <typename In>
 void MetaInterface<In>::update(const In& inputData)
 {
-    currentInterface()->update(inputData);
-
-    if (currentInterface()->toLoad())
+    if (currentInterface())
     {
-        addInterface(currentInterface()->toLoad());
+        currentInterface()->update(inputData);
+
+        if (currentInterface()->isDone())
+        {
+            auto p = currentInterface()->next();
+
+            if (p)
+            m_interface.reset(p);
+
+            else
+            AbstractGameInterface<In>::endThisLater();
+        }
     }
-
-    if (currentInterface()->toDelete())
-    {
-        AGIi* lastInterface = currentInterface();
-        m_interfaces.pop();
-
-        if (! m_interfaces.size())
-        AbstractGameInterface<In>::deleteLater();
-
-        delete lastInterface;
-    }
-}
-
-
-template <typename In>
-void MetaInterface<In>::addInterface(AGIi* newInterface)
-{
-    m_interfaces.push(newInterface);
 }
 
 
 template <typename In>
 AbstractGameInterface<In>* MetaInterface<In>::currentInterface()
 {
-    return m_interfaces.top();
+    return m_interface.get();
 }
-
 
 template <typename In>
 const AbstractGameInterface<In>* MetaInterface<In>::currentInterface() const
 {
-    return m_interfaces.top();
+    return m_interface.get();
 }
 
 
 template <typename In>
-AbstractGameInterface<In>* MetaInterface<In>::toLoad()
+AbstractGameInterface<In>* MetaInterface<In>::next()
 {
     return nullptr;
-}
-
-
-
-template <typename In>
-MetaInterface<In>::~MetaInterface()
-{
-    while(m_interfaces.size())
-    {
-        delete m_interfaces.top();
-        m_interfaces.pop();
-    }
 }
 
 

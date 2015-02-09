@@ -1,35 +1,57 @@
 
+
 #include "AbstractInputsArray.h"
 
 
-
-const std::vector<sf::Mouse::Button>& AbstractInputs::pressedMouseButtons() const          // list of pressed mouse buttons
+std::list<sf::Mouse::Button> AbstractInputs::pressedMouseButtons() const          // array of pressed mouse buttons
 {
-    const_cast<AbstractInputs*>(this)->pmb.clear();
+    std::list<sf::Mouse::Button> pmb;
 
     for (const auto& b : mouseButtons())
     {
         if (b.second)
-        const_cast<AbstractInputs*>(this)->pmb.push_back(b.first);
+        pmb.push_back(b.first);
     }
 
     return pmb;
 }
 
-
-const std::vector<sf::Keyboard::Key>& AbstractInputs::pressedKeyboardButtons() const       // list of pressed keyboard keys
+std::list<sf::Keyboard::Key>  AbstractInputs::pressedKeyboardButtons() const       // list of pressed keyboard keys
 {
-    const_cast<AbstractInputs*>(this)->pkb.clear();
+    std::list<sf::Keyboard::Key> pkb;
 
     for (const auto& k : keyboardButtons())
     {
         if (k.second)
-        const_cast<AbstractInputs*>(this)->pkb.push_back(k.first);
+        pkb.push_back(k.first);
     }
 
     return pkb;
 }
 
+bool AbstractInputs::anyMouseButtonPressed() const
+{
+    for (const auto& b : mouseButtons())
+    {
+        if (b.second)
+        return true;
+    }
+
+/// default
+    return false;
+}
+
+bool AbstractInputs::anyKeyPressed() const
+{
+    for (const auto& k : keyboardButtons())
+    {
+        if (k.second)
+        return true;
+    }
+
+/// default
+    return false;
+}
 
 
 const std::map<sf::Mouse::Button, bool>& AbstractInputs::mouseButtons() const
@@ -41,7 +63,6 @@ const std::map<sf::Keyboard::Key , bool>& AbstractInputs::keyboardButtons() cons
 {
     return const_cast<AbstractInputs*>(this)->_keyboardButtons();
 }
-
 
 std::map<sf::Mouse::Button, bool>& AbstractInputs::mouseButtons()
 {

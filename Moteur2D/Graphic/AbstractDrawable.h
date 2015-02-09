@@ -3,25 +3,19 @@
 #ifndef HEADER_OBJET_AFFICHABLE_ABSTRAIT
 #define HEADER_OBJET_AFFICHABLE_ABSTRAIT
 
-/*
-Interface for drawable objects
-*/
+#include <SFML/Graphics.hpp>
+
+
 class AbstractDrawer;
 
+// Interface for drawable objects
 class AbstractDrawable
 {
     public :
 
     virtual ~AbstractDrawable() {}
-    virtual void drawIn(AbstractDrawer& cible) const = 0;
+    virtual void drawIn(sf::Vector2f pos, AbstractDrawer& target, sf::FloatRect limits, float dt) const = 0;
 };
 
 
-#include "AbstractDrawer.h"
-
-
-
-
-#endif
-
-
+#endif // HEADER_OBJET_AFFICHABLE_ABSTRAIT

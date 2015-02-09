@@ -1,6 +1,5 @@
 
 
-
 #ifndef MENU_ITEM_GRID_HEADER
 #define MENU_ITEM_GRID_HEADER
 
@@ -19,7 +18,7 @@ namespace Menu
 
         ItemGrid();
         ItemGrid(const std::vector<std::vector< std::shared_ptr<AbstractItem> >>& items, sf::Vector2f gaps = sf::Vector2f(0,0));
-        ItemGrid(const std::vector<std::shared_ptr<AbstractItem>>& items, bool is_a_line, float gaps = 0);
+        ItemGrid(const std::vector<std::shared_ptr<AbstractItem>>& items, bool is_a_row, float gaps = 0);
 
         void set(const std::vector<std::vector< std::shared_ptr<AbstractItem> >>& items, sf::Vector2f gaps = sf::Vector2f(0,0));
         void setAsLine(const std::vector<std::shared_ptr<AbstractItem>>& items, float gaps = 0);
@@ -33,7 +32,7 @@ namespace Menu
         void setItem(size_t x, size_t y, AbstractItem* item);
         void setItem(size_t x, size_t y, std::shared_ptr<AbstractItem> item);
 
-        sf::Vector2f size() const;
+        sf::Vector2f getSize() const;
 
         size_t lines() const;
         size_t columns() const;
@@ -46,6 +45,7 @@ namespace Menu
         void updateOwnSize();
         void setItemsParent();
 
+
         private :
 
         std::vector<std::vector< std::shared_ptr<AbstractItem> >> m_itemLines;     // it's an array of lines, each one being an array of item
@@ -57,35 +57,9 @@ namespace Menu
         sf::Vector2f m_size;
         std::vector<float> m_lineHeights;
         std::vector<float> m_columnWidths;
-
     };
 
 }
 
 
-
 #endif // MENU_ITEM_GRID_HEADER
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

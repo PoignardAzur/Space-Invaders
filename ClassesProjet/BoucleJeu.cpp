@@ -1,28 +1,33 @@
 
-
 #include "BoucleJeu.h"
 
+#define MAIN_LOADING_FILE "mainFile.json"
 
-BoucleJeu::BoucleJeu(AbstractInputs* in, sf::RenderWindow* cible) : m_level(new RandomSpaceLevel)
+
+BoucleJeu::BoucleJeu(AbstractInputs* in, sf::RenderWindow* cible)
 {
-    set(in, cible);
+    // LOAD CAMPAIGN
     m_level->setUserInputs(windowInputs());
-
-    m_font.loadFromFile(DEFAULT_FONT_NAME);
-    FirstScreen* screen = new FirstScreen(&m_font, sf::Color::White, windowInputs());
-
-    SpaceHUD* hud = new SpaceHUD(m_level);
-    m_interface.addInterface(hud);
-    m_interface.addInterface(screen);
-
-    drawEverything(0);
-
-    m_loader.setBaseTextureList(m_textureList);
     m_loader.setLevel(m_level, m_textureList, m_statsList);
-    m_loader.setHUD(m_textureList, hud, &m_font);
 }
 
+void BoucleJeu::set2(AbstractInputs* in, sf::RenderWindow* cible)
+{
+    set(in, cible);
+    m_loader.loadFromFile(MAIN_LOADING_FILE);
 
+    m_loader.loadFont(m_font);
+    m_loader.loadMenuTextures(m_textureList);
+    m_loader.loadFirstScreen(m_firstScreen);
+    // drawMenu;
+
+    m_loader.loadTextures(m_textureList);
+    //m_loader.loadMenu
+    m_loader.loadCampaign(m_campaign);
+
+    m_hud.setAllFonts(&m_font, sf::Color::White);
+    m_hud.setLifeSprite(sf::Sprite(m_textureList[LIFE_TEXTURE_NAME]));
+}
 
 
 

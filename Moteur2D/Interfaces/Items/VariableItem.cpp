@@ -48,10 +48,10 @@ void Menu::VariableItem::drawImageIn(AbstractDrawer& target, sf::Vector2f positi
     m_items[m_drawnItem]->drawIn(target, position, isHitboxDrawn);
 }
 
-sf::Vector2f Menu::VariableItem::size() const
+sf::Vector2f Menu::VariableItem::getSize() const
 {
     if (m_size == Dynamic)
-    return m_items[m_drawnItem]->size();
+    return m_items[m_drawnItem]->getSize();
 
 /// else
     return m_sizeValue;
@@ -70,11 +70,11 @@ void Menu::VariableItem::setSize(ItemSize s)
 
     for (auto& item : m_items)
     {
-        if ( (item->size().x > m_sizeValue.x) == (s == MaximumOne) )
-        m_sizeValue.x = item->size().x;
+        if ( (item->getSize().x > m_sizeValue.x) == (s == MaximumOne) )
+        m_sizeValue.x = item->getSize().x;
 
-        if ( (item->size().y > m_sizeValue.y) == (s == MaximumOne) )
-        m_sizeValue.y = item->size().y;
+        if ( (item->getSize().y > m_sizeValue.y) == (s == MaximumOne) )
+        m_sizeValue.y = item->getSize().y;
     }
 
     updateParentSize();

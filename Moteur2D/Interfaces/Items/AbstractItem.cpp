@@ -1,7 +1,9 @@
 
 
-
 #include "AbstractItem.h"
+
+
+bool DRAW_ITEM_HITBOX = false; // doesn't need to be const
 
 
 Menu::AbstractItem::AbstractItem(AbstractItem* parent)
@@ -27,18 +29,20 @@ void Menu::AbstractItem::drawInBox(AbstractDrawer& target, sf::FloatRect box, Al
 {
     sf::Vector2f position(box.left, box.top);
 
+
     if (isRight(a))
-    position.x += box.width - size().x;
+    position.x += box.width - getSize().x;
 
     if (isVerticalMiddle(a))
-    position.x += (box.width - size().x) / 2;
+    position.x += (box.width - getSize().x) / 2;
 
 
     if (isBottom(a))
-    position.y += box.height - size().y;
+    position.y += box.height - getSize().y;
 
     if (isHorizontalMiddle(a))
-    position.y += (box.height - size().y) / 2;
+    position.y += (box.height - getSize().y) / 2;
+
 
     drawIn(target, position, drawHitbox);
 }
@@ -49,16 +53,14 @@ int Menu::AbstractItem::hashToColor(float x) const
     return static_cast<int>(x * 17) % 255;
 }
 
-
 void Menu::AbstractItem::drawHitboxIn(AbstractDrawer& target, sf::Vector2f position) const
 {
-    sf::RectangleShape hitbox(size());
+    sf::RectangleShape hitbox(getSize());
     hitbox.setPosition(position);
-    hitbox.setFillColor(sf::Color( hashToColor(position.x), hashToColor(position.y), hashToColor(size().x + size().y) ));
+    hitbox.setFillColor(sf::Color( hashToColor(position.x), hashToColor(position.y), hashToColor(getSize().x + getSize().y) ));
 
     target.draw(hitbox);
 }
-
 
 
 void Menu::AbstractItem::updateParentSize()

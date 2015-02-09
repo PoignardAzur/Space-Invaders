@@ -1,34 +1,31 @@
 
 
-
 #ifndef MENU_TEXT_HEADER
 #define MENU_TEXT_HEADER
 
-
 #include "AbstractItem.h"
-#include <string>
+#include "AbstractTextObject.h"
 
-#define DEFAULT_FONT_SIZE 30
 
 namespace Menu
 {
 
-    class Text : public AbstractItem
+    class Text : public AbstractItem, public AbstractTextObject
     {
         public :
 
-        explicit Text(const std::string& str = "", const sf::Font* f = nullptr, unsigned int charSize = DEFAULT_FONT_SIZE, const sf::Color& c = sf::Color::Black);
-        explicit Text(const sf::Font* f, unsigned int charSize = DEFAULT_FONT_SIZE, const sf::Color& c = sf::Color::Black);
+        explicit Text(const std::string& str = "", FontStyle f = FontStyle());
+        explicit Text(FontStyle f);
 
         void setString(const std::string& str);
-        void setFont(const sf::Font* f, unsigned int charSize = DEFAULT_FONT_SIZE);
-        void setColor(const sf::Color& c);
-        sf::Vector2f size() const;
+
+        sf::Vector2f getSize() const;
 
 
         protected :
 
         void drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const;
+        void setFontStyle(const FontStyle& f);
 
 
         private :
@@ -38,12 +35,7 @@ namespace Menu
         sf::Text m_text;
     };
 
-
 }
 
 
 #endif // MENU_TEXT_HEADER
-
-
-
-

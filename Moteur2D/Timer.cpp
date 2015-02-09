@@ -3,77 +3,63 @@
 #include "Timer.h"
 
 
-Timer::Timer(float tempsDepart, float tempsMax, bool razAuto) :
-m_temps(tempsDepart), m_autoReset(razAuto)
+Timer::Timer(float startTime, float maxTime) : m_time(startTime)
 {
-    if (tempsMax)
-    m_tempsMax = tempsMax;
+    if (maxTime > 0)
+    m_maxTime = maxTime;
 
     else
-    m_tempsMax = tempsDepart;
-}
-
-Timer::Timer(const Timer& t) : m_temps(t.m_temps), m_tempsMax(t.m_tempsMax), m_autoReset(t.m_autoReset)
-{
-
+    m_maxTime = startTime;
 }
 
 
-void Timer::setMaxTime(float nTemps)
+void Timer::setMaxTime(float t)
 {
-    m_tempsMax = nTemps;
+    m_maxTime = t;
 }
 
-void Timer::setTime(float nTemps, bool limiter)
+void Timer::setTime(float t, bool respectLimit)
 {
-    if (!limiter || nTemps <= m_tempsMax)
-    m_temps = nTemps;
+    if (!respectLimit || t <= m_maxTime)
+    m_time = t;
 
     else
-    nTemps = m_tempsMax;
+    m_time = m_maxTime;
 }
 
 void Timer::resetTimeToMax()
 {
-    m_temps = m_tempsMax;
+    m_time = m_maxTime;
 }
 
 bool Timer::decrement(float ticks)
 {
-    if (m_temps)
+    if (m_time > 0)
+    m_time -= ticks;
+
+    if (m_time <= 0)
     {
-        if (ticks <= m_temps)
-        m_temps -= ticks;
-
-        else if (m_autoReset)
-        {
-            resetTimeToMax();
-            return true;
-        }
-
-        else
-        m_temps = 0;
-
-        return m_temps == 0;
+        m_time = 0;
+        return true;
     }
 
 /// else
-    return true;
+    return false;
 }
 
-/*inline*/ float Timer::maxTime() const
+float Timer::getMaxTime() const
 {
-    return m_tempsMax;
+    return m_maxTime;
 }
 
-/*inline*/ float Timer::time() const
+float Timer::getCurrentTime() const
 {
-    return m_temps;
+    return m_time;
 }
 
 
 
-std::vector<bool> decrement(std::vector<Timer> tableau, float ticks)
+std::vector<bool> decrement(std::vector<Timer> tableau, float dt)
 {
     std::vector<bool> tableauRetour (tableau.size(), true);
     auto p1 = tableau.begin();
@@ -81,7 +67,7 @@ std::vector<bool> decrement(std::vector<Timer> tableau, float ticks)
 
     while (p1 != tableau.end())
     {
-        *p2 = p1->decrement(ticks);
+        *p2 = p1->decrement(dt);
 
         p1++;
         p2++;

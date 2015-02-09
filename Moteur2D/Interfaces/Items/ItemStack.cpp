@@ -5,22 +5,22 @@
 
 Menu::ItemStack::ItemStack()
 {
-
+    m_size = sf::Vector2f(0,0);
 }
 
-Menu::ItemStack::ItemStack(const std::vector<std::pair<AbsItemPtr, Alignement>>& items, bool sizeIsMax)
+Menu::ItemStack::ItemStack(std::vector<std::pair<AbsItemPtr, Alignement>> items, bool sizeIsMax)
 {
-    setItems(items, sizeIsMax);
+    setItems(std::move(items), sizeIsMax);
 }
 
-void Menu::ItemStack::setItems(const std::vector<std::pair<AbsItemPtr, Alignement>>& items, bool sizeIsMax)
+void Menu::ItemStack::setItems(std::vector<std::pair<AbsItemPtr, Alignement>> items, bool sizeIsMax)
 {
-    for (auto item : items)
+    for (auto& item : items)
     {
         item.first->setParent(this);
     }
 
-    m_items = items;
+    m_items = std::move(items);
     m_sizeIsMax = sizeIsMax;
 
     updateOwnSize();
@@ -43,7 +43,7 @@ void Menu::ItemStack::drawImageIn(AbstractDrawer& target, sf::Vector2f position,
     }
 }
 
-sf::Vector2f Menu::ItemStack::size() const
+sf::Vector2f Menu::ItemStack::getSize() const
 {
     return m_size;
 }
@@ -56,19 +56,19 @@ void Menu::ItemStack::updateOwnSize()
 
         for (auto const& alignedItem : m_items)
         {
-            m_size.x = m_size.x > alignedItem.first->size().x ? m_size.x : alignedItem.first->size().x;
-            m_size.y = m_size.y > alignedItem.first->size().y ? m_size.y : alignedItem.first->size().y;
+            m_size.x = m_size.x > alignedItem.first->getSize().x ? m_size.x : alignedItem.first->getSize().x;
+            m_size.y = m_size.y > alignedItem.first->getSize().y ? m_size.y : alignedItem.first->getSize().y;
         }
     }
 
     else if (m_items.size())
     {
-        m_size = m_items[0].first->size();
+        m_size = m_items[0].first->getSize();
 
         for (auto const& alignedItem : m_items)
         {
-            m_size.x = m_size.x < alignedItem.first->size().x ? m_size.x : alignedItem.first->size().x;
-            m_size.y = m_size.y < alignedItem.first->size().y ? m_size.y : alignedItem.first->size().y;
+            m_size.x = m_size.x < alignedItem.first->getSize().x ? m_size.x : alignedItem.first->getSize().x;
+            m_size.y = m_size.y < alignedItem.first->getSize().y ? m_size.y : alignedItem.first->getSize().y;
         }
     }
 

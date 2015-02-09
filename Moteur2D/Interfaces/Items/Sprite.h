@@ -16,21 +16,20 @@ namespace Menu
         Sprite();
         Sprite(const sf::Sprite& spr);
         void set(const sf::Sprite& spr);
-        sf::Vector2f size() const;
+        sf::Vector2f getSize() const;
+
 
         protected :
+
         void drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const;
 
+
         private :
+
         sf::Sprite m_sprite;
     };
-
 
 }
 
 
-
 #endif // MENU_SPRITE_HEADER
-
-
-

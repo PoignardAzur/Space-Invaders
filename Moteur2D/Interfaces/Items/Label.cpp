@@ -2,16 +2,12 @@
 #include "Label.h"
 
 
-Menu::Label::Label(AbstractItem* item, const std::string& str, bool horizontalAlignement, float gap)
-{
-    setItem(item, str);
-    setAlignement(horizontalAlignement, gap);
-}
-
-void Menu::Label::setItem(AbstractItem* item, const std::string& str)
+Menu::Label::Label(AbstractItem* item, const std::string& str, FontStyle f, bool horizontalAlignement, float gap)
 {
     setItem(item);
     setLabel(str);
+    setAlignement(horizontalAlignement, gap);
+    setFont(f);
 }
 
 void Menu::Label::setItem(AbstractItem* item)
@@ -29,15 +25,10 @@ void Menu::Label::setLabel(const std::string& str)
     setOwnSize();
 }
 
-void Menu::Label::setFont(const sf::Font* f, unsigned int charSize)
+void Menu::Label::setFontStyle(const FontStyle& f)
 {
-    m_label.setFont(f, charSize);
+    m_label.setFont(f);
     setOwnSize();
-}
-
-void Menu::Label::setColor(const sf::Color& c)
-{
-    m_label.setColor(c);
 }
 
 void Menu::Label::setAlignement(bool horizontal, float gap)
@@ -48,14 +39,14 @@ void Menu::Label::setAlignement(bool horizontal, float gap)
     setOwnSize();
 }
 
-sf::Vector2f Menu::Label::size() const
+sf::Vector2f Menu::Label::getSize() const
 {
     return m_size;
 }
 
 void Menu::Label::drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const
 {
-    sf::FloatRect box(position.x, position.y, size().x, size().y);
+    sf::FloatRect box(position.x, position.y, getSize().x, getSize().y);
 
     if (m_horizontalAlignement)
     {
@@ -77,18 +68,18 @@ void Menu::Label::drawImageIn(AbstractDrawer& target, sf::Vector2f position, boo
 void Menu::Label::setOwnSize()
 {
     if (!m_item)
-    m_size = m_label.size();
+    m_size = m_label.getSize();
 
     else if (m_horizontalAlignement)
     {
-        m_size.x = m_label.size().x + m_item->size().x + m_gap;
-        m_size.y = m_label.size().y > m_item->size().y ? m_label.size().y : m_item->size().y;
+        m_size.x = m_label.getSize().x + m_item->getSize().x + m_gap;
+        m_size.y = m_label.getSize().y > m_item->getSize().y ? m_label.getSize().y : m_item->getSize().y;
     }
 
     else
     {
-        m_size.x = m_label.size().x > m_item->size().x ? m_label.size().x : m_item->size().x;
-        m_size.y = m_label.size().y + m_item->size().y + m_gap;
+        m_size.x = m_label.getSize().x > m_item->getSize().x ? m_label.getSize().x : m_item->getSize().x;
+        m_size.y = m_label.getSize().y + m_item->getSize().y + m_gap;
     }
 }
 

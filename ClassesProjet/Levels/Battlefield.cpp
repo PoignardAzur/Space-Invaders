@@ -147,17 +147,17 @@ void Battlefield::deleteEnemyShots()
 }
 
 
-VartPusher<Enemy>* Battlefield::enemies()
+VartArray<Enemy>* Battlefield::enemies()
 {
     return &t_enemies;
 }
 
-VartPusher<Bullet>* Battlefield::redBullets()
+VartArray<Bullet>* Battlefield::redBullets()
 {
     return &t_red_bullets;
 }
 
-VartPusher<Bullet>* Battlefield::blueBullets()
+VartArray<Bullet>* Battlefield::blueBullets()
 {
     return &t_blue_bullets;
 }

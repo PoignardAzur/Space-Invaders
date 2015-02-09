@@ -5,14 +5,14 @@
 
 
 
-Inputs::Inputs(sf::Window* fenetre, bool escapeMeansClose) : m_fenetre(fenetre), m_closeWindow(false), m_escapeMeansClose(escapeMeansClose)
+Inputs::Inputs(sf::Window* window, bool escapeMeansClose)
 {
-
+    set(window, escapeMeansClose);
 }
 
-void Inputs::set(sf::Window* fenetre, bool escapeMeansClose)
+void Inputs::set(sf::Window* window, bool escapeMeansClose)
 {
-    m_fenetre = fenetre;
+    m_fenetre = window;
     m_escapeMeansClose = escapeMeansClose;
 }
 
@@ -26,7 +26,7 @@ sf::Vector2f Inputs::cursor() const
     return m_cursor;
 }
 
-void Inputs::update(float ticks)
+void Inputs::update(float dt)
 {
     if (!m_fenetre)
     return;
@@ -53,7 +53,7 @@ void Inputs::update(float ticks)
             t_boutonsClavier[m_event.key.code] = true;
 
             if (m_event.key.code == sf::Keyboard::Escape && m_escapeMeansClose) // In simple games, pressing escape can be a
-            m_closeWindow = true;                                               // shorcut to exit the game (as well as Alt+F4)
+            m_closeWindow = true;                                               // shortcut to exit the game (as well as Alt+F4)
 
             break;
 
@@ -62,12 +62,12 @@ void Inputs::update(float ticks)
             break;
 
 
-            case sf::Event::MouseMoved : // Sets the new mouse position (the relative moving isn't tracked)
+            case sf::Event::MouseMoved : // Sets the new mouse position (the relative moving is not tracked)
             m_cursor.x = m_event.mouseMove.x;
             m_cursor.y = m_event.mouseMove.y;
             break;
 
-            case sf::Event::Closed : // Detects attemps to close the window (Alt+F4, Red X, etc)
+            case sf::Event::Closed : // Detects attempts to close the window (Alt+F4, Red X, etc)
             m_closeWindow = true;
             break;
 

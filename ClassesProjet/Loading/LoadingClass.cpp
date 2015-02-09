@@ -1,17 +1,15 @@
 
 
 #include "LoadingClass.h"
+#include <fstream>
+#include <string>
+
+#define DEFAULT_FONT_NAME "Ressources/arial.ttf"
 
 
 Loader::Loader()
 {
-    std::ifstream file(COMMAND_FILE);
 
-    if (file.is_open())
-    createDatabaseFromFile(m_database, file, MAIN_DATABASE, &std::cerr, true);
-
-    else
-    m_database.open(MAIN_DATABASE);
 }
 
 
@@ -40,18 +38,6 @@ void Loader::setTextureList(TextureList& list)
 
 
 
-void Loader::setBaseTextureList(TextureList& t)
-{
-    std::map<std::string, std::string> textures;
-
-    textures[LIFE_TEXTURE_NAME] = "Ressources\\Images\\Vie.bmp";
-    textures[IDLE_PLAYER_TEXTURE_NAME] = "Ressources\\Images\\Vaisseau_Joueur.bmp";
-    textures[SHOOTING_PLAYER_TEXTURE_NAME] = "Ressources\\Images\\Vaisseau_Joueur_Charge.bmp";
-    textures[PLAYER_BULLET_SPRITE_NAME] = "Ressources\\Images\\Tir.bmp";
-    textures[DEFAULT_ENEMY_SHOT_NAME] = "Ressources\\Images\\Tir_Ennemi.bmp";
-
-    t.loadTextures(textures);
-}
 
 
 /**
@@ -90,30 +76,71 @@ void Loader::setEnemyStats(ResourceList<EnemiesStats>& statsList)
 
 void Loader::setLevel(RandomSpaceLevel* level, TextureList& t, ResourceList<EnemiesStats>& s)
 {
-    level->setVisibleZone(sf::FloatRect(0,0, LARGEUR_FENETRE, HAUTEUR_FENETRE));
-    level->setResources(&t, &s);
 
     setTextureList(t);
     setEnemyStats(s);
 
-    sf::Sprite idlePlayer(t[IDLE_PLAYER_TEXTURE_NAME]);
-    sf::Sprite shootingPlayer(t[SHOOTING_PLAYER_TEXTURE_NAME]);
-    sf::Sprite bulletSprite(t[PLAYER_BULLET_SPRITE_NAME]);
-
-    level->setLives(NUMBER_OF_LIVES);
-    level->setSprites(idlePlayer, shootingPlayer, bulletSprite);
-
-    level->respawnPlayer();
 }
 
 
-void Loader::setHUD(TextureList& t, SpaceHUD* hud, sf::Font* f)
+
+void Loader::loadFromFile(const char* fileName)
 {
-    hud->setAllFonts(f, sf::Color::White);
-    hud->setLifeSprite(sf::Sprite(t[LIFE_TEXTURE_NAME]));
+    std::string fileContent;
+    std::string line;
+    std::ifstream file(fileName);
+
+    if (!file.open())
+    {
+        throw (std::string(filename) + " could not be open.").c_str();
+    }
+
+    while (std::getline(file, line)
+    {
+        fileContent += line;
+    }
+
+    m_document.Parse(fileContent.c_str());
 }
 
+void Loader::loadFont(sf::Font& font)
+{
+    m_font.loadFromFile(DEFAULT_FONT_NAME);
+}
 
+void Loader::loadMenuTextures(TextureList& textureList)
+{
+    std::map<std::string, std::string> textures;
+    textures[LIFE_TEXTURE_NAME] = "Ressources\\Images\\Vie.bmp";
+    textureList.load(textures);
+}
 
+void Loader::loadFirstScreen(FirstScreen& screen)
+{
+    screen.setText(&m_font, sf::Color::White);
+    screen.setInputs(windowInputs());
+}
+
+void Loader::loadTextures(TextureList& textureList)
+{
+    std::map<std::string, std::string> textures;
+
+    textures[IDLE_PLAYER_TEXTURE_NAME] = "Ressources\\Images\\Vaisseau_Joueur.bmp";
+    textures[SHOOTING_PLAYER_TEXTURE_NAME] = "Ressources\\Images\\Vaisseau_Joueur_Charge.bmp";
+    textures[PLAYER_BULLET_SPRITE_NAME] = "Ressources\\Images\\Tir.bmp";
+    textures[DEFAULT_ENEMY_SHOT_NAME] = "Ressources\\Images\\Tir_Ennemi.bmp";
+
+    textureList.loadTextures(textures);
+}
+
+//void Loader::loadMenu(Menu)
+{
+
+}
+
+void Loader::loadCampaign(Campaign& mainCampaign)
+{
+
+}
 
 

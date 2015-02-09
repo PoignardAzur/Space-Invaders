@@ -32,17 +32,6 @@ void Menu::LifeCounter::setBounds(int maxDrawable, int max)
     updateGrid();
 }
 
-void Menu::LifeCounter::setFont(const sf::Font* f, unsigned int charSize)
-{
-    m_counter->setFont(f, charSize);
-    m_cross->setFont(f, charSize);
-}
-
-void Menu::LifeCounter::setColor(const sf::Color& c)
-{
-    m_counter->setColor(c);
-    m_cross->setColor(c);
-}
 
 void Menu::LifeCounter::setRightAligned(bool rightAligned)
 {
@@ -68,17 +57,24 @@ void Menu::LifeCounter::setGaps(float gap)
 
 void Menu::LifeCounter::drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const
 {
-    sf::FloatRect box(position.x, position.y, size().x, size().y);
+    sf::FloatRect box(position.x, position.y, getSize().x, getSize().y);
 
     m_grid.drawInBox(target, box, m_rightAligned ? BottomRightCorner : BottomLeftCorner, isHitboxDrawn);
 }
 
 
-sf::Vector2f Menu::LifeCounter::size() const
+void Menu::LifeCounter::setFontStyle(const FontStyle& f)
 {
-    float height = m_lifeSprite->size().y > m_counter->size().y ? m_lifeSprite->size().y : m_counter->size().y;
-    float width1 = m_lifeSprite->size().x * m_maxDrawable + m_gap * (m_maxDrawable - 1);
-    float width2 = m_lifeSprite->size().x + m_gap + m_counter->size().x;
+    m_counter->setFont(f);
+    m_cross->setFont(f);
+}
+
+
+sf::Vector2f Menu::LifeCounter::getSize() const
+{
+    float height = m_lifeSprite->getSize().y > m_counter->getSize().y ? m_lifeSprite->getSize().y : m_counter->getSize().y;
+    float width1 = m_lifeSprite->getSize().x * m_maxDrawable + m_gap * (m_maxDrawable - 1);
+    float width2 = m_lifeSprite->getSize().x + m_gap + m_counter->getSize().x;
 
     return sf::Vector2f(width1 > width2 ? width1 : width2, height);
 }

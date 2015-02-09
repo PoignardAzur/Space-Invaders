@@ -102,7 +102,6 @@ void RandomEnemyPlacer::placeEnemy(std::default_random_engine* rng)
 
 void RandomEnemyPlacer::placeEnemy(const std::string& name, std::default_random_engine* rng)
 {
-    const char* name2 = name.c_str();
     const EnemiesStats& stats = (*m_stats)[name];
     const sf::Texture& texture = (*m_textureList)[DEFAULT_ENEMY_SHOT_NAME];
 

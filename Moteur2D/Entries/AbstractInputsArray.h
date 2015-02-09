@@ -3,7 +3,7 @@
 #define ABSTRACT_INPUT_ARRAY_HEADER
 
 #include <map>
-#include <vector>
+#include <list>
 #include <SFML/Graphics.hpp>
 
 
@@ -20,33 +20,27 @@ class AbstractInputs
     virtual bool closeWindow() const = 0;           // true when the window must be closed or the escape key is pressed
     virtual sf::Vector2f cursor() const = 0;        // cursor position
 
-    virtual void update(float ticks = 0) = 0;       // the number of ticks isn't really important
+    virtual void update(float dt = 0) = 0;       // the number of ticks is not really important
 
     std::map<sf::Mouse::Button, bool>& mouseButtons();                          // these four methods all return the
     std::map<sf::Keyboard::Key , bool>& keyboardButtons();                      // same value as _[m|k]Buttons()
 
-    const std::map<sf::Mouse::Button, bool>& mouseButtons() const;
-    const std::map<sf::Keyboard::Key , bool>& keyboardButtons() const;
+    const std::map<sf::Mouse::Button, bool>& mouseButtons() const;              // their name is different to avoid
+    const std::map<sf::Keyboard::Key , bool>& keyboardButtons() const;          // inheritance problems with name overloading
 
-    const std::vector<sf::Mouse::Button>& pressedMouseButtons() const;          // array of pressed mouse buttons
-    const std::vector<sf::Keyboard::Key>& pressedKeyboardButtons() const;       // array of pressed keyboard keys
+    std::list<sf::Mouse::Button> pressedMouseButtons() const;          // array of pressed mouse buttons
+    std::list<sf::Keyboard::Key> pressedKeyboardButtons() const;       // array of pressed keyboard keys
+
+    bool anyMouseButtonPressed() const;
+    bool anyKeyPressed() const;
 
 
     protected :
 
     virtual std::map<sf::Mouse::Button, bool>& _mouseButtons() = 0;             // map of all mouse buttons
     virtual std::map<sf::Keyboard::Key , bool>& _keyboardButtons() = 0;         // map of all keyboard keys
-
-
-    private :
-
-    std::vector<sf::Keyboard::Key> pkb;             // where the return value of pressedMouseButtons() is stored
-    std::vector<sf::Mouse::Button> pmb;             // where the return value of pressedKeyboardButtons() is stored
 };
 
 
-
-
 #endif
-
 

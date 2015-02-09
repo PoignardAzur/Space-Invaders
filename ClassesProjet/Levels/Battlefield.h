@@ -40,9 +40,9 @@ class Battlefield
     void updateBlueBullets(float dt);
     void updateEnemies(float dt);
 
-    VartPusher<Enemy>* enemies();
-    VartPusher<Bullet>* redBullets();
-    VartPusher<Bullet>* blueBullets();
+    VartArray<Enemy>* enemies();
+    VartArray<Bullet>* redBullets();
+    VartArray<Bullet>* blueBullets();
 
 
     private :

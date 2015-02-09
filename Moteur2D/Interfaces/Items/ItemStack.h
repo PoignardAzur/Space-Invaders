@@ -14,14 +14,14 @@ namespace Menu
     {
         public :
 
-        using AbsItemPtr = std::shared_ptr<AbstractItem>;
+        using AbsItemPtr = std::unique_ptr<AbstractItem>;
 
         ItemStack();
-        ItemStack(const std::vector<std::pair<AbsItemPtr, Alignement>>& items, bool sizeIsMax = true);
+        ItemStack(std::vector<std::pair<AbsItemPtr, Alignement>> items, bool sizeIsMax = true);
 
-        void setItems(const std::vector<std::pair<AbsItemPtr, Alignement>>& items, bool sizeIsMax = true);
+        void setItems(std::vector<std::pair<AbsItemPtr, Alignement>> items, bool sizeIsMax = true);
         void addItem(AbstractItem* item, Alignement align);
-        sf::Vector2f size() const;
+        sf::Vector2f getSize() const;
 
 
         protected :

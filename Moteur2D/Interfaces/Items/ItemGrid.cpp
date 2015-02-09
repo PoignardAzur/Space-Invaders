@@ -13,9 +13,9 @@ Menu::ItemGrid::ItemGrid(const std::vector<std::vector< std::shared_ptr<Abstract
     set(items, gaps);
 }
 
-Menu::ItemGrid::ItemGrid(const std::vector<std::shared_ptr<AbstractItem>>& items, bool is_a_line, float gaps)
+Menu::ItemGrid::ItemGrid(const std::vector<std::shared_ptr<AbstractItem>>& items, bool is_a_row, float gaps)
 {
-    if (is_a_line)
+    if (is_a_row)
     setAsLine(items, gaps);
 
     else
@@ -147,7 +147,7 @@ void Menu::ItemGrid::expandToFill(sf::Vector2f nSize, bool allowNegativeSizes)
 
 
 
-sf::Vector2f Menu::ItemGrid::size() const
+sf::Vector2f Menu::ItemGrid::getSize() const
 {
     return m_size;
 }
@@ -203,8 +203,8 @@ void Menu::ItemGrid::updateOwnSize()
 
         for (auto& item : m_itemLines[l])
         {
-            if (item && item->size().y > maxHeight)
-            maxHeight = item->size().y;
+            if (item && item->getSize().y > maxHeight)
+            maxHeight = item->getSize().y;
         }
 
         m_lineHeights[l] = maxHeight;
@@ -220,8 +220,8 @@ void Menu::ItemGrid::updateOwnSize()
 
         for (auto& itemLine : m_itemLines)
         {
-            if (itemLine[c] && itemLine[c]->size().x > maxWidth)
-            maxWidth = itemLine[c]->size().x;
+            if (itemLine[c] && itemLine[c]->getSize().x > maxWidth)
+            maxWidth = itemLine[c]->getSize().x;
         }
 
         m_columnWidths[c] = maxWidth;

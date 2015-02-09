@@ -1,22 +1,18 @@
 
 
-
 #include "Text.h"
 
 
-Menu::Text::Text(const std::string& str, const sf::Font* f, unsigned int charSize, const sf::Color& c)
+Menu::Text::Text(const std::string& str, FontStyle f)
 {
     setString(str);
-    setFont(f, charSize);
-    setColor(c);
+    setFont(f);
 }
 
-Menu::Text::Text(const sf::Font* f, unsigned int charSize, const sf::Color& c)
+Menu::Text::Text(FontStyle f)
 {
-    setFont(f, charSize);
-    setColor(c);
+    setFont(f);
 }
-
 
 
 void Menu::Text::setString(const std::string& str)
@@ -25,33 +21,25 @@ void Menu::Text::setString(const std::string& str)
     updateParentSize();
 }
 
-void Menu::Text::setFont(const sf::Font* f, unsigned int charSize)
+void Menu::Text::setFontStyle(const FontStyle& f)
 {
-    m_text.setFont(*f);
-    m_text.setCharacterSize(charSize);
+    m_text.setFont(*(f.f));
+    m_text.setCharacterSize(f.charSize);
+    m_text.setColor(f.c);
 
     updateParentSize();
-}
-
-void Menu::Text::setColor(const sf::Color& c)
-{
-    m_text.setColor(c);
 }
 
 
 void Menu::Text::drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const
 {
-    const_cast<Text*>(this)->m_text.setPosition(position.x, position.y - m_text.getLocalBounds().top);
+    const_cast<Text*>(this)->m_text.setPosition(position.x - m_text.getLocalBounds().left, position.y - m_text.getLocalBounds().top);
     target.draw(m_text);
 }
 
-sf::Vector2f Menu::Text::size() const
+sf::Vector2f Menu::Text::getSize() const
 {
     return sf::Vector2f(m_text.getGlobalBounds().width, m_text.getGlobalBounds().height);
 }
-
-
-
-
 
 

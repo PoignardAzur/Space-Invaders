@@ -6,27 +6,27 @@
 #include "Text.h"
 #include <memory>
 
+
 namespace Menu
 {
 
-    class Label : public AbstractItem
+    // Draws a label next to another item
+    class Label : public AbstractItem, public AbstractTextObject
     {
         public :
 
-        explicit Label(AbstractItem* item = nullptr, const std::string& str = "", bool horizontalAlignement = true, float gap = 0);
+        explicit Label(AbstractItem* item = nullptr, const std::string& str = "", FontStyle f = FontStyle(), bool horizontalAlignement = true, float gap = 0);
 
-        void setItem(AbstractItem* item, const std::string& str);
         void setItem(AbstractItem* item);
         void setLabel(const std::string& str);
-        void setFont(const sf::Font* f, unsigned int charSize = DEFAULT_FONT_SIZE);
-        void setColor(const sf::Color& c);
 
         void setAlignement(bool horizontal, float gap);
-        sf::Vector2f size() const;
+        sf::Vector2f getSize() const;
 
 
         protected :
 
+        void setFontStyle(const FontStyle& f);
         void drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const;
         void setOwnSize();
 
@@ -41,8 +41,6 @@ namespace Menu
 
         sf::Vector2f m_size;
     };
-
-
 
 }
 

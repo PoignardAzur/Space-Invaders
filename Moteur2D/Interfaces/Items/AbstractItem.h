@@ -1,12 +1,12 @@
 
 
-
 #ifndef ABSTRACT_MENU_ITEM_HEADER
 #define ABSTRACT_MENU_ITEM_HEADER
 
 #include "../../Graphic/AbstractDrawer.h"
 
-const bool DRAW_ITEM_HITBOX = false;
+
+extern bool DRAW_ITEM_HITBOX; // doesn't need to be const
 
 namespace Menu
 {
@@ -16,9 +16,11 @@ namespace Menu
         TopLeftCorner,
         MiddleTopSide,
         TopRightCorner,
+
         MiddleLeftSide,
         Center,
         MiddleRightSide,
+
         BottomLeftCorner,
         MiddleBottomSide,
         BottomRightCorner
@@ -34,17 +36,20 @@ namespace Menu
         virtual ~AbstractItem();
 
         virtual void drawIn(AbstractDrawer& target, sf::Vector2f position, bool drawHitbox = DRAW_ITEM_HITBOX) const;
+        // draws the item with 'position' as the top-left corner of its "box"
         virtual void drawInBox(AbstractDrawer& target, sf::FloatRect box, Alignement a = Center, bool drawHitbox = DRAW_ITEM_HITBOX) const;
-        virtual sf::Vector2f size() const = 0;
+        // draws the item with its internal "box" against one of the sides of 'box', or at its center
+        virtual sf::Vector2f getSize() const = 0;
+        // returns the size of the item's "box"
 
 
         protected :
 
-        virtual void drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const = 0;
+        virtual void drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const = 0; // isHitboxDrawn is used for recursion, to draw children's boxes too
         virtual void drawHitboxIn(AbstractDrawer& target, sf::Vector2f position) const;
-        virtual int hashToColor(float x) const;
+        virtual int hashToColor(float x) const;     // used to determine the hitbox's color
 
-        virtual void updateParentSize();
+        virtual void updateParentSize();    // useful for items that need to change their box's size whenever their children do
         virtual void updateOwnSize();
 
 

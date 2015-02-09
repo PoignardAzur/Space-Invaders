@@ -1,15 +1,11 @@
 
 
-
-
 #ifndef MENU_LIFE_COUNTER_HEADER
 #define MENU_LIFE_COUNTER_HEADER
 
 #include "ItemGrid.h"
-#include "ItemBox.h"
 #include "Sprite.h"
 #include "Counter.h"
-
 
 
 namespace Menu
@@ -22,26 +18,25 @@ namespace Menu
         LifeCounter();
 
         void setValue(int n);
-        void setBounds(int maxDrawable, int max);
+        void setBounds(int maxDrawable, int max); // Cannot draw more sprites than 'maxDrawable', cannot draw a number higher than 'max'
 //        void setBase(int base);
 
-        void setFont(const sf::Font* f, unsigned int charSize = DEFAULT_FONT_SIZE);
-        void setColor(const sf::Color& c);
         void setRightAligned(bool rightAligned);
         void setSprite(const sf::Sprite& spr);
 
         void setGaps(float gap);
-        sf::Vector2f size() const;
+        sf::Vector2f getSize() const;
 
 
         protected :
 
         void drawImageIn(AbstractDrawer& target, sf::Vector2f position, bool isHitboxDrawn) const;
+        void setFontStyle(const FontStyle& f);
 
 
         private :
 
-        ItemGrid m_grid; // use-a
+        ItemGrid m_grid;
 
         int m_count;
         int m_maxDrawable;
@@ -56,11 +51,7 @@ namespace Menu
         void updateGrid();
     };
 
-
 }
 
 
-
 #endif // MENU_LIFE_COUNTER_HEADER
-
-

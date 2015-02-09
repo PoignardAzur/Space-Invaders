@@ -1,20 +1,23 @@
 
+
 #ifndef HEADER_VART_ABSTRAIT
 #define HEADER_VART_ABSTRAIT
 
-#include "Updatable.h"
-#include "Deletable.h"
 #include "../Graphic/ObjectDrawer.h"
 
 
-/*
-Interface d'objet affichable ET pouvant etre mis a jour.
-*/
-class AbsVart : public Updatable, public Deletable
+// Object that can be drawn and updated
+class AbsVart
 {
     public :
 
-    virtual void drawIn(AbstractDrawer&) = 0;
+    virtual bool toDelete() const = 0;
+    virtual void update(float dt) = 0;
+    virtual void drawIn(sf::Vector2f pos, AbstractDrawer& target, sf::FloatRect limits, float dt) const = 0;
+
+    virtual sf::Vector2f getPos() const = 0; /// TO UTTERLY REMOVE FROM THE CODE
+
+    virtual ~AbsVart() {}
 };
 
 

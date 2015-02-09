@@ -38,6 +38,11 @@ void BasicSpaceLevel::addWave(AbsWave* wave)
     m_waves.push(std::shared_ptr<AbsWave>(wave));
 }
 
+bool BasicSpaceLevel::levelComplete() const
+{
+    return !m_waves.size();
+}
+
 
 void BasicSpaceLevel::update(const float& dt)
 {
@@ -57,10 +62,14 @@ void BasicSpaceLevel::drawIn(AbstractDrawer& fenetre)
 
 void BasicSpaceLevel::generateEnemyWaves(float dt)
 {
-    if (!m_waves.size())
+    if (levelComplete())
     return;
 
-    else if (m_waves.front()->update(dt))
+//  else
+
+    m_waves.front()->update(dt);
+
+    if (m_waves.front()->isDone() && enemies().empty())
     m_waves.pop();
 }
 
